@@ -1,0 +1,3319 @@
+% Self-contained source: the bibliography is included at the end of this file.
+% Compile twice with:
+%   pdflatex formal_categories_and_distributors.tex
+% Alternatively use: latexmk -pdf formal_categories_and_distributors.tex
+\documentclass[11pt,reqno]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{tikz-cd}
+\usepackage{booktabs,array}
+\usepackage[margin=1.12in]{geometry}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usetikzlibrary{arrows.meta,decorations.pathmorphing}
+\tikzcdset{arrow style=tikz,diagrams={>=Stealth}}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\numberwithin{equation}{section}
+\newcommand{\D}{\mathbb D}
+\newcommand{\Pcal}{\mathbb P}
+\newcommand{\Bcal}{\mathbb B}
+\newcommand{\V}{\mathcal V}
+\newcommand{\E}{\mathsf E}
+\newcommand{\Q}{\mathsf Q}
+\newcommand{\Ccal}{\mathbb C}
+\newcommand{\Kcal}{\mathbb K}
+\newcommand{\Ddist}{\mathbb D_{\mathrm{dist}}}
+\newcommand{\FDist}{\mathsf{Dist}_{\mathrm{poly}}}
+\newcommand{\Up}{U_{\mathrm{poly}}}
+\newcommand{\harr}{\mathrel{\rightsquigarrow}}
+\newcommand{\cell}{\mathrel{\Longrightarrow}}
+\newcommand{\emp}[1]{\varnothing_{#1}}
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\vop}{\mathrm v}
+\newcommand{\Mod}{\operatorname{Mod}_{\mathrm{CS}}}
+\newcommand{\Mon}{\operatorname{Mon}}
+\newcommand{\FCat}{\operatorname{FCat}}
+\newcommand{\Bicomod}{\operatorname{Bicomod}}
+\newcommand{\Comon}{\operatorname{Comon}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\Set}{\mathbf{Set}}
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Forest}{\mathsf{For}}
+\newcommand{\Raw}{\mathsf{Path}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\wh}{\mathbin{\odot}}
+\newcommand{\bal}{\operatorname{Bal}}
+\DeclareMathOperator{\Eq}{Eq}
+\title[Formal categories and distributors]{Non-Cartesian Internal Categories\\and Distributors without Regularity:\\A Poly-Virtual Approach}
+\date{}
+\subjclass[2020]{Primary 18N10; Secondary 18M05, 18M65, 18M85, 16T15.}
+\keywords{internal category, formal distributor, bicomodule, cotensor, virtual equipment, polycategory, localization}
+
+\begin{document}
+\begin{abstract}
+Aguiar's non-Cartesian internal categories use cotensor products of
+bicomodules to express composition. His regularity condition supplies
+these composites but excludes monoidal categories such as abelian groups.
+We define formal internal categories in every monoidal category using
+actual bicomodule carriers and a poly-virtual calculus whose two boundaries
+are finite paths. Multiplication and units satisfy the monad equations by
+tree substitution. The construction forms a forest envelope of balanced
+bicomodule maps and makes intrinsic globular contextually universal comparisons reversible.
+We prove conservativity, including equivariant maps over changing
+comonoid bases, and recover cotensor categories and functors whenever the
+relevant cones are stable under tensoring.
+
+We then construct a poly-virtual equipment whose objects are these formal
+categories, whose vertical arrows are formal functors, and whose horizontal
+arrows are formal distributors. Distributor carriers are finite bicomodule
+paths; those with one bicomodule as carrier recover the original bimodule
+action data exactly. Balanced distributor multicells form a virtual
+equipment: restrictions and their actions are constructed by cartesian
+factorization. A second conservative completion supplies many-sided cells,
+companions, conjoints, and coherent boundary transport. Contextually
+preserved coequalizers represent distributor composition. In the finite
+group-like abelian-group sector the resulting calculus recovers enriched
+categories, functors, and distributors. The general completion also
+preserves virtual monoids and their generalized-multicategory examples.
+\end{abstract}
+\maketitle
+\tableofcontents
+
+\section{Introduction}\label{sec:intro}
+
+An internal category has an object of objects, an object of arrows, and
+composition on composable pairs. In a monoidal category, Aguiar expresses
+these data by a comonoid $C$, a $C$--$C$ bicomodule $A$, and maps
+\[
+ m:A\square_C A\longrightarrow A,\qquad u:C\longrightarrow A,
+\]
+with associative and unital multiplication
+\cite[Definition 2.3.1]{Aguiar1997}. The comonoid and its coactions replace
+the object of objects and the source and target maps; the cotensor replaces
+the pullback of composable arrows. This gives a formulation that also
+makes sense when the monoidal product is not Cartesian.
+
+Cotensor composition requires equalizers and their compatibility with
+tensoring. Aguiar's regularity condition supplies this compatibility for
+every equalizer in the ambient monoidal category
+\cite[Definition 2.1.1]{Aguiar1997}. However, even
+$(\Ab,\otimes_{\mathbb Z},\mathbb Z)$ fails this condition. As
+\cref{prop:Ab} shows, the finite group-like comonoids in $\Ab$
+nevertheless admit stable bicomodule composition and encode the expected
+finite-object enriched categories. A general definition should therefore
+separate the specification of category operations from the existence of
+all ambient horizontal composites.
+
+Cruttwell and Shulman's virtual framework provides a precedent for this
+separation. It treats enriched categories, internal categories, and
+generalized multicategories through cells with several horizontal inputs
+and one output \cite{CruttwellShulman2010}. In particular, its virtual
+equipment of enriched profunctors is available without the coends used
+to represent horizontal profunctor composition. The relevant analogy is
+between these coends and bicomodule cotensors. Coends here compose
+profunctors between enriched categories; the composition operations inside
+an enriched category are already part of its defining data.
+
+The guiding question of this paper is therefore the following: can
+non-Cartesian internal categories be defined over an arbitrary monoidal
+category, on actual bicomodule carriers, so that stable cotensors recover
+Aguiar's multiplication and changing-base functors, and can these formal
+categories themselves be the objects of an equipment of distributors?
+The primitive maps
+available without cotensors have the form
+\[
+ N\longrightarrow M_1\otimes\cdots\otimes M_n,
+\]
+subject to balance and equivariance equations. They describe cones into a
+prospective composite. Their arity is opposite to that of multiplication.
+Consequently, the existing virtual bicomodule calculus alone does not yet
+supply the desired forward category operations.
+
+We construct a two-sided cell calculus in which both boundaries are finite
+paths of bicomodules. A formal internal category has an endobicomodule
+$A:C\harr C$ and cells
+\begin{equation}\label{eq:shape}
+ \mu:(A,A)\cell A,\qquad \eta:\emp C\cell A
+\end{equation}
+satisfying the usual monad equations. The construction makes each existing intrinsic globular
+contextually universal composite comparison reversible. It thereby allows
+represented cotensors to be used on either boundary, while paths without
+representatives remain legitimate boundaries. Its cells are specified by
+finite expressions and relations, so the definition does not depend on
+the existence of the object $A\square_C A$.
+
+\begin{theorem}[Internal categories without regularity]\label{thm:main}
+Every monoidal category $\V$ determines a poly-virtual equipment $\Q(\V)$
+and a category $\FCat(\Q(\V))$ with the following properties.
+\begin{enumerate}
+\item The objects of $\Q(\V)$ are comonoids, its vertical arrows are
+comonoid maps, and its designated atomic horizontal arrows are actual
+bicomodules. Its unary squares between designated atomic bicomodules are
+exactly equivariant bicomodule maps.
+More generally, all primitive balanced cells are preserved and reflected.
+\item A formal internal category consists of an atomic endobicomodule
+and cells as in \cref{eq:shape}, with associativity and unit equations
+given by tree substitution. Homomorphisms have ordinary forward variance
+and may change the comonoid base.
+\item On bicomodule paths represented by cotensor cones preserved under
+tensoring, these structures, their homomorphisms, and their bimodule
+actions recover the corresponding cotensor structures and equations.
+In particular, for regular $\V$ the category $\FCat(\Q(\V))$ is
+isomorphic to Aguiar's category of internal categories and internal functors.
+\end{enumerate}
+\end{theorem}
+
+The construction applies more generally to virtual equipments. Here
+\emph{contextually universal} means that a comparison represents its
+source path in every compatible horizontal context, including contexts
+that pass through different objects. The technical result is a conservative
+completion that recognizes all such comparisons intrinsically.
+
+\begin{theorem}[Conservative completion]\label{thm:maincompletion}
+Every virtual equipment $\D$ has a merge realization $\E(\D)$ and
+a poly-virtual reduct $\Up\E(\D)$ on the same objects, vertical
+arrows, and designated atomic horizontal arrows, with natural bijections
+\[
+ \D_{f,g}(\Gamma;H)\cong\E(\D)_{f,g}(\Gamma;H)
+\]
+for all original paths $\Gamma$, atomic outputs $H$, and compatible
+vertical boundaries. The realization makes every intrinsic globular
+contextually universal comparison, and hence every horizontal contextual
+instance of one, reversible. It also admits coherent transport of horizontal
+boundaries. The reduct retains all cells and equalities and the tree
+operations; it preserves and reflects formal categories and their
+homomorphisms on atomic carriers.
+\end{theorem}
+
+The bicomodule instance is
+\[
+ \Q(\V)=\Up\bigl(\E(\Mod(\V^\op))^{\vop}\bigr).
+\]
+Here $\Mod$ is Leinster's monoids-and-bimodules construction
+\cite[Section 5.3]{Leinster2004}, in the virtual-double-category formulation
+of Cruttwell and Shulman \cite[Definition 2.8]{CruttwellShulman2010}. It
+supplies the initial balanced calculus; the completion
+and the reversal of squares supply its two-sided, forward formulation.
+
+The distributor construction uses the same completion a second time.
+Let $\mathbb B(\V)=\E(\Ccal(\V))^{\vop}$ be the merge realization,
+and regard its finite bicomodule paths as individual horizontal arrows
+of an underlying virtual equipment $\Kcal(\V)$. We form
+$\Mod(\Kcal(\V))$ and retain exactly the monoids whose carriers are
+original atomic bicomodules. The restriction here is on objects: the
+horizontal carriers of the resulting equipment $\Ddist(\V)$ remain
+finite bicomodule paths. This makes the required distributor restrictions
+available while retaining all original atomic bimodules. Define
+\[
+ \FDist(\V)=\Up\E(\Ddist(\V)).
+\]
+
+\begin{theorem}[Formal distributors without regularity]\label{thm:maindistributors}
+For every monoidal category $\V$, $\FDist(\V)$ is a poly-virtual
+equipment with the following properties.
+\begin{enumerate}
+\item Its objects are the formal internal categories in $\Q(\V)$,
+and its vertical category is exactly $\FCat(\Q(\V))$.
+\item Its designated horizontal arrows are distributors with associative,
+unital, commuting actions on finite bicomodule-path carriers. On a carrier
+consisting of one actual bicomodule, these are exactly the atomic bimodule
+actions in $\Q(\V)$.
+\item Balanced single-output distributor cells are preserved and
+reflected by the completion, including all their changing-base instances.
+In particular, unary cells between distributors carried by one actual
+bicomodule are exactly equivariant bicomodule maps preserving both actions.
+\item Formal functors have companions and conjoints, yielding coherent
+transport of distributor boundaries. Every intrinsic globular contextually
+universal distributor-composition comparison becomes reversible.
+\end{enumerate}
+\end{theorem}
+
+There are two distinct representation problems. Cotensors represent
+paths of bicomodules over comonoid bases. Relative tensor products of
+distributors represent balancing over the actions of an intervening
+formal category. We give a contextual coequalizer construction for the
+latter and verify it in the finite group-like $\Ab$ sector. Neither
+construction requires a missing representative to be an object of $\V$.
+
+The term \emph{poly-virtual equipment} has the precise meaning given in
+\cref{def:poly,def:equipment}. Its equipment structure transports
+boundaries, and a transported boundary can itself be a path. The tree and
+merge operations are related to those of \cite{Hadzihasanovic2019}; empty
+boundaries and a vertical category are included here. The relation with
+implicit structures is discussed in \cref{sec:comparison}.
+
+\Cref{sec:bicomod} identifies the bicomodule cells available before
+composition. \Cref{sec:typed,sec:monads} define the two-sided calculus
+and its category structures. The forest construction and its conservative
+localization occupy \cref{sec:forest,sec:localization};
+\cref{sec:global,sec:completion} establish vertical transport and the
+general completion theorem. We then construct $\Q(\V)$ in
+\cref{sec:formalinternal} and prove cotensor recovery, including changing
+bases and actions, in \cref{sec:recovery,sec:changing}.
+\Cref{sec:distributors} constructs the virtual equipment of formal
+distributors, and \cref{sec:distributorcompletion} gives its conservative
+poly-virtual completion. Carrier representation and distributor composition
+are treated in \cref{sec:distributorrecovery}. \Cref{sec:examples} tests
+both constructions on familiar bases and on $\Ab$. The generalized-
+multicategory applications and comparison with other completions follow in
+\cref{sec:kleisli,sec:comparison}.
+
+\subsection*{Conventions}
+
+Horizontal paths are written in traversal order: $HK$ means first $H$,
+then $K$. Composition of ordinary maps and of cells is written in functional
+order: $ba=b\circ a$. Horizontal juxtaposition of cells is $a\wh b$.
+The path of length zero at $X$ is $\emp X$; a represented unit is denoted
+$U_X$. A semicolon separates the two boundaries of a cell.
+Associators and unitors in a monoidal category are inserted by their
+canonical coherence maps; no braiding is used unless explicitly stated.
+The notation $\V^\op$ reverses maps and leaves the order of tensor factors
+unchanged. Size is discussed in \cref{app:size}.
+We write $\mathsf A=(X,A,\mu_A,\eta_A)$ for a formal category and
+$\mathsf F=(f,F)$ for a formal functor, separating the whole structure
+from its carrier and its underlying square. The word \emph{atomic} is
+relative to the designated horizontal graph: an atomic arrow of the
+distributor equipment is one distributor, whose carrier in the original
+bicomodule graph can be a path.
+
+\section*{Note on use of AI}
+Generative AI systems were used during the research and development of this
+manuscript as tools for mathematical investigation, discussion, and
+editorial refinement.  Responsibility for the mathematical content,
+arguments, and conclusions rests with the author.
+
+
+\section{Bicomodules and the missing composition}\label{sec:bicomod}
+
+The enriched precedent separates a calculus of operations from the
+objects that represent its horizontal composites. We first make this
+separation explicit, then identify the corresponding bicomodule data.
+The outcome is a virtual equipment in every monoidal category, together
+with the variance issue that the two-sided construction must resolve.
+
+\subsection{Virtual composition and its enriched precedent}
+A virtual double category has objects, vertical maps, horizontal arrows,
+and cells from a finite path to one horizontal arrow. Its composition is
+substitution of compatible cells. A cell is globular when its exterior
+vertical maps are identities. A composite of a horizontal path, when
+it exists, represents these substitutions in every surrounding path
+context. A virtual equipment has represented horizontal units and
+cartesian restrictions along pairs of vertical arrows
+\cite[Sections 2, 5, and 7]{CruttwellShulman2010}.
+
+For enriched profunctors $P:\mathcal A\harr\mathcal B$ and
+$R:\mathcal B\harr\mathcal C$, the usual represented composite has
+components
+\[
+ (P\wh R)(a,c)=\int^{b\in\mathcal B}P(a,b)\otimes R(b,c).
+\]
+Balanced families of maps out of these tensor factors define the virtual
+cells before the coend is formed. This is the distinction between the
+virtual equipment and its represented composites
+\cite[Examples 5.6 and 7.7]{CruttwellShulman2010}.
+For bicomodules the basic balanced maps point into tensor products.
+We now specify those maps without taking their equalizers.
+
+\subsection{Comonoids, coactions, and balanced cells}
+
+\begin{definition}
+A comonoid in $\V$ is an object $C$ with coassociative
+$\delta_C:C\to C\otimes C$ and counit $\eps_C:C\to I$.
+A comonoid map preserves both maps. A bicomodule $M:C\harr D$ has
+coactions
+\[
+ \lambda_M:M\to C\otimes M,\qquad
+ \rho_M:M\to M\otimes D
+\]
+which are counital and coassociative and commute:
+\begin{equation}\label{eq:bicomodcommute}
+ (1_C\otimes\rho_M)\lambda_M=(\lambda_M\otimes1_D)\rho_M.
+\end{equation}
+A map $F:M\to N$ over comonoid maps $f:C\to C'$, $g:D\to D'$
+is equivariant if
+\begin{equation}\label{eq:equivariant}
+ \lambda_NF=(f\otimes F)\lambda_M,\qquad
+ \rho_NF=(F\otimes g)\rho_M.
+\end{equation}
+\end{definition}
+
+Our horizontal arrow points from the left coaction base to the right
+coaction base. References using the opposite horizontal direction write
+composite bicomodules in the opposite order. This convention fixes the
+order of all tensor factors below.
+
+For $M:C\harr D$ and $N:D\harr E$, the prospective cotensor
+is the equalizer of
+\[
+ \rho_M\otimes1_N,\;1_M\otimes\lambda_N:
+ M\otimes N\rightrightarrows M\otimes D\otimes N.
+\]
+Even if this equalizer is unavailable, maps equalizing the displayed pair
+can still be specified. Longer paths impose one such balance equation
+at each interior base, together with the exterior coaction equations.
+
+\begin{definition}[Balanced cells]\label{def:balanced}
+Let $M_i:C_{i-1}\harr C_i$ for $1\leq i\leq n$, let
+$N:D\harr E$, and let $a:D\to C_0$, $b:E\to C_n$ be comonoid
+maps. For $n>0$, a balanced cell is a map
+$\phi:N\to M_1\otimes\cdots\otimes M_n$ such that
+\begin{align}
+ (\lambda_{M_1}\otimes1)\phi&=(a\otimes\phi)\lambda_N,
+ & (1\otimes\rho_{M_n})\phi&=(\phi\otimes b)\rho_N,
+ \label{eq:exterior}\\
+ (1\otimes\rho_{M_i}\otimes1)\phi
+ &=(1\otimes\lambda_{M_{i+1}}\otimes1)\phi
+ &&(1\leq i<n).\label{eq:balance}
+\end{align}
+The two sides of each interior equation land in the tensor with $C_i$
+inserted between $M_i$ and $M_{i+1}$.
+For $n=0$ the upper path is $\emp C$, $a:D\to C$, $b:E\to C$,
+and a cell is a map $\phi:N\to I$ satisfying
+\begin{equation}\label{eq:nullbalance}
+ (a\otimes\phi)\lambda_N=(\phi\otimes b)\rho_N:N\to C.
+\end{equation}
+The unitors identify the codomains with $C$.
+\end{definition}
+
+\subsection{The virtual equipment already available}
+The balanced maps are closed under substitution. Their orientation as
+single-output cells is forced by that substitution law: the map from
+$N$ into a tensor of $M_i$ is regarded as a cell with output $N$.
+This produces the following instance of the monoids-and-bimodules
+construction of Leinster, in the virtual-double-category formulation of
+Cruttwell and Shulman \cite[Section 5.3]{Leinster2004}
+\cite[Definition 2.8]{CruttwellShulman2010}.
+
+\begin{proposition}\label{prop:modinput}
+Comonoids, opposite comonoid maps, bicomodules, and the balanced cells
+of \cref{def:balanced}, regarded as cells
+$(M_1,\ldots,M_n)\cell N$, form the virtual equipment
+\[
+ \Ccal(\V)=\Mod(\V^\op).
+\]
+This construction exists for every monoidal $\V$.
+\end{proposition}
+\begin{proof}
+Regard $\V^\op$ as the one-object virtual double category whose cells
+are maps into tensor products in $\V$. The construction $\Mod$ requires no
+additional exactness condition on this virtual double category
+\cite[Section 5.3]{Leinster2004}\cite[Remark following Definition 2.8]{CruttwellShulman2010}. A monoid there is precisely a
+comonoid in $\V$, and a bimodule is precisely a bicomodule. The exterior
+action equations and interior balancing equations in the module
+construction become \cref{eq:exterior,eq:balance}; the zero-arity
+action equation becomes \cref{eq:nullbalance}.
+
+Explicitly, substitution composes $\phi$ with the tensor product of the
+maps substituted into its factors. An interior equation inside a block
+is the corresponding equation of the substituted map, tensored with
+the other maps. At an interface between two nonempty blocks,
+\cref{eq:exterior} moves the coactions through those maps and the
+remaining equality is \cref{eq:balance} for $\phi$. An empty block
+is removed using its map to $I$; equation \cref{eq:nullbalance}
+identifies the two induced maps to its vertex comonoid, so the same
+interface equality remains true. Repeating this for successive empty
+blocks proves the statement also when every block is empty. The exterior
+equations follow by the first and last such calculations. Associativity
+and identities now follow from tensor functoriality and composition in
+$\V$.
+
+Restrictions are explicit. To restrict $N:D\harr E$ along vertical
+arrows $C\to D$ and $C'\to E$ in the opposite comonoid category,
+write their actual maps as $a:D\to C$, $b:E\to C'$. Retain the
+object $N$ and replace its coactions by
+$(a\otimes1)\lambda_N$ and $(1\otimes b)\rho_N$.
+The identity map on $N$ is the restriction cell. The equations for
+factorization through it are literally \cref{eq:exterior} with these
+coactions, proving cartesianness. Units are proved in
+\cref{lem:bicomodunit} below. This also directly verifies the units
+and restrictions supplied abstractly by
+\cite[Propositions 5.5 and 7.4]{CruttwellShulman2010}.
+\end{proof}
+
+\begin{lemma}[The nullary representative]\label{lem:bicomodunit}
+For a comonoid $C$, its regular bicomodule
+$(C,\delta_C,\delta_C)$ represents $\emp C$ in $\Ccal(\V)$.
+The universal cell $\emp C\cell C$ is represented by $\eps_C$.
+\end{lemma}
+\begin{proof}
+First consider a globular nullary cell $\phi:N\to I$. By
+\cref{eq:nullbalance},
+\[
+ q=(1_C\otimes\phi)\lambda_N
+   =(\phi\otimes1_C)\rho_N:N\to C.
+\]
+Coassociativity of $\lambda_N$ gives
+$\delta_Cq=(1_C\otimes q)\lambda_N$, and that of $\rho_N$ gives
+$\delta_Cq=(q\otimes1_C)\rho_N$; in each equation use the
+corresponding expression for $q$. Thus $q$ is a bicomodule map.
+Counitality gives $\eps_Cq=\phi$. Conversely a bicomodule map
+$q:N\to C$ satisfies both displayed expressions with
+$\phi=\eps_Cq$, proving uniqueness.
+
+For a contextual instance, take a balanced map
+$\phi:N\to\bigotimes L\otimes\bigotimes R$ in which the two
+paths meet at $C$. If $L$ is nonempty, insert $C$ by the right
+coaction of its last factor. If $R$ is nonempty, one can instead use
+the left coaction of its first factor. Interior balance says these
+two constructions agree when both apply. If both are empty, use the
+map $q$ just constructed. If only one side is present, the exterior
+equation supplies the missing endpoint calculation. Coassociativity
+gives balance at the two new interfaces, and commuting coactions give
+the unchanged exterior equations. Removing the inserted factor by
+$\eps_C$ recovers $\phi$. Conversely, either balance equation
+adjacent to an inserted $C$, followed by its counit, forces this
+insertion formula. Thus the factorization is unique in all contexts.
+For nonidentity exterior maps, corestrict the two exterior coactions
+by the explicit restriction construction above. The resulting
+factorization is the globular one just proved, with the same underlying
+maps in $\V$.
+\end{proof}
+
+Thus units and restrictions already exist without cotensors. After
+reversing squares, the same data give forward equivariant maps and
+primitive cells $N\cell(M_1,\ldots,M_n)$. The remaining task is to
+place these cells in a two-sided calculus that also admits multiplication
+$(A,A)\cell A$ and recognizes any cotensors that are represented.
+
+\section{Two-sided cells and tree pastings}\label{sec:typed}
+
+Balanced bicomodule cells have one input after reversal, whereas a
+category multiplication has one output. Both can be treated in a
+calculus with paths on the two boundaries. We distinguish tree pastings,
+which suffice for category equations, from composition along whole paths,
+which will be used to construct the examples. Empty boundaries are
+included so that units have their usual nullary form.
+
+\begin{definition}[Boundary signature]
+A boundary signature consists of a category $\mathcal C$ and a directed
+graph of horizontal arrows on its objects. A horizontal path
+$\Gamma=(H_1,\ldots,H_n):X_0\harr X_n$ includes its entire sequence of
+vertices. A cell profile is $(f,g;\Gamma;\Delta)$, where
+$\Gamma:X\harr Y$, $\Delta:X'\harr Y'$, $f:X\to X'$, and
+$g:Y\to Y'$ lie in $\mathcal C$. We depict it as
+\[
+\begin{tikzcd}[column sep=huge,row sep=large]
+ X \arrow[r,rightsquigarrow,"\Gamma"] \arrow[d,"f"'] &
+ Y \arrow[d,"g"]\\
+ X' \arrow[r,rightsquigarrow,"\Delta"'] &Y'.
+ \arrow[Rightarrow,from=1-1,to=2-2,"\alpha" description,shorten <=9pt,shorten >=9pt]
+\end{tikzcd}
+\]
+A globular profile has $f=\id_X$ and $g=\id_Y$.
+\end{definition}
+
+We specify the pasting shapes independently of any cells that will label
+them. Start with rectangles with finitely many ordered horizontal ports on
+their upper and lower sides. The horizontal ports are labelled by arrows
+and their vertices; the two lateral sides are labelled by composable
+vertical paths. A rectangular scheme is a finite expression formed by
+horizontal and vertical pasting of such rectangles, identity strips on
+horizontal paths, and empty horizontal strips on vertical arrows. Pasting
+requires literal agreement of the full common boundary. In particular,
+horizontal pasting requires equality of the common vertical arrow, not
+merely agreement of its endpoints. Empty strips compose as the arrows of
+$\mathcal C$ do.
+
+The \emph{wire graph} of a scheme is the finite multigraph whose vertices
+are its labelled rectangles and whose edges are its internal atomic horizontal
+wires; structural identity strips are contracted. Acyclicity is understood for
+this multigraph, so in particular two parallel edges form a cycle. A
+\emph{tree scheme} is a rectangular scheme whose wire graph is nonempty,
+connected, and acyclic, and which has no separate
+horizontal wire component meeting no labelled rectangle. The last
+condition excludes adjoining unused through-wires as a tree operation.
+For the poly-virtual calculus the permitted schemes with no labelled
+rectangle are a single identity wire and an empty horizontal square on
+a vertical arrow. Call these \emph{elementary structural schemes}.
+Two schemes describe the same pasting
+when they differ by planar deformation, insertion or deletion of structural
+identity strips, associativity of pasting, or interchange of rectangular
+subdivisions. The arity of an internal seam is its number of atomic wires.
+Thus two boxes joined along two wires are a merge scheme, not a tree scheme.
+
+\begin{lemma}\label{lem:shapes}
+Substitution of a tree scheme into a labelled rectangle of another tree
+scheme again gives a tree scheme. Insertion of an elementary structural
+scheme gives a tree scheme or an elementary structural scheme. Such
+substitution is associative and has one-rectangle schemes as identities.
+Evaluation orders related by contracting connected rectangular subtrees
+describe the same substituted scheme.
+\end{lemma}
+\begin{proof}
+Rectangular substitution preserves every boundary label and replaces one
+graph vertex by a tree. Each old incident edge attaches to its designated
+port. The resulting graph is connected. A cycle entirely in the inserted
+graph is impossible; any other cycle would contract to a cycle in the old
+graph. Substitution of finite labelled rectangles is associative before
+passing to planar equivalence. The equivalence respects substitution since
+each of its generating moves can be performed inside the substituted
+rectangle. A single identity wire removes a vertex having one input and
+one output, preserving connectivity and acyclicity. An empty structural
+square can replace only a zero-port vertex, which in a connected scheme
+must be its sole vertex. These observations prove the structural cases.
+The last assertion is the resulting associativity identity.
+\end{proof}
+
+\begin{definition}[Poly-virtual and merge calculi]\label{def:poly}
+A \emph{poly-virtual double calculus} on a boundary signature assigns a
+collection $\Pcal_{f,g}(\Gamma;\Delta)$ to every profile and evaluates every
+labelled tree scheme. It supplies the cells for single identity wires and
+structural empty squares, and evaluates elementary structural schemes.
+Evaluation respects the equivalences of
+schemes and substitution of schemes into rectangles, and evaluation of a
+one-rectangle scheme is its label. A map preserves this data.
+
+A \emph{merge calculus} has evaluation of all rectangular schemes, with
+the same equations, including all structural schemes on arbitrary paths.
+Its \emph{poly-virtual reduct} $\Up\Bcal$ keeps the
+same cell collections and equalities and restricts the specified evaluation
+operations to tree and elementary structural schemes. In particular an
+identity cell on a longer path remains a cell, but its empty multiwire
+scheme is not a designated poly-virtual operation. Original horizontal arrows are
+called \emph{atomic} when a calculus is presented using their paths.
+\end{definition}
+
+This is an algebraic definition: \cref{lem:shapes} constructs the
+multicategory of allowed operations, and a calculus is an algebra for those
+operations. It does not require every many-sided pasting to be evaluable.
+
+For clarity, an elementary globular cut can be described without pictures.
+Let
+\[
+ \alpha:\Gamma\cell(\Delta_0,M,\Delta_1),\qquad
+ \beta:(\Lambda_0,M,\Lambda_1)\cell\Sigma.
+\]
+The planar two-rectangle cut is allowed when all endpoints match and
+\begin{equation}\label{eq:cutplacement}
+ (\Delta_0=\varnothing\text{ or }\Lambda_0=\varnothing),\qquad
+ (\Delta_1=\varnothing\text{ or }\Lambda_1=\varnothing).
+\end{equation}
+Its profile is
+\[
+ (\Lambda_0,\Gamma,\Lambda_1)\cell
+ (\Delta_0,\Sigma,\Delta_1).
+\]
+Indeed, these conditions say that on either side of the common wire only
+one box has an exposed boundary to traverse. If both corresponding
+contexts are nonempty, the putative exterior is not the stated pair of
+directed paths. One useful instance is
+\begin{equation}\label{eq:cornercut}
+ \frac{\Gamma\cell(\Delta,M)\qquad (M,\Lambda)\cell\Sigma}
+ { (\Gamma,\Lambda)\cell(\Delta,\Sigma)}.
+\end{equation}
+
+\begin{proposition}\label{prop:fragments}
+The single-output fragment of a poly-virtual calculus is a virtual double
+category. Its single-input fragment is the vertically reversed version of
+a virtual double category. Ordinary virtual substitution, including its
+changing-base and nullary instances, is an allowed tree operation.
+\end{proposition}
+\begin{proof}
+An outer single-output rectangle and a compatible family of single-output
+rectangles above its input ports form a rooted tree. Shared lateral maps
+are precisely the compatibility data of virtual substitution. Replacing
+vertices of this tree gives associativity by \cref{lem:shapes}; structural
+strips give the identity laws. A nullary vertex has no incoming wire and
+causes no change in this argument. Reversing the upper and lower boundaries
+proves the single-input assertion. Vertical maps must be matched for the
+whole family; they need not allow the family to be pasted one member at a
+time with other members held fixed.
+\end{proof}
+
+\begin{remark}[Empty profiles]
+A cell with two empty boundaries has a specified upper object, a specified
+lower object, and two lateral arrows between them. It is an ordinary
+possible label of a zero-port rectangle. Its arbitrary vertical composites
+are available in a merge calculus; they are not automatically tree
+operations. Structural empty squares on a vertical arrow are distinguished
+and obey the category laws. These conventions include monad units without
+identifying an empty boundary with an atomic horizontal unit.
+\end{remark}
+
+The single-output and single-input fragments thus supply the two
+substitution laws needed for the motivating examples. The next section
+defines category structure using only the retained tree operations.
+
+\section{Formal categories and their homomorphisms}\label{sec:monads}
+
+The two-sided calculus permits a category structure to be specified before
+the path $(A,A)$ has a horizontal representative. Its multiplication,
+unit, and homomorphism equations use the single-output substitution
+fragment. We show that their entire category of models survives passage
+from a merge calculus to its poly-virtual reduct.
+
+\begin{definition}\label{def:formalcat}
+A \emph{formal category} in $\Pcal$ is a quadruple $(X,A,\mu,\eta)$,
+where $A:X\harr X$ is an atomic arrow and
+$\mu:(A,A)\cell A$, $\eta:\emp X\cell A$ are globular cells such that
+\begin{equation}\label{eq:monadlaws}
+ \mu(\mu,1_A)=\mu(1_A,\mu),\qquad
+ \mu(\eta,1_A)=1_A=\mu(1_A,\eta).
+\end{equation}
+Each expression denotes the corresponding rooted tree evaluation.
+A homomorphism $(X,A)\to(Y,B)$ is a vertical arrow $f:X\to Y$ and a
+cell $F\in\Pcal_{f,f}(A;B)$ satisfying
+\begin{equation}\label{eq:functorlaws}
+ F\mu_A=\mu_B(F,F),\qquad F\eta_A=\eta_B[f].
+\end{equation}
+Here $\eta_B[f]$ is the nullary cell obtained by precomposing its upper
+vertex by $f$, that is, by pasting the structural empty square on $f$.
+\end{definition}
+
+In a merge presentation the equations can be displayed as
+\[
+\begin{tikzcd}[column sep=large]
+ (A,A,A) \arrow[r,"\mu\wh1"] \arrow[d,"1\wh\mu"'] &
+ (A,A) \arrow[d,"\mu"]\\
+ (A,A) \arrow[r,"\mu"'] & A
+\end{tikzcd}
+\qquad
+\begin{tikzcd}[column sep=large]
+ A \arrow[r,"\eta\wh1"] \arrow[dr,equal] &
+ (A,A) \arrow[d,"\mu"] &
+ A \arrow[l,"1\wh\eta"'] \arrow[dl,equal]\\
+ & A &
+\end{tikzcd}
+\]
+Each complete composite in these diagrams is a tree evaluation and
+therefore has meaning in the reduct. The individual whiskerings, such
+as $\mu\wh1_A$, are written in the merge presentation; adjoining
+an unused identity wire is not itself a designated tree operation.
+
+\begin{proposition}\label{prop:cat}
+Formal categories and their homomorphisms form a category $\FCat(\Pcal)$.
+\end{proposition}
+\begin{proof}
+Compose $(f,F)$ and $(g,G)$ by $(gf,GF)$, using unary tree pasting.
+Associativity and identities follow from the corresponding tree equations.
+For multiplication, the homomorphism equations for $F$ and $G$,
+interleaved with substitution associativity, give
+\begin{align*}
+ (GF)\mu_A
+ &=G(F\mu_A)=G\bigl(\mu_B(F,F)\bigr)\\
+ &=(G\mu_B)(F,F)=\mu_C(G,G)(F,F)
+   =\mu_C(GF,GF).
+\end{align*}
+For units, the structural empty squares compose with their vertical
+arrows, so
+$(GF)\eta_A=G\eta_B[f]=\eta_C[g][f]=\eta_C[gf]$.
+Thus the composite satisfies both homomorphism equations. The same
+equations hold for identity cells by the substitution identity laws.
+\end{proof}
+
+\begin{theorem}[Invariance under the reduct]\label{thm:reduct}
+For every merge calculus with designated atomic carriers, the identity on
+data induces an isomorphism of categories
+\[
+ \FCat(\Bcal)\cong\FCat(\Up\Bcal).
+\]
+\end{theorem}
+\begin{proof}
+All cells specifying an object or morphism occur in the retained cell
+collections. Every operation in \cref{eq:monadlaws,eq:functorlaws} is a
+tree or structural operation. The reduct retains their values and the
+equalities between them. Finally, identity and composite homomorphisms use
+only structural and unary tree operations. Consequently the object sets,
+hom-sets, identities, and compositions agree.
+\end{proof}
+
+Consequently, merge operations can be used to build a realization
+without becoming additional operations in the definition of formal
+category. We next construct such a realization from the original
+single-output calculus and prove that it preserves that calculus.
+
+\section{The typed forest envelope}\label{sec:forest}
+
+To construct two-sided cells, first place original multicells side by side
+as ordered forests. This step uses no represented composites. We then
+identify the original comparisons whose universal property allows a path
+to be replaced by one arrow in every surrounding context. In the
+bicomodule application, this test will recognize stable cotensor cones.
+
+Let $P$ be a globular virtual calculus: its objects form a set or collection,
+its arrows form a directed graph, and $P(\Gamma;H)$ has identities and
+substitution for composable paths with the same endpoints. In the main
+application $P$ is the entire globular part of $\D$. Arrows between
+different objects are retained.
+
+\begin{definition}\label{def:forest}
+The strict path $2$-category $\Forest(P)$ has the objects of $P$ and its
+finite paths as $1$-arrows. For paths $\Gamma=(H_1,\ldots,H_n)$ and
+$\Delta=(K_1,\ldots,K_m)$ with common endpoints, a $2$-cell consists of
+a weakly increasing subdivision
+\[
+ 0=i_0\leq i_1\leq\cdots\leq i_m=n
+\]
+whose cut vertices are the vertices of $\Delta$, and cells
+$a_j\in P(H_{i_{j-1}+1},\ldots,H_{i_j};K_j)$.
+Repeated indices are permitted only with the indicated coincident vertices.
+When $m=0$, there is a cell only if $n=0$, and it is the empty identity
+forest. Vertical composition substitutes the $a_j$; horizontal composition
+concatenates subdivisions and cells.
+\end{definition}
+
+\begin{lemma}\label{lem:forest}
+These operations make $\Forest(P)$ a strict $2$-category, and
+\begin{equation}\label{eq:forestsingle}
+ \Forest(P)(\Gamma;H)=P(\Gamma;H)
+\end{equation}
+for atomic $H$. A map from $P$ to the single-output part of a strict path
+$2$-category extends uniquely to a strict $2$-functor from $\Forest(P)$.
+\end{lemma}
+\begin{proof}
+Associativity of substitution proves vertical associativity; concatenation
+proves horizontal associativity. Substitution on disjoint consecutive blocks
+commutes, which is interchange. The forest of unary identities and the
+empty forest give the identity laws. With one output the subdivision has
+only one block, proving \cref{eq:forestsingle}. A forest must be sent to
+the horizontal composite of the images of its roots, so an extension is
+unique, and the same substitution identities show that it is a functor.
+\end{proof}
+
+\begin{definition}[Intrinsic comparison class]\label{def:universal}
+A cell $s\in P(\Omega;T)$ is \emph{contextually universal} if for all
+compatible paths $L,R$ and every atomic output $B$, substitution is a
+bijection
+\begin{equation}\label{eq:universal}
+ s^*:P(L,T,R;B)\longrightarrow P(L,\Omega,R;B),
+ \qquad b\longmapsto b(1_L,s,1_R).
+\end{equation}
+Let $S(P)$ be the class of all such cells, including those with empty
+source. We say that $\Omega$ is \emph{represented by $T$} when such an
+$s$ exists.
+\end{definition}
+
+\begin{lemma}\label{lem:universalclosure}
+Identities are contextually universal. Substitution of contextually
+universal comparisons into a contextually universal comparison is
+contextually universal. Contextual instances of such comparisons are
+stable under further adjoining contexts.
+\end{lemma}
+\begin{proof}
+The first assertion is the identity law. For the second, the substitution
+map of the resulting cell is the composite of the substitution maps for
+the outer comparison and its inputs, in their specified contexts. These
+maps are bijections. For the last assertion, enlarge $L,R$ in
+\cref{eq:universal}. This last statement concerns instances in the forest
+envelope, which may have several outputs; it does not change the definition
+of $S(P)$ as single-output cells.
+\end{proof}
+
+\begin{lemma}[Globular detection in an equipment]\label{lem:globdet}
+If $P$ is the globular part of a virtual equipment $\D$, then
+\cref{eq:universal} is equivalent to the same factorization property with
+arbitrary exterior vertical boundaries in $\D$.
+\end{lemma}
+\begin{proof}
+For a target $B$ and exterior arrows $f,g$, its cartesian restriction gives
+\[
+ \D_{f,g}(\Xi;B)\cong P(\Xi;B[f,g]).
+\]
+This bijection commutes with substitution in $\Xi$. Apply it to both
+sides of the desired factorization map and use
+\cref{eq:universal} with output $B[f,g]$. The converse takes identity
+vertical boundaries.
+\end{proof}
+
+The forest envelope supplies several-output boundaries, and
+$S(P)$ records exactly the comparisons licensed by the original
+contextual universal properties. These are the comparisons made
+reversible in the next section. Using the whole typed calculus ensures
+that the same test also covers paths through different bases.
+
+\section{Conservative localization}\label{sec:localization}
+
+A represented path must be usable on either boundary if its representative
+is to support the later multiplication comparison. We therefore adjoin
+inverses to the contextual comparisons. The issue is whether this creates
+new cells with an original single output, or new equalities between such
+cells. Substitution presheaves prove faithfulness, and backward evaluation
+proves that every cell of this profile is already an original multicell.
+
+\begin{definition}\label{def:localization}
+For each $s:\Omega\cell T$ in $S(P)$, adjoin a formal $2$-cell
+$s^{-1}:T\cell\Omega$ to $\Forest(P)$. Form the strict $2$-category
+presented by these generators, the forest equations, and
+\begin{equation}\label{eq:inverserel}
+ s^{-1}s=1_\Omega,\qquad ss^{-1}=1_T.
+\end{equation}
+Denote it by $L(P)$. Equations are closed under horizontal and vertical
+composition. Equivalently, localize the hom-categories of $\Forest(P)$
+at all contextual instances $1_L\wh s\wh1_R$, and extend horizontal
+composition to those localizations.
+\end{definition}
+
+The equivalence in the definition follows directly from the universal
+property of category localization: horizontal composition sends an
+instance to another instance, so it extends uniquely, and its associativity
+and interchange follow by uniqueness. In particular, the construction
+does not merely invert comparisons in isolated hom-categories and then
+postulate compatibility with contexts.
+
+\begin{lemma}[Substitution presheaves]\label{lem:presheaf}
+For an atomic arrow $A:X\harr Y$, the assignment
+$\Phi_A(\Gamma)=P(\Gamma;A)$ is a presheaf on $\Forest(P)(X,Y)$.
+It takes every contextual comparison to a bijection and therefore extends
+uniquely to a presheaf $\overline\Phi_A$ on $L(P)(X,Y)$.
+The map $P(\Gamma;A)\to L(P)(\Gamma;A)$ is injective.
+\end{lemma}
+\begin{proof}
+The action of a forest is simultaneous substitution into its consecutive
+blocks. Identity and composition follow from the virtual identities.
+The assertion about comparisons is precisely \cref{eq:universal}.
+Thus the action of a formal inverse is the inverse bijection, and this
+defines the extension. If original cells $a,b$ have equal images, apply
+their presheaf actions to $1_A\in P(A;A)$. The results are $a$ and $b$,
+respectively, so $a=b$.
+\end{proof}
+
+\begin{lemma}[Backward evaluation]\label{lem:backward}
+Every $z\in L(P)(\Gamma;A)$ with atomic output $A$ equals the image of
+the original cell $\overline\Phi_A(z)(1_A)$.
+\end{lemma}
+\begin{proof}
+Write $z$ as a finite vertical sequence of forests and inverses of
+contextual comparisons. Such a sequence exists: distribute horizontal
+composites of generators into vertical layers by interchange, adding
+identity forests. Start at the final boundary $A$ with $1_A$ and traverse
+the sequence backwards. At an ordinary forest $a:\Xi\cell\Psi$,
+replace the current $b\in P(\Psi;A)$ by its substitution $ba$.
+At the inverse of
+\[
+ t=1_L\wh s\wh1_R:(L,\Omega,R)\cell(L,T,R),
+\]
+the current cell has source $(L,\Omega,R)$. Let $c$ be its unique factor
+through $t$ using \cref{eq:universal}, so that $b=ct$.
+Then in the localization $bt^{-1}=c$. In either case the original cell
+now obtained equals the localized suffix that it replaces. Induction over
+the finite sequence proves the assertion. These two backward operations
+are exactly the actions defining $\overline\Phi_A$, which also proves
+independence from the sequence used.
+\end{proof}
+
+\begin{theorem}[Conservativity]\label{thm:conservative}
+The canonical comparison is a bijection
+\begin{equation}\label{eq:conservative}
+ P(\Gamma;A)\xrightarrow{\ \cong\ }L(P)(\Gamma;A)
+\end{equation}
+for every original path and atomic output. It respects all original
+substitutions. Reversing cells gives the corresponding single-input
+statement for the dual construction.
+\end{theorem}
+\begin{proof}
+Injectivity is \cref{lem:presheaf} and surjectivity is
+\cref{lem:backward}. The canonical map respects substitution by its
+definition. Reversing the displayed bijections proves the dual assertion.
+\end{proof}
+
+\begin{theorem}[Detection of represented paths]\label{thm:detection}
+For an original path $\Gamma$ and atomic arrow $T$,
+\[
+ \Gamma\cong T\text{ in }L(P)
+ \quad\Longleftrightarrow\quad
+ \Gamma\text{ is represented by }T\text{ in }P.
+\]
+More precisely, an original cell $s:\Gamma\cell T$ is invertible in
+$L(P)$ if and only if $s\in S(P)$.
+\end{theorem}
+\begin{proof}
+The reverse implication is the construction. Conversely an isomorphism
+$\Gamma\to T$ is the image of a unique original cell $s$ by
+\cref{thm:conservative}. Whiskering it by any $L,R$ is an isomorphism.
+Precomposition with that isomorphism is a bijection into every atomic
+output $B$. Apply \cref{eq:conservative} to both its source profiles;
+the resulting bijection is \cref{eq:universal}. The same argument applies
+to any specified $s$ whose image is invertible.
+\end{proof}
+
+\begin{theorem}[Universal property]\label{thm:localUP}
+An interpretation of $P$ in the single-output part of a strict path
+$2$-category extends to $L(P)$ if and only if it sends every member of
+$S(P)$ to an invertible comparison. The extension is unique once its
+values on the original signature are fixed.
+\end{theorem}
+\begin{proof}
+Extend first to forests by \cref{lem:forest}. Necessity follows from
+\cref{eq:inverserel}. For sufficiency send $s^{-1}$ to the inverse of
+the interpreted $s$; all defining equations hold. An inverse, when it
+exists, is unique, so all values of the extension are forced.
+\end{proof}
+
+\begin{remark}
+The backward evaluator is a normalization theorem for cells with one
+atomic output. It makes no assertion that arbitrary many-output cells
+have a forest normal form. Such an assertion is unnecessary for
+\cref{thm:conservative,thm:detection,thm:localUP}.
+\end{remark}
+
+The usable conclusion is \cref{eq:conservative}: original
+single-output cells and their substitutions are unchanged. At the same
+time, represented paths can now be used reversibly, with their occurrence
+detected by \cref{thm:detection}. The remaining construction extends
+these globular results to arbitrary vertical boundaries.
+
+\section{Changing vertical boundaries}\label{sec:global}
+
+Globular conservativity compares cells whose exterior maps are identities.
+Internal functors, however, may change the comonoid base. We recover all
+vertical boundaries using companion and conjoint adjunctions, then prove
+that the resulting square calculus preserves the original changing-base
+cells. The construction uses the mixed-base paths already retained in
+the forest envelope.
+
+Fix a virtual equipment $\D$, and let $P$ be its entire globular calculus.
+The constructions below use only represented units and restrictions already
+present in $\D$. For the displayed calculations, choose representatives for
+the finitely many objects and vertical arrows involved and write
+$f_*:X\harr X'$ and $f^*:X'\harr X$ for the resulting companion and
+conjoint. No simultaneous choice of such representatives is part of the
+construction: \cref{prop:choices} below quotients all local presentations by
+their unique binding-compatible comparisons. This is the usual binding or
+base-change calculus; compare \cite[Sections 4--5]{Shulman2008}.
+
+\begin{lemma}[Binding and restriction comparisons]\label{lem:binding}
+The units and restrictions of $\D$ give the following data in $L(P)$.
+\begin{enumerate}
+\item For $f:X\to X'$, an adjunction $f_*\dashv f^*$ with
+\[
+ j_f:\emp X\cell f_*f^*,\qquad
+ e_f:f^*f_*\cell\emp{X'},
+\]
+satisfying
+\begin{equation}\label{eq:triangles}
+ (1_{f_*}\wh e_f)(j_f\wh1_{f_*})=1_{f_*},\qquad
+ (e_f\wh1_{f^*})(1_{f^*}\wh j_f)=1_{f^*}.
+\end{equation}
+\item For $H:X'\harr Y'$ and $f:X\to X'$, $g:Y\to Y'$, an
+intrinsically universal comparison, with unit factors suppressed,
+\begin{equation}\label{eq:restrictioncomparison}
+ s_{f,H,g}:f_*Hg^*\cell H[f,g].
+\end{equation}
+\item For composable $f:X\to Y$, $u:Y\to Z$, invertible comparisons
+\[
+ k_{f,u}:f_*u_*\cell(uf)_*,\qquad
+ l_{f,u}:u^*f^*\cell(uf)^*.
+\]
+They are associative and unital, and identify the displayed adjunction
+for $uf$ with the composite adjunction.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We recall the binding argument, to specify which universal properties are
+used. The cartesian cell $f_*\cell U_{X'}$ has sides $(f,1)$.
+Factoring the unit cell on $f$ through it gives the other companion
+binding cell, with sides $(1,f)$. The corresponding two cells for $f^*$
+have the reversed sides. A vertical paste of each pair is the unit square
+on $f$. The horizontal binding identity is proved by postcomposing with
+the defining cartesian cell: both sides then give that same unit square,
+and uniqueness of cartesian factorization makes them equal.
+
+Paste the cartesian companion and conjoint cells on the two ends of
+$H$, and remove the displayed copies of $U_{X'}$ and $U_{Y'}$ by their
+unit universal properties. Factoring through $H[f,g]$ gives
+\cref{eq:restrictioncomparison}. To factor a cell having $f_*Hg^*$
+in its source, insert the other two binding cells on its sides and then
+use the cartesian factorization defining $H[f,g]$. Substitution back gives
+the original cell by the horizontal binding identities. In the opposite
+order, cartesian uniqueness gives the identity factorization. This works
+inside any $L,R$ and with arbitrary exterior maps; hence the comparison
+belongs to $S(P)$. This is the binding form of the opcartesian base-change
+comparison of \cite[Theorem 7.16]{CruttwellShulman2010}.
+
+For the first assertion, the same argument with $H=U_{X'}$ makes
+$f_*f^*$ a representative of $U_{X'}[f,f]$, after removal of a unit
+factor. Let $t_f:\emp X\cell U_{X'}[f,f]$ be the factor of the
+nullary unit at $X'$ with sides $(f,f)$. Define $j_f$ by composing
+$t_f$ with the inverse representing comparison. The two cartesian
+binding cells, followed by unit composition, give
+$f^*f_*\cell U_{X'}$; compose with the inverse of
+$\emp{X'}\cell U_{X'}$ to obtain $e_f$.
+The two composites in \cref{eq:triangles}, on expanding these
+definitions, are the horizontal binding pastes just proved. Removal and
+insertion of the representing comparisons cancel. Thus they are the
+identity cells.
+
+For composable $f:X\to Y$ and $u:Y\to Z$, paste their companion binding
+pairs. Factoring the resulting binding pair through a companion binding
+pair for $uf$ gives a comparison
+$k_{f,u}:f_*u_*\cell(uf)_*$. By
+\cite[Corollary 7.19]{CruttwellShulman2010}, the pasted companion path has
+an opcartesian composite comparison to the base-change object of $uf$.
+That comparison is characterized by the same pasted binding cells as
+$k_{f,u}$, so cartesian uniqueness identifies it with the comparison just
+constructed. Its factorization property holds in every surrounding
+horizontal context; hence \cref{lem:globdet} places $k_{f,u}$ in $S(P)$,
+and it is invertible in $L(P)$. Dually,
+the pasted conjoint binding pairs give
+$l_{f,u}:u^*f^*\cell(uf)^*$, which likewise belongs to $S(P)$ and is
+invertible in $L(P)$.
+
+Two comparisons between binding pairs which respect the binding cells are
+equal: postcompose with a cartesian binding cell and use its uniqueness.
+For three composable vertical arrows, the two composites of the $k$'s
+carry the same pasted companion binding pair to the binding pair of the
+threefold composite, so they agree; the same argument applies to the
+$l$'s. Identity comparisons are proved similarly. Finally the constructions
+of $j_f,e_f$ from the binding cells show, again by uniqueness, that these
+comparisons identify the displayed adjunction for a composite with the
+composite adjunction.
+\end{proof}
+
+We normalize a local presentation of a vertical identity to the empty path
+with identity adjunction. The comparison $\emp X\cong U_X$ permits this
+normalization without changing the atomic graph. For later calculations,
+compatibility with composition in \cref{lem:binding} says explicitly
+\begin{align}
+ j_{uf}&=(k_{f,u}\wh l_{f,u})
+       (1_{f_*}\wh j_u\wh1_{f^*})j_f,\label{eq:unitcomp}\\
+ e_{uf}&=e_u(1_{u^*}\wh e_f\wh1_{u_*})
+       (l_{f,u}^{-1}\wh k_{f,u}^{-1}).\label{eq:counitcomp}
+\end{align}
+
+\begin{definition}[Cloven global merge presentation]\label{def:global}
+Given a system $\mathfrak b$ of represented units, companions, and
+conjoints, define an auxiliary presentation $\E_{\mathfrak b}(\D)$.
+Its objects and vertical arrows are those of $\D$, and its horizontal
+boundaries are paths in the original horizontal graph. Define
+\begin{equation}\label{eq:globalcells}
+ \E_{\mathfrak b}(\D)_{f,g}(\Gamma;\Delta)
+ :=L(P)(\Gamma;f_*\Delta g^*).
+\end{equation}
+For a square $a$, denote its right-hand representative by $\widehat a$.
+Horizontal pasting of $a$ over $(f,g)$ and $b$ over $(g,h)$ is
+\begin{equation}\label{eq:hcomp}
+ \widehat{a\wh b}=
+ (1_{f_*\Delta}\wh e_g\wh1_{\Delta'h^*})
+ (\widehat a\wh\widehat b).
+\end{equation}
+If $b$ below $a$ has sides $(u,v)$, define vertical pasting by
+\begin{equation}\label{eq:vcomp}
+ \widehat{ba}=
+ (k_{f,u}\wh1_{\Xi}\wh l_{g,v})
+ (1_{f_*}\wh\widehat b\wh1_{g^*})\widehat a,
+\end{equation}
+where $\Xi$ is the lower boundary of $b$.
+The vertical identity on $\Gamma$ is $1_\Gamma$; the horizontal identity
+on $f$ is $j_f$.
+\end{definition}
+
+For example, \cref{eq:vcomp} is the typed sequence
+\[
+ \Gamma\longrightarrow f_*\Delta g^*
+ \longrightarrow f_*u_*\Xi v^*g^*
+ \longrightarrow(uf)_*\Xi(vg)^*.
+\]
+
+\begin{theorem}[Pasting coherence]\label{thm:globalcoherence}
+For every cloven presentation $\mathfrak b$, the operations of
+\cref{def:global} give $\E_{\mathfrak b}(\D)$ the structure of a strict
+double category with paths as horizontal arrows, and hence a merge
+calculus on the original atomic graph.
+\end{theorem}
+\begin{proof}
+For three horizontally adjacent squares, either association tensors their
+representatives and contracts the two disjoint strings $g^*g_*$ and
+$h^*h_*$. The contractions commute by interchange in $L(P)$.
+Horizontal composition with $j_f$ or $j_g$ is an identity by the two
+triangle identities \cref{eq:triangles}.
+
+For three vertically adjacent squares, either association first substitutes
+all three representatives and then compares the three successive
+companions and the three successive conjoints with those of the composite
+vertical maps. Associativity of $k,l$ from \cref{lem:binding} makes
+these results equal. Their identity comparisons are normalized, proving
+the vertical identity laws. Equation \cref{eq:unitcomp} states exactly
+that the horizontal identity on $uf$ is the vertical paste of those on
+$f$ and $u$.
+
+It remains to check interchange. At an interior vertical side, write its
+upper and lower segments as $g$ and $v$. After expanding the four square
+representatives, either order of evaluation has the same uncontracted
+string. Pasting horizontally first contracts $g^*g_*$, then $v^*v_*$,
+in that string. Pasting vertically first replaces the string
+$v^*g^*g_*v_*$ by $(vg)^*(vg)_*$ using $l,k$, and contracts by
+$e_{vg}$. These operations are equal by \cref{eq:counitcomp}.
+Every other part of the two expressions agrees by functoriality of
+whiskering. This proves interchange. It also proves compatibility with
+structural subdivisions and hence evaluation of all rectangular schemes.
+\end{proof}
+
+\begin{proposition}[Choice-free global merge realization]\label{prop:choices}
+For each vertical arrow $f$, let $\mathcal B(f)$ be the collection of all
+binding presentations furnished by \cref{lem:binding}, obtained from any
+represented unit and the corresponding restrictions. If
+$\mathfrak f,\mathfrak f'\in\mathcal B(f)$, there are unique
+binding-compatible isomorphisms
+\[
+ \kappa_{\mathfrak f,\mathfrak f'}:
+ \mathfrak f_*\cell\mathfrak f'_*,\qquad
+ \lambda_{\mathfrak f,\mathfrak f'}:
+ \mathfrak f^*\cell\mathfrak f'^*,
+\]
+and they satisfy the identity and cocycle equations. The cell collections
+\begin{equation}\label{eq:choicefreecells}
+ \E(\D)_{f,g}(\Gamma;\Delta)
+ :=
+ \left(
+ \coprod_{\substack{\mathfrak f\in\mathcal B(f)\\
+                     \mathfrak g\in\mathcal B(g)}}
+ L(P)(\Gamma;\mathfrak f_*\Delta\mathfrak g^*)
+ \right)\big/\!\sim
+\end{equation}
+where
+\begin{equation}\label{eq:choicefreerel}
+ (\mathfrak f,\mathfrak g,a)\sim
+ (\mathfrak f',\mathfrak g',a')
+ \quad\Longleftrightarrow\quad
+ a'=(\kappa_{\mathfrak f,\mathfrak f'}\wh1_\Delta\wh
+        \lambda_{\mathfrak g,\mathfrak g'})a,
+\end{equation}
+form a merge realization on the original boundary signature. Every finite
+rectangular pasting is evaluated by choosing representatives for its
+finitely many cells and vertical seams, evaluating by the local cloven
+formulas \cref{eq:hcomp,eq:vcomp}, and taking the class in
+\cref{eq:choicefreecells}. The result is independent of all such local
+choices. Thus $\E(\D)$ is defined without a simultaneous choice of units,
+companions, or conjoints. Any cloven presentation
+$\E_{\mathfrak b}(\D)$ is canonically isomorphic to $\E(\D)$, and the
+canonical isomorphisms between cloven presentations satisfy the cocycle
+identity.
+\end{proposition}
+\begin{proof}
+For two represented units, universal factorization gives a unique
+isomorphism carrying one nullary universal cell to the other. For two
+companion binding pairs, factor the cartesian binding cell of the first
+through that of the second and conversely. Each resulting composite has
+the same factorization through a cartesian binding cell as the identity,
+so cartesian uniqueness makes the two factors inverse. This gives
+$\kappa_{\mathfrak f,\mathfrak f'}$; the conjoint argument gives
+$\lambda_{\mathfrak f,\mathfrak f'}$. A composite of two
+binding-compatible comparisons is binding-compatible, so uniqueness gives
+\[
+ \kappa_{\mathfrak f',\mathfrak f''}
+ \kappa_{\mathfrak f,\mathfrak f'}
+ =\kappa_{\mathfrak f,\mathfrak f''},\qquad
+ \lambda_{\mathfrak f',\mathfrak f''}
+ \lambda_{\mathfrak f,\mathfrak f'}
+ =\lambda_{\mathfrak f,\mathfrak f''},
+\]
+together with the identity equations. Hence \cref{eq:choicefreerel} is
+an equivalence relation.
+
+Binding-compatible isomorphisms preserve $j$ and $e$: after expanding
+these cells by their defining binding factorizations, both possible
+transports have the same composite with the relevant cartesian binding
+cell, so uniqueness identifies them. They likewise preserve $k$ and $l$,
+since the transported and untransported composites respect the same
+pasted binding pairs. Therefore changing any representative or seam in a
+finite rectangular pasting transports its cloven value exactly by the
+relation \cref{eq:choicefreerel}. The class of the value is independent
+of the choices. Only finitely many representatives are needed for a finite
+scheme, so this definition requires no simultaneous cleavage.
+
+Evaluate the two sides of any associativity, identity, or interchange law
+using the same finite choices. The calculation in the proof of
+\cref{thm:globalcoherence} uses only those finitely many choices and makes
+the two values equal; hence they determine the same quotient class. Thus
+the quotient is a strict double category and a merge calculus. If a
+cloven presentation $\mathfrak b$ is given, send
+$a\in L(P)(\Gamma;f_*\Delta g^*)$ to its class. Every quotient class has
+a unique representative after transport to the $\mathfrak b$-presentation
+of its two exterior arrows, so this map is bijective on every cell
+collection and respects all pasting. It is therefore a canonical
+isomorphism $\E_{\mathfrak b}(\D)\cong\E(\D)$. The cocycle identity is
+the one already proved for the binding-compatible comparisons.
+\end{proof}
+
+\begin{theorem}[Global conservativity]\label{thm:globalembedding}
+There is a virtual functor $\D\to\E(\D)$, identical on its boundary
+signature, inducing bijections
+\begin{equation}\label{eq:globalembedding}
+ \D_{f,g}(\Gamma;H)\cong\E(\D)_{f,g}(\Gamma;H)
+\end{equation}
+for every atomic $H$. It preserves and reflects original cartesian cells.
+\end{theorem}
+\begin{proof}
+For the fixed profile in question, choose binding presentations of the two
+exterior arrows. By \cref{prop:choices}, every class in
+$\E(\D)_{f,g}(\Gamma;H)$ has a unique representative in the corresponding
+summand of \cref{eq:choicefreecells}. The desired bijection is therefore
+the composite
+\begin{align*}
+ \D_{f,g}(\Gamma;H)
+ &\cong P(\Gamma;H[f,g])\\
+ &\cong L(P)(\Gamma;H[f,g])\\
+ &\cong L(P)(\Gamma;f_*Hg^*)\\
+ &\cong \E(\D)_{f,g}(\Gamma;H).
+\end{align*}
+The first step is cartesian factorization, the second is
+\cref{thm:conservative}, the third is postcomposition with
+$s_{f,H,g}^{-1}$, and the last takes the quotient class. The construction
+is independent of the two local binding presentations by
+\cref{eq:choicefreerel}.
+
+Identities are preserved by the binding identities. For substitution of a
+compatible family, choose binding presentations for the finitely many
+vertical seams and apply the displayed construction to every cell. At each
+internal side the two binding cells are adjacent and contract by $e_g$, as
+in \cref{eq:hcomp}; at the exterior sides their vertical composites are
+compared by $k,l$, as in \cref{eq:vcomp}. The horizontal binding identity
+cancels each inserted pair. The remaining cartesian factor is precisely
+that of the original substituted cell. Passing to quotient classes proves
+compatibility with all virtual substitution, including empty blocks.
+Finally, the test for an original unary cartesian cell is a bijection of
+original single-output cell collections for every top path and exterior
+boundary. The displayed bijections identify all these tests and their
+substitution maps in the two calculi, proving both preservation and
+reflection.
+\end{proof}
+
+\begin{definition}[Equipment boundary transport]\label{def:equipment}
+A \emph{boundary presentation} of a vertical arrow $f:X\to X'$ consists
+of arrows $f_*:X\harr X'$ and $f^*:X'\harr X$ (empty paths are permitted
+for identities) and cells
+\[
+ j_f:\emp X\cell f_*f^*,\qquad
+ e_f:f^*f_*\cell\emp{X'}
+\]
+satisfying \cref{eq:triangles}. A poly-virtual calculus has
+\emph{equipment boundary transport} when every vertical arrow admits a
+boundary presentation and, for every local choice of presentations for
+$f,g$, there are bijections
+\[
+ \Pcal_{f,g}(\Gamma;\Delta)
+   \cong\Pcal_{\mathrm{glob}}(\Gamma;f_*\Delta g^*).
+\]
+For two local presentations of the same vertical arrow, these
+representability bijections induce the unique comparison isomorphisms
+between their companion boundaries and between their conjoint boundaries:
+with the other exterior map an identity and the lower path empty, the two
+companion boundaries represent the same cell functor, and the conjoint
+case is dual. The boundary-bending bijections are required to be invariant
+under these canonical comparisons, which also carry the corresponding
+$j,e$ cells to one another. There are also natural identifications between the cell
+collections obtained by iterated boundary bending and by bending along
+composite vertical maps. Coherence means that all diagrams of these
+bijections generated by inserting identity vertical maps, reassociating a
+composable string of vertical maps, changing local boundary presentations
+by their canonical comparisons, and the defined tree substitutions
+commute. This is coherence of functions on cell collections; it does not
+declare a multiwire merge to be a tree operation. A \emph{poly-virtual
+equipment} is a poly-virtual calculus having this property. Transported
+boundaries such as $f_*\Delta g^*$ need not have atomic representatives.
+In the realizations constructed below the comparison and coherence clauses
+are consequences of \cref{lem:binding,prop:choices,prop:transportcoherence},
+not additional structure imposed on the construction.
+\end{definition}
+
+\begin{proposition}[Mates in the reduct]\label{prop:mates}
+For any local choices of binding presentations for $f$ and $g$, the
+realization and its reduct have coherent bijections
+\begin{equation}\label{eq:mates}
+ \E(\D)_{f,g}(\Gamma;\Delta)
+ \cong L(P)(\Gamma;f_*\Delta g^*)
+ \cong L(P)(f^*\Gamma g_*;\Delta).
+\end{equation}
+The second bijection and its inverse use only single-wire cuts.
+Together with \cref{prop:transportcoherence}, these bijections give
+$\Up\E(\D)$ equipment boundary transport.
+\end{proposition}
+\begin{proof}
+The first bijection chooses the unique representative of the quotient class
+in the selected summand of \cref{eq:choicefreecells}; equivalently it is
+\cref{eq:globalcells} in that cloven presentation. For the second, cut the
+leftmost exposed $f_*$ output against $e_f$, adjoining the input $f^*$;
+cut the rightmost $g^*$ output against $e_g$, adjoining $g_*$. In merge
+notation the resulting map is
+\[
+ a\longmapsto
+ (e_f\wh1_\Delta\wh e_g)(1_{f^*}\wh a\wh1_{g_*}).
+\]
+For its inverse, cut the $f^*$ output of $j_f$ into the leftmost input
+and the $g_*$ output of $j_g$ into the rightmost input. Each cut satisfies
+\cref{eq:cutplacement}. The two composites reduce to identity by
+\cref{eq:triangles}. Their naturality under tree substitution follows
+by substituting the same cuts into the corresponding trees. Compatibility
+with vertical composition is \cref{eq:unitcomp,eq:counitcomp}. All
+these operations and equalities are retained by the reduct.
+\end{proof}
+
+\begin{proposition}[Finite coherence for boundary transport]\label{prop:transportcoherence}
+For a composable finite string $f_1,\ldots,f_n$, iterated use of the
+comparisons $k$ gives a comparison
+\[
+ K_{f_1,\ldots,f_n}:
+ f_{1*}\cdots f_{n*}\cell(f_n\cdots f_1)_*,
+\]
+and iterated use of $l$ gives
+\[
+ L_{f_1,\ldots,f_n}:
+ f_n^*\cdots f_1^*\cell(f_n\cdots f_1)^*.
+\]
+These comparisons are independent of all bracketings. Every iterated
+boundary-bending bijection in \cref{def:equipment} reduces to a common
+normal form built from $j,e,K,L$, and all the coherence diagrams required
+there commute. Hence no further boundary-transport coherence equations
+are imposed in the realization.
+\end{proposition}
+\begin{proof}
+For three arrows, independence of bracketing is the associativity of $k$
+and $l$ proved in \cref{lem:binding}; induction gives the assertion for
+any finite string. The identity cases use the normalized empty-path
+presentations. Expand an iterated bending into insertions of $j$, cuts
+against $e$, and the comparison cells joining successive companion or
+conjoint paths. Reassociate the latter to $K$ and $L$. There are four
+possible local changes of evaluation order. Cuts on disjoint wires commute
+by interchange. Adjacent $j,e$ pairs cancel by the triangle identities
+\cref{eq:triangles}. Rebracketings of companion or conjoint strings agree
+by the just-proved independence of $K,L$. Replacing bending successively
+along $f,u$ by bending along $uf$ is exactly
+\cref{eq:unitcomp,eq:counitcomp}. Thus any two evaluations with the same
+typed exterior reduce to the same expression. These calculations are
+spelled out in \cref{app:bindings}. Finally, changing the local binding
+presentations transports every term by the unique comparisons of
+\cref{prop:choices}, so the conclusion descends to the choice-free
+realization.
+\end{proof}
+
+\begin{remark}[Restrictions, extensions, and laxity]\label{rem:lax}
+For a path $K:X'\harr Y'$, any local boundary presentations for
+$f,g$ give the restriction boundary $f_*Kg^*$. In the corresponding cloven
+presentation its cartesian correspondence is \cref{eq:globalcells};
+the other bending in \cref{eq:mates} gives extension transport.
+For $f:X\to X'$, the operation on endopaths
+$R_f(H)=f_*Hf^*$ is lax monoidal, with comparison
+\[
+ f_*Hf^*f_*Kf^*
+ \xrightarrow{\,1\wh e_f\wh1\,}f_*HKf^*
+\]
+and unit $j_f$. Contractions of disjoint counits prove associativity,
+and \cref{eq:triangles} proves unitality. No inverse for this comparison
+is supplied or needed. Vertical reversal interchanges the roles of
+restriction and extension; the resulting transport remains a formal
+boundary even when it has no bicomodule representative.
+\end{remark}
+
+Thus \cref{eq:globalembedding} retains every original square with
+one atomic output, including its vertical maps. The mate bijections
+\cref{eq:mates} give coherent transport even when the resulting boundary
+has no atomic representative. Both facts will survive the reversal needed
+for forward bicomodule maps.
+
+\section{The completion theorem and maps of calculi}\label{sec:completion}
+
+The global square calculus now supplies the two parts needed for the
+general theorem: conservativity on original multicells and coherent
+vertical transport. Taking its poly-virtual reduct retains the category
+operations. We also determine which maps of the initial calculi extend
+across the construction.
+
+\begin{theorem}[Poly-virtual completion]\label{thm:completion}
+The construction
+$\E_{\mathrm{poly}}(\D)=\Up\E(\D)$ has the properties stated in
+\cref{thm:maincompletion}. In particular,
+\[
+ \FCat(\E_{\mathrm{poly}}(\D))\cong\Mon(\D),
+\]
+where $\Mon(\D)$ denotes the category of monoids and monoid
+homomorphisms in $\D$, and carriers on the left are the original atomic
+arrows.
+\end{theorem}
+\begin{proof}
+The tree calculus and transport follow from
+\cref{thm:globalcoherence,prop:choices,prop:mates,prop:transportcoherence}.
+Global conservativity is
+\cref{thm:globalembedding}, and identifies all multiplication, unit,
+and homomorphism cells. Its compatibility with substitution identifies
+all their equations and compositions. Finally apply \cref{thm:reduct}.
+\end{proof}
+
+\begin{theorem}[Exact extension criterion]\label{thm:functoriality}
+Let $F:P\to P'$ be a map of typed globular calculi. It extends, with
+the same values on atomic arrows and cells, to a map $L(P)\to L(P')$
+if and only if $F(S(P))\subseteq S(P')$.
+For a virtual functor between equipments satisfying this criterion,
+the extension globalizes canonically to the choice-free merge realizations.
+In cloven presentations it is represented by the unique binding-compatible
+comparisons of \cref{prop:choices}.
+\end{theorem}
+\begin{proof}
+By \cref{thm:localUP}, extension is equivalent to invertibility of
+every $F(s)$ in $L(P')$. By \cref{thm:detection}, this is precisely
+membership in $S(P')$. For globalization, the image of an original unit comparison becomes
+invertible. Hence the image binding cells define a companion and conjoint
+presentation for the image vertical map in the target realization. Compare
+this local presentation with any other one by the unique binding-compatible
+comparisons of \cref{prop:choices}, and use these at the two ends of the
+image of \cref{eq:globalcells}. Their compatibility with $j,e,k,l$ proves
+that \cref{eq:hcomp,eq:vcomp} are respected. The cocycle identity makes
+the resulting quotient class independent of the local presentations, and
+uniqueness proves compatibility with compositions of such functors.
+\end{proof}
+
+\begin{proposition}[Path presentation]\label{prop:pathpresentation}
+A merge calculus on a horizontal graph is equivalently a strict double
+category whose horizontal category is the free path category on that
+graph, with the graph retained as designated atomic arrows.
+\end{proposition}
+\begin{proof}
+From a merge calculus, regard a boundary path as a horizontal arrow and
+use its cell collections as squares. Two-box rectangular evaluations
+give the two compositions, and scheme substitution gives associativity,
+units, and interchange. Conversely, compose a rectangular expression
+in a strict double category. The double-category laws identify the
+generating equivalent schemes, so its value is well defined. These
+constructions recover exactly the specified cell collections and pasting
+operations in either direction.
+\end{proof}
+
+This is a presentation equivalence for the strict path realization used
+here. It does not identify every poly-virtual calculus with a merge
+calculus, nor assert that forgetting merges is invertible.
+
+The completion is therefore determined by its intrinsic comparison
+class, and a map extends precisely when it preserves that class.
+We apply it next to the bicomodule input, where reversal converts the
+preserved single-output cells into forward balanced maps.
+
+\section{Formal internal categories in an arbitrary monoidal base}\label{sec:formalinternal}
+
+The conservative completion is now available for the virtual equipment
+$\Ccal(\V)$ constructed in \cref{sec:bicomod}. Reversing its squares
+restores the ordinary direction of bicomodule maps. The poly-virtual
+reduct then gives the category operations of \cref{def:formalcat} in
+every monoidal base.
+
+\begin{definition}\label{def:Q}
+The \emph{bicomodule poly-virtual equipment} is
+\begin{equation}\label{eq:Q}
+ \Q(\V)=\Up\bigl(\E(\Ccal(\V))^{\vop}\bigr).
+\end{equation}
+Vertical reversal reverses the vertical category and the upper and
+lower boundaries of every square, retaining horizontal orientations.
+A \emph{formal internal category in $\V$} is a formal category in
+$\Q(\V)$ on an atomic bicomodule carrier.
+\end{definition}
+
+The variance is summarized here; ``primitive'' refers to cells before
+localization.
+\begin{center}
+\small
+\begin{tabular}{@{}p{.20\textwidth}p{.35\textwidth}p{.35\textwidth}@{}}
+\toprule
+Data & $\Ccal(\V)$ & Reversed realization\\
+\midrule
+Objects & Comonoids & Comonoids\\
+Vertical arrows & Opposite comonoid maps & Forward comonoid maps\\
+Atomic arrows & Bicomodules & Bicomodules\\
+Unary cells & Opposite equivariant maps & Forward equivariant maps\\
+Primitive arities & Many inputs, one output & One input, many outputs\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{theorem}\label{thm:arbitraryV}
+For every monoidal category $\V$, \cref{eq:Q} defines a poly-virtual
+equipment with the displayed variance. Every primitive single-input
+cell, including a unary changing-base cell, is preserved and reflected.
+All its cells admit finite expressions in primitive cells, pasting, and
+inverses of intrinsically universal comparisons.
+\end{theorem}
+\begin{proof}
+Apply \cref{prop:modinput,lem:bicomodunit,thm:completion}, then
+reverse the vertical category and the squares. Under reversal the
+original companion and conjoint exchange their roles, as do their unit
+and counit. Use the second mate description in \cref{eq:mates} to
+rewrite the reversed square correspondence in the form required by
+\cref{def:equipment}. The triangle and composition identities are
+preserved by this reversal, and \cref{prop:transportcoherence} gives the
+required coherent equipment transport. The cell assertion is the
+dual of \cref{thm:globalembedding}. The finite-expression assertion
+is \cref{def:localization,def:global}; the latter's adjunction cells
+were themselves constructed as finite expressions in
+\cref{lem:binding}. The reduct changes none of these collections.
+\end{proof}
+
+A multiplication is therefore an element of the constructed collection
+$\Q(\V)((A,A);A)$, and its associativity is an equality between
+specified finite expressions. The carrier remains the given bicomodule
+$A$. This proves the existence and preservation assertions of
+\cref{thm:main}; \cref{thm:reduct} supplies its assertion about tree
+operations. It remains to identify these expressions with actual
+cotensor multiplication maps whenever the corresponding boundaries are
+represented.
+
+\section{Represented cotensors and Aguiar recovery}\label{sec:recovery}
+
+Formal multiplication has been defined in every monoidal base. To compare
+it with Aguiar's multiplication, we must show that an existing stable
+cotensor represents the same input boundary and transports the same
+equations. We first recognize its cone by contextual universality, then
+use its inverse comparison to make the conversion by one cut.
+
+\begin{definition}[Stable cotensor cone]\label{def:stable}
+For $M:C\harr D$ and $N:D\harr E$, a stable cotensor cone is an
+equalizer
+\begin{equation}\label{eq:cotensorfork}
+\begin{tikzcd}[column sep=large]
+ T \arrow[r,hook,"i_{M,N}"] & M\otimes N
+ \arrow[r,shift left=.65ex,"\rho_M\otimes1"]
+ \arrow[r,shift right=.65ex,"1\otimes\lambda_N"'] & M\otimes D\otimes N
+\end{tikzcd}
+\end{equation}
+which remains an equalizer after applying $K\otimes-\otimes L$ for
+every pair of objects $K,L$ of $\V$. Write $T=M\square_D N$.
+\end{definition}
+
+This is a property of an existing cone, not a condition on the definition
+of $\Q(\V)$. Aguiar calls a monoidal category regular when all
+equalizers exist and are preserved in this way
+\cite[Definition 2.1.1]{Aguiar1997}.
+
+\begin{lemma}\label{lem:cotensorstructure}
+A stable cone \cref{eq:cotensorfork} has unique exterior coactions
+making $i_{M,N}$ equivariant for the exterior coactions of $M,N$.
+It is a $C$--$E$ bicomodule. Its inclusion is a contextually universal
+cell $(M,N)\cell T$ of $\Ccal(\V)$.
+\end{lemma}
+\begin{proof}
+The map $(\lambda_M\otimes1)i_{M,N}$ satisfies the balance equation
+in $C\otimes M\otimes N$: this follows by commuting $\lambda_M$
+past $\rho_M$ in \cref{eq:bicomodcommute}. Since
+$1_C\otimes i_{M,N}$ is the corresponding equalizer, there is a
+unique $\lambda_T$ with
+\[
+ (1_C\otimes i_{M,N})\lambda_T=(\lambda_M\otimes1)i_{M,N}.
+\]
+Construct $\rho_T$ similarly. Postcomposing the two coassociativity
+maps with $1_C\otimes1_C\otimes i_{M,N}$ proves their equality,
+because this map is monic; counitality uses $i_{M,N}$ in the same
+way. The right coaction and commuting-coaction equations follow by
+postcomposing with $i_{M,N}\otimes1_E\otimes1_E$ and
+$1_C\otimes i_{M,N}\otimes1_E$, respectively. All these maps are
+monic by stability.
+
+Now take a balanced map
+$b:B\to\bigotimes L\otimes M\otimes N\otimes\bigotimes R$.
+Its balance equation at $D$ gives a unique factor
+\[
+ \bar b:B\longrightarrow\bigotimes L\otimes T\otimes\bigotimes R
+\]
+through $1\otimes i_{M,N}\otimes1$, by stability. For every remaining
+balance or exterior equation for $\bar b$, postcompose both sides
+with the tensor of $i_{M,N}$ and the additional coaction base. The
+defining equations for $\lambda_T,\rho_T$ turn the two resulting
+maps into the corresponding equal maps for $b$. The postcomposed map
+is monic, so the equation for $\bar b$ holds. Conversely such a
+balanced $\bar b$ gives a balanced $b$ by composition. Uniqueness
+is that of the equalizer factorization. This is exactly
+\cref{eq:universal} in $\Ccal(\V)$.
+\end{proof}
+
+Let $\mathbb B(\V)=\E(\Ccal(\V))^{\vop}$ denote the merge
+calculus before taking its reduct. Under vertical reversal the cone
+becomes a cell
+\[
+ \iota_{M,N}:T\cell(M,N),
+\]
+whose underlying map in $\V$ is $i_{M,N}$.
+
+\begin{proposition}[Conversion by one cut]\label{prop:tau}
+For a stable cotensor cone the construction supplies an inverse
+comparison
+\[
+ \tau_{M,N}:(M,N)\cell T
+\]
+in $\mathbb B(\V)$. In its poly-virtual reduct, the operation
+\begin{equation}\label{eq:tauuniversal}
+ \Q(\V)(L,T,R;\Delta)\longrightarrow
+ \Q(\V)(L,M,N,R;\Delta),\qquad
+ a\longmapsto a(1_L,\tau_{M,N},1_R)
+\end{equation}
+is a bijection for all compatible paths. Likewise there is a nullary
+comparison $\tau_0:\emp C\cell C$ with this property.
+\end{proposition}
+\begin{proof}
+By \cref{lem:cotensorstructure}, the comparison in
+$\Ccal(\V)$ belongs to $S(P)$. Its image is inverted in $L(P)$;
+after reversal its inverse has the stated profile. Whiskered
+precomposition with it is a bijection in the merge calculus. The map
+in \cref{eq:tauuniversal} is a single cut along $T$, so the reduct
+retains this map, its domain and codomain, and their equalities.
+Consequently it retains the bijection. The nullary assertion follows
+identically from \cref{lem:bicomodunit}.
+\end{proof}
+
+The inverse comparison identifies two formal boundaries. The cotensor
+inclusion $i_{M,N}$ remains its original map in $\V$. The next example
+explains why the input substitution bijection requires the constructed
+inverse, even after the original output universal property is known.
+
+\begin{example}[One-sided representation does not suffice; Boolean obstruction]\label{ex:boolean}
+This is the two-truth-value instance of the Boolean obstruction used to
+distinguish poly-bicategorical cut from merge composition in
+\cite[Section 5]{Hadzihasanovic2019}, augmented here by the empty structural
+square needed for our calculus. Let horizontal arrows be the two truth
+values $\bot<\top$ at one object, and give each profile the empty or
+singleton collection
+\[
+ \mathbb H(\Gamma;\Delta)=
+ \begin{cases}
+  \{*\},&\Gamma=\Delta=\varnothing,\\
+  \{*\},&\bigwedge\Gamma\leq\bigvee\Delta,\\
+  \varnothing,&\text{otherwise}.
+ \end{cases}
+\]
+The vertical category is terminal. The empty meet is $\top$ and the
+empty join is $\bot$; the first case separately supplies the empty
+structural square required by \cref{def:poly}. It cannot be a premise
+of a single-wire cut because it has no ports. For the remaining cells,
+cuts are valid: if every remaining input is true and every remaining
+output is false, the first premise forces the cut formula true and the
+second forces it false, a contradiction. Applying this argument to the
+wires of a tree defines all tree evaluations. Unary identities exist,
+and all evaluation equations hold because each cell collection has at
+most one element. We obtain a poly-virtual calculus, with the adjoined
+empty structural square affecting none of its nonempty profiles.
+
+The output list $(\top,\bot)$ is contextually represented on the
+output side by $\top$, since
+$\top\vee\bot=\top$ in every join context. Nevertheless
+\[
+ \mathbb H(\top,\bot;\bot)=\{*\},\qquad
+ \mathbb H(\top;\bot)=\varnothing.
+\]
+Thus one-sided output representation alone does not give the input
+substitution bijection used for multiplication. In our construction
+that bijection is \cref{eq:tauuniversal}, obtained from a constructed
+inverse and then retained under the reduct. This distinguishes its
+proof from an inference based only on a one-sided universal property.
+\end{example}
+
+We now compare iterated representatives. Their unique cone comparisons
+must supply the associator and unitors used by ordinary cotensor
+multiplication; this will identify the formal category equations.
+
+\begin{lemma}[Coherence of represented cotensors]\label{lem:cotensorcoherence}
+When the stable cotensors of the pairs being composed exist, all
+parenthesizations of a finite bicomodule path represent the same balanced
+cone functor. There is a unique comparison between any two of them
+commuting with their maps to the unparenthesized tensor. These comparisons
+are isomorphisms and satisfy the pentagon and triangle identities.
+\end{lemma}
+\begin{proof}
+For a triple, the object $(M\square_D N)\square_E K$, mapped into
+$M\otimes N\otimes K$, receives a map from $B$ exactly when a map
+from $B$ into that tensor satisfies both adjacent balance equations.
+Indeed the first equation uniquely factors it through
+$i_{M,N}\otimes1_K$, and the second then becomes the balance
+equation for the second cotensor. Monicity after tensoring verifies
+this equivalence, including exterior equivariance, as in
+\cref{lem:cotensorstructure}. Reversing the order of these two
+factorizations gives $M\square_D(N\square_E K)$ and the same
+cone functor. The unique mutually inverse factorizations define the
+associator $a_{M,N,K}$, characterized by the commutative triangle
+\[
+\begin{tikzcd}[column sep=large]
+ (M\square_D N)\square_E K
+ \arrow[rr,"a_{M,N,K}"] \arrow[dr,"(i_{M,N}\otimes1)i_{M\square N,K}"'] &&
+ M\square_D(N\square_E K)
+ \arrow[dl,"(1\otimes i_{N,K})i_{M,N\square K}"]\\
+ &M\otimes N\otimes K.&
+\end{tikzcd}
+\]
+The tensor associator is understood on the lower vertex. Induction
+establishes the same property for any finite path. Two routes around
+the pentagon give maps between representatives with the same composite
+to the unparenthesized fourfold tensor, so uniqueness makes them equal.
+
+For units, $\lambda_M:M\to C\otimes M$ is the equalizer of
+$\delta_C\otimes1$ and $1\otimes\lambda_M$. If $x:B\to C\otimes M$
+equalizes them, apply $\eps_C$ to their first tensor factor to obtain
+\[
+ x=\lambda_M(\eps_C\otimes1)x.
+\]
+Counitality proves uniqueness. This formula survives arbitrary tensoring,
+so the cone is stable. It gives an isomorphism $C\square_C M\cong M$;
+the right coaction gives $M\square_D D\cong M$. Inserting a unit
+factor and removing it by its counit preserves the universal cone.
+Thus the two routes in each triangle have the same cone and agree
+by uniqueness. This also verifies the nullary cases of the induction.
+\end{proof}
+
+\begin{theorem}[Fixed-base recovery]\label{thm:aguiar}
+For any fixed choices of the stable cotensor representatives used to
+present cotensor composition, the formal-category structures on a
+$C$--$C$ bicomodule $A$ in $\Q(\V)$ are in bijection with monoid
+structures on $A$ in the cotensor monoidal category
+$\Bicomod_C(\V)$. Explicitly,
+\begin{equation}\label{eq:mutransport}
+ \mu=m\tau_{A,A},\qquad \eta=u\tau_0,
+ \qquad m=\mu\iota_{A,A},\qquad u=\eta\tau_0^{-1},
+\end{equation}
+where the inverse formulas are evaluated in the merge presentation and
+then identified with actual maps by unary full faithfulness.
+In particular this recovers Aguiar internal categories in every regular
+monoidal category.
+\end{theorem}
+\begin{proof}
+By \cref{prop:tau} and unary full faithfulness from
+\cref{thm:arbitraryV},
+\begin{align*}
+ \Q(\V)((A,A);A)&\cong
+ \Q(\V)(A\square_C A;A)
+ \cong\Bicomod_C(\V)(A\square_C A,A),\\
+ \Q(\V)(\emp C;A)&\cong
+ \Q(\V)(C;A)
+ \cong\Bicomod_C(\V)(C,A).
+\end{align*}
+These are the formulas \cref{eq:mutransport}. Their forward
+operations each use one cut. We verify all equations.
+
+Write $T=A\square_C A$, $T_L=T\square_C A$, $T_R=A\square_C T$,
+and let
+\[
+ I_L=(\iota_{A,A}\wh1_A)\iota_{T,A}:T_L\cell(A,A,A),\qquad
+ I_R=(1_A\wh\iota_{A,A})\iota_{A,T}:T_R\cell(A,A,A).
+\]
+The defining cone equality of \cref{lem:cotensorcoherence} says
+$I_Ra_{A,A,A}=I_L$. Functoriality of cotensor maps, defined by
+equalizer factorization, says that the squares
+\[
+\begin{tikzcd}[column sep=large]
+ T_L \arrow[r,"m\square_C1"] \arrow[d,"I_L"'] &
+ T \arrow[d,"\iota_{A,A}"]\\
+ (A,A,A) \arrow[r,"\mu\wh1"'] &(A,A)
+\end{tikzcd}
+\qquad
+\begin{tikzcd}[column sep=large]
+ T_R \arrow[r,"1\square_Cm"] \arrow[d,"I_R"'] &
+ T \arrow[d,"\iota_{A,A}"]\\
+ (A,A,A) \arrow[r,"1\wh\mu"'] &(A,A)
+\end{tikzcd}
+\]
+commute in the merge calculus. To see this without presupposing any
+monoid laws, compose their upper maps with the cotensor inclusions.
+The equalities become the defining factorizations for
+$m\square_C1$ and $1\square_Cm$, followed by cancellation of
+$\tau_{A,A}\iota_{A,A}=1_T$.
+Postcomposing with $\mu$ therefore transports the two associativity
+trees to
+\begin{equation}\label{eq:ordinaryassoc}
+ m(m\square_C1_A),\qquad
+ m(1_A\square_Cm)a_{A,A,A}:T_L\longrightarrow A.
+\end{equation}
+Since $I_L$ is invertible in the merge calculus and unary maps embed
+faithfully, formal associativity is equivalent to equality of the
+actual maps in \cref{eq:ordinaryassoc}.
+
+Let $\ell_A:C\square_C A\to A$ and $r_A:A\square_C C\to A$
+be the unitors from \cref{lem:cotensorcoherence}. Their cone
+descriptions identify the left unit tree with
+$m(u\square_C1_A)\ell_A^{-1}$ and the right unit tree with
+$m(1_A\square_Cu)r_A^{-1}$. Thus the formal unit laws are precisely
+\[
+ m(u\square_C1_A)=\ell_A,\qquad
+ m(1_A\square_Cu)=r_A.
+\]
+This proves preservation and reflection of the full monoid structure.
+Aguiar's internal category is a monoid in this bicomodule monoidal
+category \cite[Theorem 2.2.1 and Definition 2.3.1]{Aguiar1997};
+regularity supplies every stable cone used above.
+\end{proof}
+
+\begin{corollary}[Represented paths globally]\label{cor:globalrepresented}
+When every bicomodule path is stably represented, composition of its
+boundaries identifies every completed square with an ordinary
+equivariant bicomodule map between the represented boundaries.
+This identification respects mixed bases and all pasting.
+\end{corollary}
+\begin{proof}
+Replace each boundary by its representative using the invertible cone
+comparisons. This gives a unary square, and unary full faithfulness
+identifies it with an actual equivariant map. Independence from
+parenthesization and from the sequence of replacements follows from
+\cref{lem:cotensorcoherence}. For adjacent squares, pasting the
+representing cones gives the representing cone of their composite;
+uniqueness therefore makes composition agree. The exterior vertical
+maps have not been changed during any replacement.
+\end{proof}
+
+We have therefore recovered multiplication and its coherence from
+the formal operations, and represented paths can be replaced throughout
+the completed square calculus. To recover the full category of internal
+categories, it remains to identify the equations for maps that change
+the comonoid base.
+
+\section{Changing-base functors and bimodule actions}\label{sec:changing}
+
+The fixed-base comparison identifies category structures on each
+endobicomodule. Global conservativity also retains equivariant maps over
+comonoid maps. We use the universal cotensor cones to show that their
+formal homomorphism equations are exactly the internal-functor equations.
+The same calculation then applies to bimodule actions and their maps.
+
+\begin{lemma}[Cotensor maps over a base map]\label{lem:changebase}
+Let $F:M\to M'$ and $G:N\to N'$ be equivariant over comonoid maps
+$(f,g)$ and $(g,h)$, respectively. For stable cotensors there is a
+unique equivariant map
+\[
+ F\square_g G:M\square_D N\longrightarrow M'\square_{D'}N'
+\]
+with
+\begin{equation}\label{eq:changefactor}
+ i_{M',N'}(F\square_g G)=(F\otimes G)i_{M,N}.
+\end{equation}
+These maps respect identities and composition of all three base maps.
+\end{lemma}
+\begin{proof}
+Using equivariance, the two balance maps of the right side of
+\cref{eq:changefactor} are
+\[
+ (F\otimes g\otimes G)(\rho_M\otimes1)i_{M,N},\qquad
+ (F\otimes g\otimes G)(1\otimes\lambda_N)i_{M,N}.
+\]
+They agree. The equalizer property gives the unique factorization.
+Postcompose its proposed exterior equivariance equations with
+$1\otimes i_{M',N'}$ or $i_{M',N'}\otimes1$. The results follow
+from exterior equivariance of $F,G$; stability makes these testing maps
+monic. Identity maps satisfy the characterization, so their factor is
+the identity. For successive pairs $(F,G)$ and $(F',G')$, either
+factorization has composite with the final inclusion
+$(F'F\otimes G'G)i_{M,N}$, so uniqueness proves
+\[
+ (F'\square_{g'}G')(F\square_g G)
+       =(F'F)\square_{g'g}(G'G).
+\]
+\end{proof}
+
+\begin{theorem}[Global category recovery]\label{thm:globalaguiar}
+In the represented cotensor setting of \cref{thm:aguiar}, the
+correspondence is an isomorphism of categories, including homomorphisms
+over arbitrary comonoid maps. Such a homomorphism is exactly a comonoid
+map $f:C\to D$ and an equivariant map $F:A\to B$ satisfying
+\begin{equation}\label{eq:actualfunctors}
+ Fu_A=u_Bf,\qquad
+ Fm_A=m_B(F\square_f F).
+\end{equation}
+\end{theorem}
+\begin{proof}
+Unary global full faithfulness from \cref{thm:arbitraryV} identifies
+the formal carrier square with exactly the equivariant map $F$.
+For multiplication, replace the upper boundary $(A,A)$ by
+$A\square_C A$. Naturality of the representing comparisons is
+\cref{eq:changefactor}. Consequently the two formal homomorphism
+trees become the two maps in
+\[
+\begin{tikzcd}[column sep=large]
+ A\square_C A \arrow[r,"m_A"] \arrow[d,"F\square_f F"'] &
+ A \arrow[d,"F"]\\
+ B\square_D B \arrow[r,"m_B"'] &B.
+\end{tikzcd}
+\]
+For units, the primitive map $f:C\to D$ intertwines the regular
+coactions and satisfies $\eps_Df=\eps_C$. Thus it is the map
+between the nullary representatives over $f$, and the unit tree
+becomes the left equality in \cref{eq:actualfunctors}.
+Full faithfulness reflects both equations. The identity and composite
+comparisons follow from \cref{lem:changebase}, so this is an
+isomorphism of categories. These are the internal-functor equations
+in the cotensor formulation \cite[Section 4.1]{Aguiar1997}.
+\end{proof}
+
+\begin{definition}[Atomic bimodule action data]\label{def:bimodule}
+Let $(X,A)$ and $(Y,B)$ be formal categories. An $A$--$B$ bimodule
+is an atomic arrow $M:X\harr Y$ with action cells
+\[
+ p:(A,M)\cell M,\qquad q:(M,B)\cell M
+\]
+such that
+\begin{align}
+ p(\mu_A,1)&=p(1,p), & p(\eta_A,1)&=1_M,\label{eq:leftaction}\\
+ q(q,1)&=q(1,\mu_B), & q(1,\eta_B)&=1_M,\label{eq:rightaction}\\
+ q(p,1)&=p(1,q).&&\label{eq:commutingactions}
+\end{align}
+An equivariant bimodule map over homomorphisms $(f,F):(X,A)\to(X',A')$
+and $(g,G):(Y,B)\to(Y',B')$ is a square
+$\theta\in\Pcal_{f,g}(M;M')$ with
+\begin{equation}\label{eq:modulemap}
+ \theta p=p'(F,\theta),\qquad
+ \theta q=q'(\theta,G).
+\end{equation}
+\end{definition}
+
+\begin{theorem}[Bimodule comparison]\label{thm:bimodules}
+The reduct preserves and reflects bimodules, their equivariant maps, and
+composition of these maps. In the represented bicomodule setting they
+are exactly bicomodules with cotensor action maps
+\[
+ p_0:A\square_C M\to M,\qquad
+ q_0:M\square_D B\to M
+\]
+satisfying the associative, unital, and commuting action equations.
+Equivariant maps satisfy
+\[
+ \theta p_0=p'_0(F\square_f\theta),\qquad
+ \theta q_0=q'_0(\theta\square_g G).
+\]
+\end{theorem}
+\begin{proof}
+Every expression in
+\cref{eq:leftaction,eq:rightaction,eq:commutingactions,eq:modulemap}
+is a tree evaluation, so the first assertion follows exactly as in
+\cref{thm:reduct}. Composition of maps respects these equations by
+substitution associativity.
+
+For the second assertion, apply \cref{prop:tau} to $A,M$ and $M,B$
+and then use unary full faithfulness. The left associativity equation,
+tested on $(A\square_C A)\square_C M$, becomes
+\[
+ p_0(m_A\square_C1_M)
+   =p_0(1_A\square_Cp_0)a_{A,A,M}.
+\]
+The right associativity equation is the same comparison for $M,B,B$.
+The commuting equation, tested on $(A\square_C M)\square_D B$,
+becomes
+\[
+ q_0(p_0\square_D1_B)
+   =p_0(1_A\square_Cq_0)a_{A,M,B}.
+\]
+The unit equations become the left and right cotensor unitors, by the
+nullary calculation in \cref{thm:aguiar}. Finally
+\cref{lem:changebase} transports \cref{eq:modulemap} to the two
+displayed equivariant-map equations. Every step is reversible.
+\end{proof}
+
+This proves the recovery assertions of \cref{thm:main}, including
+changing-base functors and bimodule actions. These actions supply the
+atomic distributor carriers in the construction that follows. To obtain
+restrictions along arbitrary formal functors, we also use the finite
+bicomodule paths already present in the merge realization. The next three
+sections construct their balanced multicells, their many-sided completion,
+and the representation of distributor composition.
+
+\section{The virtual equipment of formal distributors}\label{sec:distributors}
+
+The action data of \cref{def:bimodule} already describe distributors on
+actual bicomodules. To put formal categories at the objects of an
+equipment, we must also construct distributor multicells and restrictions
+along formal functors. The merge realization supplies the carriers needed
+for those restrictions. Throughout this section,
+\[
+ \mathbb B(\V)=\E(\Ccal(\V))^{\vop},\qquad
+ \Q(\V)=\Up\mathbb B(\V).
+\]
+We use all horizontal paths of $\mathbb B(\V)$ as carriers while keeping
+the objects of the new equipment exactly the formal categories already
+defined on atomic bicomodules.
+
+\subsection{The carrier equipment}
+
+\begin{definition}[Paths as carriers]\label{def:carrierequipment}
+Let $\Kcal(\V)$ have the objects and vertical arrows of $\mathbb B(\V)$,
+and let each finite bicomodule path be an individual horizontal arrow of
+$\Kcal(\V)$. Set
+\begin{equation}\label{eq:carriercells}
+ \Kcal(\V)_{f,g}(H_1,\ldots,H_n;K)
+ =\mathbb B(\V)_{f,g}(H_1\cdots H_n;K).
+\end{equation}
+Substitution on the left is the corresponding rectangular evaluation on
+the right. The underlying path of an empty list of carriers is the empty
+bicomodule path at its specified vertex.
+\end{definition}
+
+A cell of \cref{eq:carriercells} has one output \emph{carrier}, even
+when that carrier contains several bicomodules. This use of the path
+presentation is part of the construction. For example, composition along
+a carrier with several bicomodules is a merge operation in the original
+graph and is an ordinary substitution in $\Kcal(\V)$.
+
+\begin{lemma}\label{lem:carrierequipment}
+The calculus $\Kcal(\V)$ is a virtual equipment. Its horizontal unit
+at $X$ is the carrier $\emp X$. For any local boundary presentations of
+$f:X\to X'$ and $g:Y\to Y'$, a restriction of a carrier
+$K:X'\harr Y'$ has carrier
+\begin{equation}\label{eq:carrierrestriction}
+ K[f,g]=f_*Kg^*.
+\end{equation}
+\end{lemma}
+\begin{proof}
+The strict double-category laws of \cref{thm:globalcoherence}, retained
+under vertical reversal, give the virtual substitution laws in
+\cref{eq:carriercells}. Concatenation represents every list of carriers,
+including the empty list, so $\emp X$ is the represented unit.
+
+Use the reversed companion and conjoint data from
+\cref{thm:arbitraryV}. Boundary bending gives
+\[
+ \mathbb B_{f,g}(H;K)
+ \cong\mathbb B_{\mathrm{glob}}(H;f_*Kg^*).
+\]
+The cell corresponding to $1_{f_*Kg^*}$ is the restriction cell
+$\chi_{f,K,g}:f_*Kg^*\cell K$. To verify its full cartesian property,
+allow exterior arrows $r:Z\to X$ and $s:W\to Y$. The comparison
+maps for composite companions and conjoints identify
+\begin{align*}
+ \mathbb B_{r,s}(H;f_*Kg^*)
+ &\cong\mathbb B_{\mathrm{glob}}(H;r_*f_*Kg^*s^*)\\
+ &\cong\mathbb B_{\mathrm{glob}}(H;(fr)_*K(gs)^*)\\
+ &\cong\mathbb B_{fr,gs}(H;K).
+\end{align*}
+Under these bijections the map is postcomposition with $\chi_{f,K,g}$.
+The same calculation applies when $H$ is a concatenation of any list of
+carriers. This is cartesianness in $\Kcal(\V)$.
+\end{proof}
+
+\subsection{Distributors and balanced multicells}
+
+\begin{definition}[Formal distributor]\label{def:formaldistributor}
+Let $\mathsf A=(X,A,\mu_A,\eta_A)$ and
+$\mathsf B=(Y,B,\mu_B,\eta_B)$ be formal categories. A formal
+distributor $M:\mathsf A\harr\mathsf B$ consists of a carrier
+$H_M:X\harr Y$ in $\Kcal(\V)$ and cells
+\[
+ p_M:(A,H_M)\cell H_M,\qquad
+ q_M:(H_M,B)\cell H_M
+\]
+such that
+\begin{align}
+ p_M(\mu_A,1)&=p_M(1,p_M),&
+ p_M(\eta_A,1)&=1_{H_M},\label{eq:distleft}\\
+ q_M(q_M,1)&=q_M(1,\mu_B),&
+ q_M(1,\eta_B)&=1_{H_M},\label{eq:distright}\\
+ q_M(p_M,1)&=p_M(1,q_M).&&\label{eq:distcommute}
+\end{align}
+These are substitution equations in $\Kcal(\V)$, hence specified merge
+equations in $\mathbb B(\V)$. We call a distributor
+\emph{bicomodule-carried} when $H_M$ consists of one actual bicomodule.
+\end{definition}
+
+On a bicomodule-carried distributor every complete expression in
+\cref{eq:distleft,eq:distright,eq:distcommute} is an original tree
+evaluation. Thus these distributors are exactly
+\cref{def:bimodule}, with exactly its equations. For general path
+carriers the merge realization supplies the required evaluations.
+
+\begin{definition}[Balanced distributor multicell]\label{def:distcell}
+Consider distributors
+$M_i:\mathsf A_{i-1}\harr\mathsf A_i$ for $1\leq i\leq n$,
+$N:\mathsf B_0\harr\mathsf B_1$, and formal functors
+\[
+ \mathsf F=(f,F):\mathsf A_0\to\mathsf B_0,
+ \qquad
+ \mathsf G=(g,G):\mathsf A_n\to\mathsf B_1.
+\]
+For $n>0$, a distributor multicell over $(\mathsf F,\mathsf G)$ is
+a cell
+\[
+ \alpha\in\Kcal(\V)_{f,g}(H_{M_1},\ldots,H_{M_n};H_N)
+\]
+satisfying exterior equivariance
+\begin{align}
+ \alpha(p_{M_1},1,\ldots,1)&=p_N(F,\alpha),
+ \label{eq:distexteriorleft}\\
+ \alpha(1,\ldots,1,q_{M_n})&=q_N(\alpha,G),
+ \label{eq:distexteriorright}
+\end{align}
+and interior balance
+\begin{equation}\label{eq:distbalance}
+ \alpha(\ldots,q_{M_i},1_{H_{M_{i+1}}},\ldots)
+ =\alpha(\ldots,1_{H_{M_i}},p_{M_{i+1}},\ldots)
+ \quad(1\leq i<n).
+\end{equation}
+Both sides of \cref{eq:distbalance} have the carrier $A_i$ inserted
+between $H_{M_i}$ and $H_{M_{i+1}}$.
+
+For $n=0$, the two functors have common domain $\mathsf A$, the
+underlying cell is $\alpha:\emp X\cell H_N$ over $(f,g)$, and
+the condition is
+\begin{equation}\label{eq:distnullary}
+ p_N(F,\alpha)=q_N(\alpha,G).
+\end{equation}
+The common source in this equation is the carrier $A$ of $\mathsf A$.
+\end{definition}
+
+Let $\Ddist(\V)$ denote this data, with formal categories as objects,
+formal functors as vertical arrows, and formal distributors as horizontal
+arrows. Its multicell collections are denoted
+$\Ddist(\V)_{\mathsf F,\mathsf G}(M_1,\ldots,M_n;N)$.
+
+\begin{proposition}[Closure under substitution]\label{prop:distvirtual}
+The specified data form a virtual double category, and there is an
+identification
+\begin{equation}\label{eq:distMod}
+ \Ddist(\V)
+ =\left.\Mod(\Kcal(\V))\right|_{\FCat(\Q(\V))}.
+\end{equation}
+The restriction in \cref{eq:distMod} is full on the displayed objects:
+all distributors between them are retained. Its vertical category is
+exactly $\FCat(\Q(\V))$.
+\end{proposition}
+\begin{proof}
+Define substitution by that of $\Kcal(\V)$. Consider an inserted
+category action in a substituted cell. If its position is internal to
+one substituted block, the balance equation for that block identifies the
+two results. At the interface between two nonempty blocks, their exterior
+equations move the action to the corresponding inputs of the outer cell;
+the outer balance equation then identifies the results. At an empty block,
+\cref{eq:distnullary} identifies the actions through its two boundary
+functors. Repeating this step moves the action past any finite string of
+empty blocks. It also covers the case in which every block is empty.
+At the two exterior boundaries, the same calculation uses the exterior
+equations of the outer cell and composition of the boundary functors.
+Thus the substituted cell satisfies all the defining equations.
+
+Unary identity cells satisfy exterior equivariance, and have no interior
+balance equations. Associativity and identities now follow from the
+corresponding identities in $\Kcal(\V)$. The definition of a monoid in
+$\Kcal(\V)$ on an original atomic bicomodule is exactly
+\cref{def:formalcat}: the comparison with $\Q(\V)$ is
+\cref{thm:reduct}. Its homomorphisms are exactly the same pairs $(f,F)$
+and equations. Bimodules and their multicells in the module construction
+are the displayed action, exterior, and balance equations, proving
+\cref{eq:distMod}. This is the explicit instance of Leinster's monoids-and-modules
+construction \cite[Section 5.3]{Leinster2004}, in the formulation of
+\cite[Definition 2.8]{CruttwellShulman2010}, used here.
+\end{proof}
+
+\subsection{Regular distributors and restrictions}
+
+\begin{lemma}[The regular distributor]\label{lem:distunit}
+For a formal category $\mathsf A$, the distributor
+\[
+ U_{\mathsf A}=(A,\mu_A,\mu_A)
+\]
+represents the empty distributor path at $\mathsf A$ in $\Ddist(\V)$.
+Its universal cell is the original unit $\eta_A$.
+\end{lemma}
+\begin{proof}
+The monad laws make the displayed data a distributor, and the two unit
+laws give \cref{eq:distnullary} for $\eta_A$. We prove the contextual
+universal property directly. Let $\alpha:(L,R)\cell N$ be a
+distributor multicell whose two paths meet at $\mathsf A$. If $L$ is
+nonempty, insert $U_{\mathsf A}$ by the right action on its last
+distributor. If $R$ is nonempty, use instead the left action on its first
+distributor. Interior balance for $\alpha$ says that the two formulas
+agree when both are available. Associativity of the adjacent action
+gives balance against the regular action on $U_{\mathsf A}$, and the
+remaining balance and exterior equations are inherited from $\alpha$.
+
+If both contexts are empty, write the boundary functors as
+$\mathsf F=(f,F)$ and $\mathsf G=(g,G)$. Define the inserted cell by
+\[
+ \beta=p_N(F,\alpha)=q_N(\alpha,G).
+\]
+The equality is \cref{eq:distnullary}. The functor multiplication laws
+and the two action associativities prove the exterior equations for
+$\beta$. Its two possible expressions prove compatibility with both
+exterior actions. When exactly one context is empty, the corresponding
+exterior equation supplies the same endpoint calculation.
+
+Substitution of $\eta_A$ into the inserted factor recovers $\alpha$
+by the action unit laws. Conversely, for a balanced cell $\beta$ with
+an inserted $U_{\mathsf A}$, its balance equation at an adjacent
+distributor, followed by substitution of $\eta_A$, forces the insertion
+formula just given. If both contexts are empty, exterior equivariance
+and $\mu_A(1,\eta_A)=1_A$ give
+$\beta=p_N(F,\beta\eta_A)$; the right formula follows similarly.
+This proves uniqueness in every context and over every exterior pair
+of functors.
+\end{proof}
+
+\begin{theorem}[Distributor restriction]\label{thm:distrestriction}
+Let $N:\mathsf A'\harr\mathsf B'$ be a distributor, and let
+\[
+ \mathsf F=(f,F):\mathsf A\to\mathsf A',\qquad
+ \mathsf G=(g,G):\mathsf B\to\mathsf B'
+\]
+be formal functors. Its restriction $N[\mathsf F,\mathsf G]$ exists
+in $\Ddist(\V)$. For any local boundary presentations of $f,g$, it may
+be chosen with carrier
+\begin{equation}\label{eq:distrestrictioncarrier}
+ H=f_*H_Ng^*.
+\end{equation}
+For the ambient cartesian cell $\chi:H\cell H_N$ over $(f,g)$,
+its actions are uniquely specified by
+\begin{equation}\label{eq:distrestrictionactions}
+ \chi p_H=p_N(F,\chi),\qquad
+ \chi q_H=q_N(\chi,G).
+\end{equation}
+These restrictions are coherent under identities and iterated restriction.
+\end{theorem}
+\begin{proof}
+\Cref{lem:carrierequipment} supplies $H$ and $\chi$.
+Cartesian factorization of the two right sides of
+\cref{eq:distrestrictionactions} constructs unique globular actions
+on $H$. To prove their laws it suffices, by the same cartesian
+uniqueness, to postcompose with $\chi$. Left associativity is the
+calculation
+\begin{align*}
+ \chi p_H(\mu_A,1)
+ &=p_N(F\mu_A,\chi)\\
+ &=p_N\bigl(\mu_{A'}(F,F),\chi\bigr)\\
+ &=p_N\bigl(F,p_N(F,\chi)\bigr)
+ =\chi p_H(1,p_H).
+\end{align*}
+For the left unit, the functor unit equation and the action unit equation
+give
+\[
+ \chi p_H(\eta_A,1)
+ =p_N(F\eta_A,\chi)
+ =p_N(\eta_{A'}[f],\chi)=\chi.
+\]
+Right associativity and its unit equation use $G$ in the same way.
+For commuting actions,
+\begin{align*}
+ \chi q_H(p_H,1)
+ &=q_N\bigl(p_N(F,\chi),G\bigr)\\
+ &=p_N\bigl(F,q_N(\chi,G)\bigr)
+ =\chi p_H(1,q_H).
+\end{align*}
+Thus $H$ is a distributor, and \cref{eq:distrestrictionactions} says
+that $\chi$ is its equivariant distributor map over
+$(\mathsf F,\mathsf G)$.
+
+To verify cartesianness in $\Ddist(\V)$, take a distributor multicell
+$\alpha$ with target $N$ whose exterior functors factor through
+$\mathsf F,\mathsf G$. Its unique underlying factor through $\chi$
+exists in $\Kcal(\V)$. Postcomposing each proposed exterior equation
+for the factor with $\chi$ gives the corresponding equation for
+$\alpha$, using \cref{eq:distrestrictionactions}. Postcomposing its
+interior balance equations gives those for $\alpha$. In the nullary
+case the same argument gives \cref{eq:distnullary}. Cartesian uniqueness
+reflects these equalities, so the factor is a distributor multicell.
+Its uniqueness is already the underlying cartesian uniqueness.
+
+For further functors $\mathsf R=(r,R)$ and $\mathsf S=(s,S)$,
+the composite ambient cartesian cell identifies the carriers
+$r_*f_*H_Ng^*s^*$ and $(fr)_*H_N(gs)^*$ by the companion and conjoint
+comparisons. Both induced distributor actions are uniquely characterized
+by their composites to $N$, with boundary functors
+$\mathsf F\mathsf R$ and $\mathsf G\mathsf S$. Therefore the
+comparison is an invertible distributor map. The identity comparisons and
+every association comparison respect the same cartesian cells; uniqueness
+proves their coherence.
+\end{proof}
+
+\begin{corollary}\label{cor:distequipment}
+For every monoidal $\V$, $\Ddist(\V)$ is a virtual equipment with
+vertical category $\FCat(\Q(\V))$.
+\end{corollary}
+\begin{proof}
+Combine \cref{prop:distvirtual,lem:distunit,thm:distrestriction}.
+These constructions also verify explicitly the units and restrictions
+provided abstractly for $\Mod$ by
+\cite[Propositions 5.5 and 7.4]{CruttwellShulman2010}.
+\end{proof}
+
+The objects selected in \cref{eq:distMod} have not been enlarged:
+their carriers are still actual bicomodules. The horizontal carriers
+include the paths \cref{eq:distrestrictioncarrier}, with their actions
+constructed above. Closure under these restrictions is established inside
+the already defined merge realization.
+
+\section{The poly-virtual equipment of formal distributors}\label{sec:distributorcompletion}
+
+The distributor action equations provide a single-output calculus. We now
+apply the conservative completion to this new virtual equipment. This
+supplies the many-sided distributor cells and their boundary transport.
+The comparison class at this stage is computed from balanced distributor
+multicells, so it records representation of distributor paths.
+
+\begin{definition}\label{def:FDist}
+The poly-virtual equipment of formal distributors is
+\begin{equation}\label{eq:FDist}
+ \FDist(\V)=\Up\E(\Ddist(\V)).
+\end{equation}
+Its designated atomic horizontal arrows are the individual formal
+distributors of \cref{def:formaldistributor}. A horizontal boundary is
+a finite path of these distributors, including their intervening formal
+categories. Each individual distributor also retains its carrier path
+in the original bicomodule graph.
+\end{definition}
+
+Thus there are two levels of paths in \cref{eq:FDist}. The carrier of
+one distributor is a bicomodule path in $\mathbb B(\V)$. A boundary
+in $\FDist(\V)$ is a path of distributors. The latter carries the
+intermediate formal-category actions encoded by \cref{eq:distbalance}.
+
+\begin{theorem}[Conservative distributor completion]\label{thm:distcompletion}
+The construction \cref{eq:FDist} has the properties of
+\cref{thm:maindistributors}. More precisely, it induces natural bijections
+\begin{equation}\label{eq:distconservative}
+ \Ddist(\V)_{\mathsf F,\mathsf G}(\Gamma;N)
+ \cong\FDist(\V)_{\mathsf F,\mathsf G}(\Gamma;N)
+\end{equation}
+for every distributor path $\Gamma$ and individual distributor $N$.
+They preserve all distributor substitutions and reflect their equations.
+Every many-sided cell has a finite expression in distributor multicells,
+pasting, and inverses of intrinsic contextual comparisons.
+\end{theorem}
+\begin{proof}
+Apply \cref{thm:completion,thm:globalembedding} to the virtual equipment
+of \cref{cor:distequipment}. These theorems keep its object and vertical
+categories, which are identified by \cref{prop:distvirtual}, and all
+its designated horizontal arrows. They give
+\cref{eq:distconservative}, its substitution compatibility, and the
+poly-virtual equipment structure. The finite-expression assertion is the
+forest and localization presentation, together with the finite binding
+construction used to globalize it. Each primitive distributor multicell
+is itself a cell of $\mathbb B(\V)$ with the equations of
+\cref{def:distcell}. Thus the whole construction is specified by the
+existing finite-term calculus and the displayed equations.
+\end{proof}
+
+\begin{corollary}[Preservation of actual bicomodule distributors]\label{cor:atomicdistributors}
+The formal categories, formal functors, and bicomodule-carried distributors
+form a unital virtual double category with the multicells of
+\cref{def:distcell}. Its inclusion in $\FDist(\V)$ preserves and
+reflects all its single-output cells. In particular, for actual bicomodule carriers
+$M,N$, its unary cells are exactly actual equivariant bicomodule maps
+$\theta:M\to N$ satisfying \cref{eq:modulemap}.
+\end{corollary}
+\begin{proof}
+The indicated restriction on horizontal arrows is closed under virtual
+substitution, which does not form a new carrier. It contains the regular
+distributor at every object. Its multicells are the same as those of
+$\Ddist(\V)$ on these profiles, so \cref{eq:distconservative}
+gives the assertion. For unary cells, \cref{thm:arbitraryV} identifies
+the underlying square with an actual equivariant bicomodule map, and
+\cref{eq:distexteriorleft,eq:distexteriorright} become exactly
+\cref{eq:modulemap}.
+\end{proof}
+
+\begin{proposition}[Functor companions and conjoints]\label{prop:distmates}
+For a formal functor $\mathsf F=(f,F):\mathsf A\to\mathsf B$,
+any local choice of the restrictions
+\begin{equation}\label{eq:distcompanions}
+ \mathsf F_*=U_{\mathsf B}[\mathsf F,1_{\mathsf B}],
+ \qquad
+ \mathsf F^*=U_{\mathsf B}[1_{\mathsf B},\mathsf F].
+\end{equation}
+gives companions and conjoints; their underlying carrier paths are
+$f_*B$ and $Bf^*$, respectively.
+In the completed calculus they have unit and counit
+\[
+ j_{\mathsf F}:\emp{\mathsf A}\cell
+       (\mathsf F_*,\mathsf F^*),\qquad
+ e_{\mathsf F}:(\mathsf F^*,\mathsf F_*)\cell\emp{\mathsf B},
+\]
+with the triangle identities. There are coherent bijections
+\begin{equation}\label{eq:distmates}
+ \FDist(\V)_{\mathsf F,\mathsf G}(\Gamma;\Delta)
+ \cong
+ \FDist(\V)_{\mathrm{glob}}
+      (\Gamma;\mathsf F_*\Delta\mathsf G^*).
+\end{equation}
+They respect the defined tree substitutions and compositions of formal
+functors.
+\end{proposition}
+\begin{proof}
+The two restrictions in \cref{eq:distcompanions} exist by
+\cref{thm:distrestriction}; \cref{eq:distrestrictioncarrier} computes
+their carriers. Use these restriction cells and the unit comparison of
+\cref{lem:distunit} in \cref{lem:binding}, now with input
+$\Ddist(\V)$. That lemma constructs $j_{\mathsf F},e_{\mathsf F}$,
+proves the triangle identities, and supplies the coherent comparisons
+for composite functors. \Cref{prop:mates} gives
+\cref{eq:distmates}. Its inverse and its second mate description use
+the single-wire cuts of that proposition, now on distributor wires.
+The unit and counit composition equations prove compatibility with
+vertical composition, and tree substitution compatibility follows by
+substituting the same binding cuts into each tree. Identity companions
+may be normalized to empty distributor paths as in
+\cref{sec:global}.
+\end{proof}
+
+\begin{remark}[The second comparison class]\label{rem:secondcomparison}
+The unit $\eta_A:\emp{\mathsf A}\cell U_{\mathsf A}$ is
+contextually universal in the distributor calculus by
+\cref{lem:distunit}. Its underlying cell
+$\eta_A:\emp X\cell A$ in $\mathbb B(\V)$ need not be
+invertible. For example, over the unit comonoid in $\Set$, take the
+two-element group as a monoid. Its unit map from the singleton is not
+an isomorphism; unary conservativity and the represented singleton
+identify this with noninvertibility of the underlying unit cell in
+$\mathbb B(\Set)$.
+
+Forgetting distributor actions defines a virtual functor to
+$\Kcal(\V)$, but this example shows that it does not in general
+preserve intrinsic contextual comparisons. By
+\cref{thm:functoriality}, it therefore need not extend across the
+second localization with the same values on cells. The second completion
+uses the distributor universal properties, including its regular units.
+\end{remark}
+
+The argument applies equally to any merge equipment, presented with paths
+as horizontal arrows, together with a specified collection of its monoids:
+take its underlying virtual equipment, form modules, restrict on those
+objects, and apply the conservative completion. In the present application
+the merge realization is already part of the construction of $\Q(\V)$,
+and the chosen monoids are exactly its formal categories on actual
+bicomodules.
+
+\section{Representing distributor carriers and composition}\label{sec:distributorrecovery}
+
+Two distinct replacements can occur in the distributor calculus. A stable
+cotensor can replace the bicomodule path underlying one distributor.
+A relative tensor product can replace a path of distributors by one
+distributor. The first replacement uses the original comparison class;
+the second uses the comparison class of $\Ddist(\V)$.
+
+\begin{lemma}[Transport of a distributor carrier]\label{lem:distcarriertransport}
+Let $M:\mathsf A\harr\mathsf B$ have carrier $H$, and let
+$h:H\cell T$ be an invertible globular cell in $\mathbb B(\V)$.
+There is a unique distributor structure on $T$ making $h$ an equivariant
+isomorphism from $M$. Its actions are
+\begin{equation}\label{eq:disttransport}
+ p_T=h p_M(1_A,h^{-1}),\qquad
+ q_T=h q_M(h^{-1},1_B).
+\end{equation}
+Transport also gives bijections on balanced distributor multicells and
+preserves all their substitutions.
+\end{lemma}
+\begin{proof}
+The equations for $h$ to preserve the actions force
+\cref{eq:disttransport}. Substitution cancels each adjacent
+$h^{-1}h$ in the associative and commuting-action equations, reducing
+them to those for $M$. The unit equations reduce to
+$h1_Hh^{-1}=1_T$. Thus the actions exist and satisfy all the laws.
+For a multicell, postcompose with the comparison on its output and
+substitute the inverse comparisons on its inputs. Each exterior or
+balance equation becomes the corresponding old equation after these
+cancellations. The same argument covers \cref{eq:distnullary}.
+Inverse transport uses the inverse comparisons, and substitution
+compatibility follows from cancellation at every internal carrier.
+\end{proof}
+
+\begin{corollary}[Cotensor recovery for distributor carriers]\label{cor:distcotensor}
+A distributor whose carrier path is stably represented by an actual
+bicomodule is canonically isomorphic to a bicomodule-carried distributor.
+When its action paths are also stably represented, its structures and
+equivariant maps are exactly the cotensor bimodule structures and maps
+of \cref{thm:bimodules}. The identifications respect changing bases and
+balanced distributor multicells.
+\end{corollary}
+\begin{proof}
+Use the inverse cone comparison as $h$ in
+\cref{lem:distcarriertransport}. Apply \cref{thm:bimodules} to the
+transported actions, and \cref{lem:changebase} to exterior functors
+and equivariant maps. For multicells, transport every carrier first.
+The bijection of \cref{lem:distcarriertransport} respects their balance
+and exterior equations. For a stably represented source path, unary full
+faithfulness further identifies the transported cell with a map from the
+corresponding cotensor; its equations are exactly equivariance and
+balancing of that map. Cone uniqueness gives independence of the chosen
+parentheses in each represented path.
+\end{proof}
+
+\begin{definition}[Represented distributor path]\label{def:representeddist}
+A globular distributor multicell $c:\Gamma\cell P$ represents
+$\Gamma$ when substitution gives bijections
+\begin{equation}\label{eq:distuniversal}
+ \Ddist(\V)(L,P,R;N)
+ \longrightarrow\Ddist(\V)(L,\Gamma,R;N)
+\end{equation}
+for every compatible distributor context $L,R$ and every individual
+distributor $N$. These are exactly the intrinsic comparisons of the
+globular calculus of $\Ddist(\V)$. By globular detection, they also
+satisfy the same property over arbitrary exterior formal functors.
+\end{definition}
+
+\begin{proposition}[Represented distributor substitution]\label{prop:distrepresented}
+For a representing cell $c:\Gamma\cell P$, the completed merge
+realization makes $c$ invertible. In its poly-virtual reduct,
+\begin{equation}\label{eq:distconversion}
+ a\longmapsto a(1_L,c,1_R):
+ \FDist(\V)(L,P,R;\Delta)
+ \longrightarrow\FDist(\V)(L,\Gamma,R;\Delta)
+\end{equation}
+is a bijection for every compatible distributor path $\Delta$ and
+every exterior pair of formal functors. Its forward operation is a
+single cut along the distributor $P$. Conversely an original
+$c:\Gamma\cell P$ is invertible in the completion exactly when it
+has \cref{eq:distuniversal}.
+\end{proposition}
+\begin{proof}
+Apply \cref{thm:detection,thm:globalembedding} to $\Ddist(\V)$.
+In the merge realization, contextual precomposition with an invertible
+cell is a bijection. The forward map in \cref{eq:distconversion} is
+a single-wire tree cut, and the reduct retains its values, all the cell
+collections, and their equalities. It therefore retains the bijection.
+The converse is the detection theorem for this second comparison class.
+\end{proof}
+
+We give a construction of representing distributor cells. The following
+definition describes a property of an existing coequalizer in the merge
+realization; the definition of $\FDist(\V)$ is independent of its
+existence.
+
+\begin{definition}[Contextually preserved action coequalizer]\label{def:distcoequalizer}
+Let $M:\mathsf A\harr\mathsf B$ and
+$N:\mathsf B\harr\mathsf C$ have carriers $H_M,H_N$, where the
+middle formal category has carrier $B$. An action coequalizer is a fork
+in the relevant globular hom-category of $\mathbb B(\V)$,
+\begin{equation}\label{eq:distcoequalizer}
+ \begin{tikzcd}[column sep=large]
+ H_M B H_N
+ \arrow[r,shift left=.7ex,"q_M\wh1"]
+ \arrow[r,shift right=.7ex,"1\wh p_N"'] &
+ H_M H_N\arrow[r,"c"] &T,
+ \end{tikzcd}
+\end{equation}
+in which $c$ is a coequalizer. It is contextually preserved when, for
+every compatible pair of bicomodule paths $L,R$, whiskering the entire
+fork by $L$ and $R$ again gives a coequalizer in the corresponding
+globular hom-category. The carrier $T$ is a horizontal path of
+$\mathbb B(\V)$.
+\end{definition}
+
+\begin{theorem}[Relative tensor construction]\label{thm:distcoequalizer}
+A contextually preserved action coequalizer
+\cref{eq:distcoequalizer} gives a unique distributor structure
+$P:\mathsf A\harr\mathsf C$ on $T$ making
+$c:(M,N)\cell P$ a distributor multicell. This multicell represents
+$(M,N)$ in $\Ddist(\V)$.
+\end{theorem}
+\begin{proof}
+Let $A,C$ be the carriers of the two exterior formal categories. The
+cell $c(p_M\wh1_{H_N})$ coequalizes the two action maps with $A$
+adjoined on the left. To check this, commute the left $A$-action on
+$M$ past its right $B$-action, and then use the equality defining
+$c$. Preservation of the fork by left whiskering with $A$ therefore
+gives a unique left action $p_P$ with
+\begin{equation}\label{eq:distcoeqactions}
+ p_P(1_A\wh c)=c(p_M\wh1_{H_N}),\qquad
+ q_P(c\wh1_C)=c(1_{H_M}\wh q_N),
+\end{equation}
+where the second action is constructed by the right-hand version of the
+same argument.
+
+Every contextual instance of $c$ is an epimorphism, since it is a
+coequalizer. Precompose the proposed left associativity equation with
+$1_A\wh1_A\wh c$. Using \cref{eq:distcoeqactions}, it becomes
+left associativity for $p_M$, postcomposed with $c$. Epimorphy gives
+the desired equality. The left unit equation is tested with $c$ and
+reduces to the unit equation for $p_M$. Right associativity and its
+unit equation are proved by the symmetric calculation with $q_N$.
+The commuting-action equation is tested with
+$1_A\wh c\wh1_C$; it reduces to the equality of the two actions
+on the disjoint factors $H_M,H_N$, by interchange. Hence $P$ is a
+distributor. Equations \cref{eq:distcoeqactions} are its exterior
+equivariance equations for $c$, and the coequalizer equation is its
+interior balance. They also prove uniqueness of the distributor actions.
+
+For contextual universality, let
+$\alpha:(L,M,N,R)\cell Z$ be a globular balanced distributor multicell.
+Its balance at the middle formal category says exactly that the
+underlying cell coequalizes the whiskered pair in
+\cref{eq:distcoequalizer}. The preserved coequalizer therefore gives a
+unique underlying factor $\bar\alpha:(L,P,R)\cell Z$. To verify
+any remaining balance or exterior equation for $\bar\alpha$,
+precompose with the corresponding contextual instance of $c$, also
+including the extra category carrier in that equation. The result is
+the corresponding equation for $\alpha$, using
+\cref{eq:distcoeqactions} at the two interfaces adjacent to $P$.
+That contextual instance is epic, so the equation holds. Conversely,
+substitution of $c$ into a distributor multicell is a distributor
+multicell by \cref{prop:distvirtual}. These two operations are inverse
+by the coequalizer property. This proves \cref{eq:distuniversal}.
+Globular detection in the virtual equipment $\Ddist(\V)$ gives all
+changing-base instances. No preservation of arbitrary coequalizers or
+ambient exactness property is used: only the stated contextual preservation
+of the particular fork \cref{eq:distcoequalizer}.
+\end{proof}
+
+When these representations exist for successive distributor pairs, their
+iterated composites have the usual coherent associators and unitors.
+Indeed substitution of intrinsic comparisons is intrinsic by
+\cref{lem:universalclosure}. Any two representatives of a path therefore
+have a unique invertible distributor map carrying one representing cell
+to the other. Every route around a pentagon or triangle carries the same
+representing cell to the same cell, so uniqueness proves equality. The
+same factorization property defines maps of represented composites over
+formal functors and proves their functoriality.
+
+For bicomodule-carried distributors in a represented cotensor setting,
+the two objects before $T$ in \cref{eq:distcoequalizer} are represented
+by $H_M\square B\square H_N$ and $H_M\square H_N$, with the
+indicated intermediate comonoid bases. Thus the pair is the familiar
+pair of module actions used to form a relative tensor product. Its
+contextual coequalizer property is a separate representation property
+from the stable equalizers used to construct those cotensors. The next
+section verifies both properties in a nonregular example.
+
+\section{Examples and the role of regularity}\label{sec:examples}
+
+The examples test two features of the definition. The unit comonoid and
+Cartesian bases recover familiar category structures, while the identity
+category exists over every comonoid without a global exactness condition.
+The example in $\Ab$ then separates ambient regularity from the stability
+of the particular cotensors used for composition. On its finite
+group-like sector we also construct the relative tensor products of
+distributors and recover the corresponding enriched equipment.
+
+\begin{proposition}[The unit comonoid]\label{prop:unitbase}
+For every monoidal $\V$, formal internal categories over $I$ are
+exactly ordinary monoids in $\V$.
+\end{proposition}
+\begin{proof}
+The counit law forces either $I$-coaction to be the inverse unitor.
+The two maps defining balance over $I$ are therefore equal after
+the canonical unit identifications. Their equalizer is the identity
+on $M\otimes N$, which is preserved by every tensor functor.
+Thus every finite path over $I$ is stably represented by its ordinary
+tensor product, and the nullary representative is $I$.
+\Cref{thm:aguiar,thm:globalaguiar} identify the resulting structures
+and fixed-base maps with ordinary monoids and their homomorphisms.
+\end{proof}
+
+\begin{proposition}[Identity category]\label{prop:identitycategory}
+Every comonoid $C$ in every monoidal $\V$ has a formal internal
+category with carrier its regular bicomodule $C$.
+\end{proposition}
+\begin{proof}
+By \cref{lem:bicomodunit}, the comparison
+$d_C:C\cell\emp C$ is invertible in the merge realization, with
+inverse $\tau_0$. Transport the identity monoid on the empty path
+along this isomorphism. Explicitly,
+\[
+ \eta=\tau_0,\qquad
+ \mu=\tau_0(d_C\wh d_C):(C,C)\cell C.
+\]
+Substitution cancels the adjacent pairs $d_C\tau_0$, proving
+associativity and the two unit laws. They remain true in the reduct
+by \cref{thm:reduct}. Equivalently, the multiplication is the
+inverse comparison for $\delta_C:C\cell(C,C)$: the unit cone
+calculation in \cref{lem:cotensorcoherence} identifies
+$C\square_C C$ with $C$ in every monoidal category.
+\end{proof}
+
+\begin{proposition}[Cartesian bases]
+For a cartesian monoidal category with finite limits, formal internal
+categories are ordinary internal categories, with their usual internal
+functors.
+\end{proposition}
+\begin{proof}
+Every object has its unique diagonal comonoid. Counitality forces a
+left coaction $M\to C\times M$ to have second component $1_M$,
+so it is equivalent to a map $M\to C$; the right coaction likewise
+amounts to a map $M\to D$. Coassociativity and commuting coactions
+then follow from the product identities. Thus a bicomodule is an
+internal graph with its two endpoint maps. The balance equalizer of
+$M\times N\rightrightarrows M\times D\times N$ is exactly
+the pullback $M\times_D N$. Product with any object preserves
+this equalizer: a map into the product is a pair of maps and factors
+exactly when its second component does. The same holds on both
+sides, so the cone is stable. The maps and equations of
+\cref{thm:aguiar,thm:globalaguiar} now say precisely that composable
+arrows compose associatively, identity arrows are units, and functors
+preserve both operations.
+\end{proof}
+
+\begin{proposition}[A nonregular ambient category]\label{prop:Ab}
+The monoidal category $(\Ab,\otimes_{\mathbb Z},\mathbb Z)$ is not
+regular in Aguiar's sense. For
+\[
+ C=\bigoplus_{i=1}^{r}\mathbb Z e_i,\qquad
+ \delta_C(e_i)=e_i\otimes e_i,\quad \eps_C(e_i)=1,
+\]
+all bicomodule paths over $C$ nevertheless have stable cotensors, with
+\begin{equation}\label{eq:matrixcotensor}
+ (M\square_C N)_{ik}=\bigoplus_{j=1}^{r}M_{ij}\otimes N_{jk}.
+\end{equation}
+Formal categories over $C$ are categories enriched in $\Ab$ on the
+fixed object set $\{1,\ldots,r\}$.
+\end{proposition}
+\begin{proof}
+The coreflexive pair $r,s:\mathbb Z\rightrightarrows\mathbb Z\oplus
+\mathbb Z$ given by
+\[
+ r(n)=(n,2n),\qquad s(n)=(n,0)
+\]
+has equalizer zero; projection to the first coordinate is a common
+retraction. After tensoring with $\mathbb Z/2$, the two maps are
+equal, so their equalizer is $\mathbb Z/2$. Hence tensoring does not
+preserve this equalizer.
+
+For the specified comonoid write
+\[
+ \lambda_M(x)=\sum_i e_i\otimes p_i(x),\qquad
+ \rho_M(x)=\sum_j q_j(x)\otimes e_j.
+\]
+Coassociativity gives $p_ip_k=\delta_{ik}p_i$ and
+$q_jq_l=\delta_{jl}q_j$; counitality gives
+$\sum_i p_i=1=\sum_j q_j$. Commuting coactions gives
+$p_iq_j=q_jp_i$. Thus
+$M=\bigoplus_{i,j}M_{ij}$, where $M_{ij}=\operatorname{im}(p_iq_j)$.
+The converse constructs the coactions from any such decomposition.
+
+Decompose $M\otimes N$ into the summands
+$M_{ij}\otimes N_{kl}$. The two balance maps insert $e_j$ and
+$e_k$, respectively. If $j=k$ they agree. If $j\ne k$, projection
+to the inserted $e_j$ coordinate takes their difference to the
+identity on this summand. Therefore the equalizer consists exactly
+of the summands with $j=k$, giving \cref{eq:matrixcotensor}.
+This argument remains valid after arbitrary tensoring on either side:
+finite direct sums are preserved, and the coordinate calculation still
+gives identity or zero on each summand. It proves preservation of the
+equalizer fork, not just preservation of its inclusion. In particular, this
+stability is a coordinate calculation after tensoring and does not use
+flatness of any of the groups involved.
+
+For $A:C\harr C$, a multiplication consists of maps
+$A_{ij}\otimes A_{jk}\to A_{ik}$. A bicomodule map $C\to A$
+consists of maps $\mathbb Z\to A_{ii}$. The cotensor associator is
+the canonical associator for the direct sums of triple tensor products,
+by its cone characterization. Thus the monoid equations are precisely
+bilinear category composition and its identity equations. Apply
+\cref{thm:aguiar} to these stable cones.
+\end{proof}
+
+\begin{remark}
+The preceding identification includes the usual variation of the finite
+object set. A comonoid map
+$\bigoplus_i\mathbb Z e_i\to\bigoplus_j\mathbb Z e_j$ must send
+each $e_i$ to a group-like element. Writing such an element as
+$\sum_j a_je_j$, its equations give $a_j^2=a_j$, $a_ja_k=0$ for
+$j\ne k$, and $\sum_j a_j=1$. Over $\mathbb Z$ exactly one
+coefficient is $1$ and the rest are $0$. Thus these comonoid maps are
+exactly functions of the indexing sets, and \cref{thm:globalaguiar}
+gives the usual enriched functors.
+\end{remark}
+
+In this nonregular example, every cotensor relevant to the indicated
+finite bases is still represented stably. Its role is to show why a global
+regularity condition is stronger than the requirements of these category
+structures. The definition in \cref{def:Q} also applies to paths without
+such representatives, using the same formal cell calculus.
+
+\begin{proposition}[Finite-object enriched distributors]\label{prop:Abdistributors}
+Apply the distributor construction to the part of $\mathbb B(\Ab)$
+whose objects are finite group-like comonoids
+$C_S=\bigoplus_{s\in S}\mathbb Z e_s$ and whose carrier paths have
+all vertices of this form. Its objects and vertical arrows are
+finite-object $\Ab$-enriched categories and enriched functors. Every
+distributor is isomorphic to one carried by an actual bicomodule, and
+these distributors are exactly enriched distributors. Every finite
+distributor path is represented by its usual relative tensor product.
+Consequently, after replacing represented boundaries, the completed
+many-sided cells are exactly the equivariant maps between these relative
+tensor products.
+\end{proposition}
+\begin{proof}
+Let $\mathbb B_{\mathrm{fin}}$ be the specified part of
+$\mathbb B(\Ab)$. The companion and conjoint of a comonoid map
+$C_S\to C_T$ are bicomodules with these finite bases, so the
+restriction paths remain in $\mathbb B_{\mathrm{fin}}$. Units remain
+there as well. Thus its path-carrier calculus is a virtual equipment
+by the proof of \cref{lem:carrierequipment}.
+
+\Cref{prop:Ab} and its proof, with rectangular indexing sets, identify
+a bicomodule $C_S\harr C_T$ with a matrix of abelian groups
+$(M_{ij})_{i\in S,j\in T}$ and identify cotensor composition with
+matrix multiplication using direct sums and tensor products. All carrier
+paths in $\mathbb B_{\mathrm{fin}}$ therefore have stable atomic
+representatives. \Cref{lem:distcarriertransport} replaces every
+distributor carrier by such a representative. Its actions are maps
+\[
+ A_{ii'}\otimes M_{i'j}\longrightarrow M_{ij},\qquad
+ M_{ij}\otimes B_{jj'}\longrightarrow M_{ij'},
+\]
+with the associative, unital, and commuting equations of an enriched
+distributor. The exterior equations on maps give the usual equivariant
+maps over enriched functors. Balanced multicells have the same
+identification by \cref{def:distcell} and cotensor representation.
+
+For distributors $M:\mathsf A\harr\mathsf B$ and
+$N:\mathsf B\harr\mathsf C$, define
+\begin{equation}\label{eq:Abdistributorproduct}
+ (M\otimes_{\mathsf B}N)_{ik}
+ =\frac{\displaystyle\bigoplus_j M_{ij}\otimes N_{jk}}
+ {\bigl\langle (mb)\otimes n-m\otimes(bn)\bigr\rangle}.
+\end{equation}
+Here the subgroup is generated by all indicated differences, with
+$m\in M_{ij}$, $b\in B_{jj'}$, and $n\in N_{j'k}$; the two terms
+belong to the $j'$ and $j$ summands, respectively. This is the
+componentwise coequalizer of the two middle actions. Tensor product of
+abelian groups preserves coequalizers in either variable, and finite
+direct sums preserve them as well. Hence matrix cotensor composition
+preserves this fork under every compatible matrix context. Replacing
+path carriers by their representatives transfers this contextual
+coequalizer property to $\mathbb B_{\mathrm{fin}}$.
+
+\Cref{thm:distcoequalizer} equips
+\cref{eq:Abdistributorproduct} with its exterior actions and proves
+that it represents the pair as distributors. The regular distributor
+represents the empty path by \cref{lem:distunit}, so induction gives
+all finite paths. Coherence and functoriality follow from the unique
+representing comparisons. In the second completion, replace both
+boundaries by these representatives and use
+\cref{eq:distconservative} to identify the resulting unary square
+with its ordinary equivariant distributor map. This proves the final
+assertion, including arbitrary exterior enriched functors.
+\end{proof}
+
+In this example a functor $\mathsf F:\mathsf A\to\mathsf B$ with
+object function $f:S\to T$ has the familiar represented companion and
+conjoint
+\[
+ (\mathsf F_*)_{ij}=B_{f(i),j},\qquad
+ (\mathsf F^*)_{ji}=B_{j,f(i)}.
+\]
+Indeed these are the matrix cotensors of the carrier paths $f_*B$ and
+$Bf^*$ in \cref{eq:distcompanions}; their actions are exactly the
+restrictions constructed in \cref{thm:distrestriction}. This comparison
+is made in the indicated finite-base construction, where every carrier
+path is represented. The global construction of \cref{eq:FDist} also
+retains distributor carriers that pass through other comonoid bases.
+
+\section{Further applications: generalized multicategories and polycategories}\label{sec:kleisli}
+
+The bicomodule application required reversal because its primitive maps
+have the opposite arity to multiplication. In an original virtual double
+category the monoid cells already have the required arity. Conservativity
+therefore gives a direct comparison with generalized multicategories.
+The distributor application likewise keeps the forward variance of its
+module multicells when applying the completion for the second time.
+This section records that comparison and the separate example supplied by
+Garner's two-sided Kleisli construction.
+
+\begin{definition}[Raw global forest calculus]
+For any virtual double category $\mathbb K$, define $\Raw(\mathbb K)$
+using paths as horizontal arrows. A square with $m>0$ outputs consists
+of a subdivision of its upper path into $m$ consecutive, possibly empty
+blocks, a vertical arrow at each cut vertex, and $m$ original cells
+whose lateral arrows are those successive cut arrows. A square with no
+outputs is a structural empty square: its upper path is empty and its
+two exterior maps are the same vertical arrow. Composition substitutes
+forests vertically and concatenates them horizontally.
+\end{definition}
+
+\begin{lemma}\label{lem:raw}
+The raw forest calculus is a strict double category with paths as
+horizontal arrows, and
+\[
+ \Raw(\mathbb K)_{f,g}(\Gamma;H)=\mathbb K_{f,g}(\Gamma;H).
+\]
+It therefore preserves and reflects formal categories and their
+homomorphisms on atomic carriers.
+\end{lemma}
+\begin{proof}
+Substitution composes the arrows at cut vertices as well as the root
+cells. Associativity is exactly virtual substitution associativity;
+substitution on disjoint blocks commutes, proving interchange.
+Nullary blocks use the degenerate virtual pastings, and the structural
+empty square on $f$ is its horizontal identity. For one output there
+is one block and its two cut arrows are the specified $f,g$, so the
+displayed equality follows. All monoid and homomorphism operations lie
+in this fragment, which proves the last statement.
+\end{proof}
+
+\begin{theorem}[Kleisli recovery]\label{thm:kleisli}
+Let $\mathbb K=H\text{-}\mathrm{Kl}(\mathbb X,T)$ be the horizontal
+Kleisli virtual double category of a monad on a virtual double category.
+There is an isomorphism
+\[
+ \FCat(\Up\Raw(\mathbb K))\cong T\text{-}\Mon(\mathbb X).
+\]
+When $\mathbb K$ is a virtual equipment, its refined realization
+$\E_{\mathrm{poly}}(\mathbb K)$ gives the same comparison and also
+preserves its represented composites and boundary transport.
+\end{theorem}
+\begin{proof}
+A horizontal Kleisli arrow from $X$ to $Y$ is the original arrow
+$X\harr TY$ with the Kleisli typing. By the definition of a $T$-monoid
+\cite[Definition 4.3]{CruttwellShulman2010}, its multiplication and
+unit are the monoid cells in $\mathbb K$. Apply \cref{lem:raw} and
+\cref{thm:reduct}. If $\mathbb K$ is an equipment, apply
+\cref{thm:completion} instead; its inverted comparisons are precisely
+the intrinsic ones by \cref{thm:detection}.
+\end{proof}
+
+\begin{proposition}[Normalization is tracked]\label{prop:normalization}
+For a monad $T$ on a virtual equipment $\mathbb X$, the preceding
+comparison restricts to normalized $T$-monoids. More explicitly, the
+original unit square
+$U_X\cell A$ with sides $(1_X,\eta_X)$ is cartesian in $\mathbb X$
+if and only if its image is cartesian in $\E(\mathbb X)$.
+\end{proposition}
+\begin{proof}
+Normalization is the cartesianness of this unit square
+\cite[Definition 8.2]{CruttwellShulman2010}. Its top is atomic and its
+bottom is atomic in the original equipment $\mathbb X$.
+\Cref{thm:globalembedding} preserves and reflects all the single-output
+factorization tests defining cartesianness. The object correspondence in
+\cref{thm:kleisli} retains the original unit square as data and
+therefore retains this property.
+\end{proof}
+
+Here cartesianness is tested in $\mathbb X$, as in the definition of
+normalization. No extension of $T$ across a localization is used to make
+this test. This matters when $T$ itself does not satisfy the extension
+criterion of \cref{thm:functoriality}.
+
+\begin{proposition}[The symmetric-polycategory benchmark]
+Garner's description of symmetric polycategories as monads on discrete
+objects in a two-sided Kleisli bicategory is a further instance of
+formal-category data in a poly-virtual calculus.
+\end{proposition}
+\begin{proof}
+Garner constructs the two-sided Kleisli bicategory using a
+pseudo-distributive law whose suitable matchings have associated graphs
+that are connected, acyclic, and have no multiple edges
+\cite[Proposition 9 and Definition 14]{Garner2008}, and identifies its
+monads on discrete objects with symmetric polycategories
+\cite[Theorem 42]{Garner2008}.
+For any bicategory, fix a bracketing of each finite path of $1$-arrows
+and take cells between the corresponding bracketed composites. Rectangular
+evaluation is composition followed by the canonical associator and unitor
+comparisons; bicategorical coherence makes the result independent of the
+evaluation order \cite[Section 1.5]{Leinster2004}. A monad on
+one original $1$-arrow is exactly \cref{eq:shape,eq:monadlaws} in
+this path presentation. Apply \cref{thm:reduct}. The symmetric
+permutations here are part of Garner's Kleisli data; this argument does
+not insert exchanges into our planar wire calculus.
+\end{proof}
+
+These comparisons return to the enriched and generalized-multicategory
+precedent that motivated the construction. A single tree definition of
+formal category accommodates those virtual examples and the forward
+bicomodule realization; the latter uses the conservative completion to
+recognize represented cotensors on its input boundary.
+
+\section{Universal characterization and comparison with other envelopes}\label{sec:comparison}
+
+The construction has been used to preserve virtual monoids, to define
+formal internal categories, and to construct a poly-virtual equipment of
+their distributors. Its universal property specifies the common
+mechanism: invert the intrinsic contextual comparisons of the chosen
+input after forming forests. In the two applications the inputs, and
+therefore the comparison classes, are different. We record what this
+characterizes and what is needed for a comparison with an independently
+defined envelope.
+
+\begin{theorem}[Characterization of the construction]
+The globular merge completion is characterized by the following
+presentation: freely form forests of the entire typed single-output
+calculus and make every member of $S(P)$, and hence each of its horizontal
+contextual instances, reversible.
+It adds no original single-output cells and identifies no such cells.
+Its poly-virtual reduct retains all cells and equalities, the tree
+operations, and coherent boundary transport; it retains the entire
+formal-category and bimodule-action theory.
+Applied to the input $\Ddist(\V)$, the same characterization gives
+$\FDist(\V)$ and preserves all primitive distributor multicells,
+including their changing-base instances.
+\end{theorem}
+\begin{proof}
+The presentation and its uniqueness are \cref{thm:localUP}.
+The exact recognition of reversible atomic comparisons is
+\cref{thm:detection}. The two conservativity assertions are
+\cref{thm:conservative,thm:globalembedding}. For the reduct use
+\cref{thm:reduct,prop:mates,thm:bimodules}.
+For the distributor instance apply \cref{thm:distcompletion}.
+\end{proof}
+
+The path presentation in \cref{prop:pathpresentation} is the merge
+form of the two-sided calculus. The distinction between virtual and
+implicit boundary operations is also described in
+\cite[Remark 1.1]{FairbanksShulman2025}. The related frameworks
+enter the argument in the following roles.
+\begin{center}
+\small
+\begin{tabular}{@{}p{.35\textwidth}p{.56\textwidth}@{}}
+\toprule
+Framework & Role\\
+\midrule
+Virtual double categories & Single-output operations and generalized
+multicategory presentations.\\
+Poly-bicategorical calculi & Two-sided boundaries with planar tree
+composition.\\
+Merge and implicit calculi & Evaluation along entire boundaries and
+reversal of represented comparisons.\\
+Module or presheaf envelopes & Other realizations defined by their own
+representability or cocompletion properties.\\
+The module construction on path carriers & Formal distributors and their
+cartesian restrictions, followed by a second conservative completion.\\
+Two-sided Kleisli bicategories & Arity-sensitive examples, including
+Garner's symmetric polycategories.\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{proposition}[A concrete comparison test]\label{prop:envelopetest}
+Let $J:P\to\mathcal M$ be a globular interpretation in a path
+presentation of another envelope. If $J$ sends every $s\in S(P)$
+to an invertible comparison, there is a unique induced interpretation
+$\bar J:L(P)\to\mathcal M$. It is an equivalence on a hom-category
+precisely when it is fully faithful there and every object of that
+hom-category is isomorphic to an interpreted path.
+\end{proposition}
+\begin{proof}
+The extension statement is \cref{thm:localUP}. A fully faithful
+and essentially surjective functor is an equivalence: choose, for
+each target object, an isomorphism from an object in the image; use
+full faithfulness to pull back the conjugated morphisms. The resulting
+functor is a quasi-inverse by those same isomorphisms. Conversely an
+equivalence is fully faithful and essentially surjective. Applied
+to $\bar J$ this gives the stated test.
+\end{proof}
+
+An identification with a module or Yoneda envelope therefore requires
+an interpretation that satisfies this test. The notation $\Mod$ used
+here refers throughout to the monoids-and-bimodules construction. It
+first supplies the balanced bicomodule calculus from $\V^\op$, and
+then supplies distributor multicells from the path-carrier equipment
+$\Kcal(\V)$. These two uses are explicit and do not identify the
+result with an independently defined presheaf envelope. In particular,
+\cref{rem:secondcomparison} explains why forgetting distributor actions
+need not extend across the second localization.
+
+The next concrete comparisons suggested by these results are to construct
+such an interpretation for a chosen presheaf or module envelope, to study
+the representations of distributor paths beyond the coequalizer
+construction of \cref{thm:distcoequalizer}, and to replace the planar
+tree shapes by other specified arity systems while retaining an analogue
+of backward evaluation. An intrinsic distributor construction starting
+only from an abstract tree calculus is another question: the construction
+proved here uses the merge realization already provided for $\Q(\V)$.
+
+\section{Conclusion}\label{sec:conclusion}
+
+The guiding problem was to retain non-Cartesian category operations when
+ambient regularity is unavailable. The construction separates two roles
+of cotensors: a finite path specifies the boundary of an operation, while
+a stable cotensor represents that boundary by one bicomodule. Formal
+internal categories use the former in every monoidal category and recover
+the latter whenever it is available.
+
+Conservativity is what makes this separation compatible with the original
+data. Forward equivariant bicomodule maps, their changes of base, and all
+primitive balanced cells remain unchanged. The reverse comparison for a
+represented cotensor then turns a formal multiplication into an actual
+cotensor multiplication, and uniqueness of its cone transports
+associativity and units. Thus the recovery theorem identifies the category
+structures, their equations, and their changing-base functors.
+
+Formal categories themselves are the objects of the second equipment
+$\FDist(\V)$. Its vertical arrows are their formal functors, and
+its horizontal arrows have distributor actions on finite bicomodule-path
+carriers. Cartesian factorization constructs the restrictions and proves
+their action laws. The regular distributors give represented units, and
+the second conservative completion supplies the many-sided cells and
+coherent companion/conjoint transport. Actual bicomodule distributors and
+their equivariant maps remain fully faithful in this construction.
+
+Representation at the distributor level balances the actions of the
+intervening formal category. Contextually preserved action coequalizers
+construct these relative tensor products and give their coherence by
+uniqueness. The finite group-like $\Ab$ sector verifies both stages:
+stable cotensors recover enriched category operations, and action
+coequalizers recover enriched distributor composition, in an ambient
+monoidal category that is not regular.
+
+The two completions therefore extend the virtual treatment of composition
+through two levels of category theory. They retain finite paths as
+legitimate boundaries, make existing intrinsic representations reversible,
+and preserve the original single-output cells at each completion stage.
+After the first reversal, this is the forward balanced single-input
+bicomodule fragment; at the second stage it is the balanced distributor
+fragment. All constructions use finite expressions, with size understood
+as in the following appendices.
+
+\appendix
+\section{Pasting conventions and admissible elementary shapes}\label{app:shapes}
+
+The definition using rectangular schemes is finite and determines every
+admissible operation. The elementary globular cases can also be listed
+as follows; each formula requires matching vertex labels.
+\begin{enumerate}
+\item Input substitution:
+$\alpha:\Gamma\cell M$, $\beta:(L,M,R)\cell\Delta$ give
+$(L,\Gamma,R)\cell\Delta$.
+\item Output substitution:
+$\alpha:\Gamma\cell(L,M,R)$, $\beta:M\cell\Delta$ give
+$\Gamma\cell(L,\Delta,R)$.
+\item A right corner cut is \cref{eq:cornercut}.
+\item A left corner cut has premises
+$\Gamma\cell(M,\Delta)$ and $(\Lambda,M)\cell\Sigma$ and
+conclusion $(\Lambda,\Gamma)\cell(\Sigma,\Delta)$.
+\end{enumerate}
+These cases, with their overlaps, are exactly
+\cref{eq:cutplacement}. Arbitrary vertical labels are governed by the
+rectangular matching rule, not by suppressing the labels in this list.
+For example, to substitute $n$ cells above a virtual cell one specifies
+all $n+1$ interface vertical arrows together; adjacent members must use
+the very same map at their common vertex.
+
+The equations defining evaluation have an equally finite structural
+description: deleting structural strips does not change evaluation;
+evaluating a subtree and replacing it by its value does not change
+evaluation; and equivalent rectangular subdivisions have the same
+value. Associativity of nested substitutions is the second rule.
+For disjoint subtrees it applies twice in either order. All higher
+instances follow by induction on the number of rectangles. In
+particular, no equation asserts equality of differently typed
+pastings or supplies a cut where an exterior directed boundary fails
+to exist.
+
+\section{Explicit adjunction calculations}\label{app:bindings}
+
+This appendix records the algebra needed in the global construction.
+For composable $f,u,w$, the companion comparisons satisfy
+\begin{equation}\label{eq:kassoc}
+ k_{uf,w}(k_{f,u}\wh1_{w_*})
+   =k_{f,wu}(1_{f_*}\wh k_{u,w}).
+\end{equation}
+The conjoint equation is its reversed-order counterpart. Both sides
+of \cref{eq:kassoc} carry the pasted binding pair to the binding
+pair of $wuf$; the uniqueness argument in \cref{lem:binding}
+therefore proves the equation. Applied to four factors, this same
+characterization proves every association comparison equal, without
+an additional coherence choice.
+
+For a globular $a:\Gamma\cell f_*\Delta g^*$ write
+\[
+ \mathfrak m(a)=(e_f\wh1_\Delta\wh e_g)
+                   (1_{f^*}\wh a\wh1_{g_*}).
+\]
+For $b:f^*\Gamma g_*\cell\Delta$, its inverse mate is
+\[
+ \mathfrak n(b)=
+ (1_{f_*}\wh b\wh1_{g^*})(j_f\wh1_\Gamma\wh j_g).
+\]
+Expanding $\mathfrak m\mathfrak n(b)$ makes the $f$ terms contract
+by $(e_f\wh1_{f^*})(1_{f^*}\wh j_f)=1_{f^*}$ and the $g$
+terms by $(1_{g_*}\wh e_g)(j_g\wh1_{g_*})=1_{g_*}$.
+The result is $b$. Expanding $\mathfrak n\mathfrak m(a)$ uses the
+other two triangle identities and gives $a$. These expansions also
+prove naturality: a whiskered cell can be moved past a contraction
+on a disjoint factor by interchange.
+
+For the interchange calculation in \cref{thm:globalcoherence}, the
+only nontrivial local equality is
+\[
+ e_{vg}(l_{g,v}\wh k_{g,v})
+     =e_v(1_{v^*}\wh e_g\wh1_{v_*})
+ :v^*g^*g_*v_*\cell\emp{\operatorname{cod}(v)}.
+\]
+This is \cref{eq:counitcomp} with its invertible comparisons moved
+to the other side. It covers every interior seam of a rectangular
+grid. At an empty horizontal boundary the corresponding equality is
+\cref{eq:unitcomp}. These two identities, the triangles, and
+\cref{eq:kassoc} account for all identity, association, and
+interchange checks in the realization.
+
+\section{Finite terms and size}\label{app:size}
+
+\begin{proposition}
+For a small input signature and small original cell collections, the
+forest envelope, localization, and global realization have small cell
+collections. For a class-sized input the same specifications define a
+finite-term calculus in an encompassing universe; they do not by
+themselves establish local smallness in the original universe.
+The same conclusions apply to the path-carrier, distributor, and second
+completion constructions.
+\end{proposition}
+\begin{proof}
+For small data, finite paths and finite subdivisions form sets.
+Forests are finite products of original cell sets, indexed by a set
+of subdivisions, hence form a set. The collection $S(P)$ is a
+subcollection of the original cells, so is a set as well. Finite
+terms in these generators and their formal inverses form a set;
+the congruence generated by the stated relations is an equivalence
+relation on it, and its quotient is a set. For a fixed vertical arrow $f$,
+the binding presentations in $\mathcal B(f)$ form a subcollection of a
+finite product of the original horizontal-arrow and cell sets, and hence a
+set. Therefore the coproduct and quotient in \cref{eq:choicefreecells} are
+sets. After a local binding presentation is fixed, each global cell
+collection is identified with the localized hom-set in
+\cref{eq:globalcells}.
+
+For the distributor construction on small data, paths and the cells of
+the carrier equipment form sets. Formal categories and distributors are
+specified by finitely many carriers and cells satisfying equations, so
+they form subcollections of sets of such tuples. Distributor multicells
+are subsets of the corresponding carrier cell sets. The forest and
+localization argument therefore applies a second time. Restricting on
+the original atomic monoid objects does not change this conclusion.
+
+For large data the same description uses finite terms labelled in
+the larger universe. Although every individual cell has a finite
+description, arbitrarily many intermediate atomic arrows can occur
+in descriptions with fixed many-sided endpoints. Finite length
+alone therefore does not give a small collection in the smaller
+universe. The conservativity theorem does give exactly the original
+size for the single-output fragment and, after reversal, for the
+single-input fragment.
+The second completion similarly preserves exactly the size of the
+primitive single-output distributor collections, without deducing local
+smallness of its general many-sided profiles in a smaller universe.
+\end{proof}
+
+\begin{thebibliography}{Had19}
+
+\bibitem[Agu97]{Aguiar1997}
+Marcelo Aguiar,
+\emph{Internal categories and quantum groups},
+Ph.D. thesis, Cornell University, 1997.
+\url{https://pi.math.cornell.edu/~maguiar/thesis2.pdf}.
+
+\bibitem[CS10]{CruttwellShulman2010}
+G.~S.~H. Cruttwell and Michael~A. Shulman,
+\emph{A unified framework for generalized multicategories},
+Theory and Applications of Categories \textbf{24} (2010), no.~21,
+580--655.
+\href{https://arxiv.org/abs/0907.2460}{arXiv:0907.2460}.
+
+\bibitem[FS26]{FairbanksShulman2025}
+Aaron David Fairbanks and Michael Shulman,
+\emph{Doubly weak double categories},
+Applied Categorical Structures \textbf{34} (2026), article 26.
+\href{https://doi.org/10.1007/s10485-026-09863-1}
+{doi:10.1007/s10485-026-09863-1}.
+
+\bibitem[Gar08]{Garner2008}
+Richard Garner,
+\emph{Polycategories via pseudo-distributive laws},
+Advances in Mathematics \textbf{218} (2008), 781--827.
+\href{https://arxiv.org/abs/math/0606735}{arXiv:math/0606735}.
+
+\bibitem[Had19]{Hadzihasanovic2019}
+Amar Hadzihasanovic,
+\emph{Weak units, universal cells, and coherence via universality for
+bicategories},
+Theory and Applications of Categories \textbf{34} (2019), no.~29,
+883--960.
+\href{https://arxiv.org/abs/1803.06086}{arXiv:1803.06086}.
+
+\bibitem[Lei04]{Leinster2004}
+Tom Leinster,
+\emph{Higher operads, higher categories},
+London Mathematical Society Lecture Note Series, vol.~298,
+Cambridge University Press, Cambridge, 2004.
+\href{https://doi.org/10.1017/CBO9780511525896}
+{doi:10.1017/CBO9780511525896}.
+
+\bibitem[Shu08]{Shulman2008}
+Michael Shulman,
+\emph{Framed bicategories and monoidal fibrations},
+Theory and Applications of Categories \textbf{20} (2008), no.~18,
+650--738.
+\href{https://arxiv.org/abs/0706.1286}{arXiv:0706.1286}.
+
+\end{thebibliography}
+\end{document}
