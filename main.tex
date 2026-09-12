@@ -11,6 +11,14 @@
 \usepackage{booktabs,array}
 \usepackage[margin=1.12in]{geometry}
 \usepackage{microtype}
+\usepackage{enumitem,etoolbox}
+% Keep proof steps compact; statement lists retain their original formatting.
+\AtBeginEnvironment{proof}{%
+  \emergencystretch=1em
+  \setlist[enumerate,1]{label=(\arabic*),leftmargin=1.85em,labelsep=.45em,
+    itemsep=.28\baselineskip plus .1\baselineskip minus .05\baselineskip,
+    topsep=.35\baselineskip,parsep=0pt,partopsep=0pt,beginpenalty=10000}%
+}
 \usepackage[colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
 \usepackage[nameinlink,noabbrev]{cleveref}
 \usetikzlibrary{arrows.meta,quotes}
@@ -147,7 +155,7 @@ $A:C\harr C$ and cells
 \begin{equation}\label{eq:shape}
  \mu:(A,A)\cell A,\qquad \eta:\emp C\cell A
 \end{equation}
-satisfying the usual monad equations. The construction makes each existing intrinsic globular
+satisfying the monad equations. The construction makes each existing intrinsic globular
 contextually universal composite comparison reversible. It thereby allows
 represented cotensors to be used on either boundary, while paths without
 representatives remain legitimate boundaries. Its cells are specified by
@@ -176,7 +184,7 @@ isomorphic to Aguiar's category of internal categories and internal functors.
 \end{theorem}
 
 The construction applies more generally to virtual equipments. Here
-\emph{contextually universal} means that a comparison represents its
+\textbf{contextually universal} means that a comparison represents its
 source path in every compatible horizontal context, including contexts
 that pass through different objects. The technical result is a conservative
 completion that recognizes all such comparisons intrinsically.
@@ -255,7 +263,7 @@ finite composition paths. Restriction along a formal functor produces
 the action from a stable one, showing that stability of action cotensors
 need not survive restriction, even over an identity comonoid map.
 
-The term \emph{poly-virtual equipment} has the precise meaning given in
+The term \textbf{poly-virtual equipment} has the precise meaning given in
 \cref{def:poly,def:equipment}. Its equipment structure transports
 boundaries, and a transported boundary can itself be a path. The tree and
 merge operations are related to those of \cite{Hadzihasanovic2019}; empty
@@ -286,7 +294,7 @@ The notation $\V^\op$ reverses maps and leaves the order of tensor factors
 unchanged. Size is discussed in \cref{app:size}.
 We write $\mathsf A=(X,A,\mu_A,\eta_A)$ for a formal category and
 $\mathsf F=(f,F)$ for a formal functor, separating the whole structure
-from its carrier and its underlying square. The word \emph{atomic} is
+from its carrier and its underlying square. The word \textbf{atomic} is
 relative to the designated horizontal graph: an atomic arrow of the
 distributor equipment is one distributor, whose carrier in the original
 bicomodule graph can be a path.
@@ -299,10 +307,8 @@ asserts equality of composites; the category and action laws compare
 tree composites. Dashed arrows denote unique factorizations, except
 where explicitly labelled $\nexists$.
 
-\section*{Note on use of AI}
-Generative AI systems were used during the research and development of this
-manuscript as tools for mathematical investigation, discussion, and
-editorial refinement.  Responsibility for the mathematical content,
+\subsection*{Note on use of AI}
+Generative AI systems were used during the research and development of this manuscript. Responsibility for the mathematical content,
 arguments, and conclusions rests with the author.
 
 
@@ -319,7 +325,7 @@ cartesian restrictions along pairs of vertical arrows
 \cite[Sections 2, 5, and 7]{CruttwellShulman2010}.
 
 For enriched profunctors $P:\mathcal A\harr\mathcal B$ and
-$R:\mathcal B\harr\mathcal C$, the usual represented composite has
+$R:\mathcal B\harr\mathcal C$, the represented composite has
 components
 \[
  (P\wh R)(a,c)=\int^{b\in\mathcal B}P(a,b)\otimes R(b,c).
@@ -452,8 +458,9 @@ D \arrow[r,proarrow,"N"',""{name=bottom,above}] & E
 \end{tikzcd}
 \]
 in the opposite comonoid category.
-\begin{proof}
-Regard $\V^\op$ as the one-object virtual double category whose cells
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Identify the module construction.} Regard $\V^\op$ as the one-object virtual double category whose cells
 are maps into tensor products in $\V$. The construction $\Mod$ requires no
 additional exactness condition on this virtual double category
 \cite[Section 5.3]{Leinster2004}\cite[Remark following Definition 2.8]{CruttwellShulman2010}. A monoid there is precisely a
@@ -462,31 +469,39 @@ action equations and interior balancing equations in the module
 construction become \cref{eq:exterior,eq:balance}; the zero-arity
 action equation becomes \cref{eq:nullbalance}.
 
-Explicitly, substitution composes $\phi$ with the tensor product of the
+\item \textbf{Check substitution at nonempty blocks.} Explicitly, substitution composes $\phi$ with the tensor product of the
 maps substituted into its factors. An interior equation inside a block
 is the corresponding equation of the substituted map, tensored with
 the other maps. At an interface between two nonempty blocks,
 \cref{eq:exterior} moves the coactions through those maps and the
-remaining equality is \cref{eq:balance} for $\phi$. An empty block
+remaining equality is \cref{eq:balance} for $\phi$.
+
+\item \textbf{Handle empty blocks.} An empty block
 is removed using its map to $I$; equation~\eqref{eq:nullbalance}
 identifies the two induced maps to its vertex comonoid, so the same
 interface equality remains true. Repeating this for successive empty
-blocks proves the statement also when every block is empty. The exterior
+blocks proves the statement also when every block is empty.
+
+\item \textbf{Verify the exterior and substitution laws.} The exterior
 equations follow by the first and last such calculations. Associativity
 and identities now follow from tensor functoriality and composition in
 $\V$.
 
-Restrictions are explicit. To restrict $N:D\harr E$ along vertical
+\item \textbf{Construct restrictions.} Restrictions are explicit. To restrict $N:D\harr E$ along vertical
 arrows $C\to D$ and $C'\to E$ in the opposite comonoid category,
 write their actual maps as $a:D\to C$, $b:E\to C'$. Retain the
 object $N$ and replace its coactions by
 $(a\otimes1)\lambda_N$ and $(1\otimes b)\rho_N$.
-The identity map on $N$ is the restriction cell. The equations for
+
+\item \textbf{Verify cartesianness.} The identity map on $N$ is the restriction cell. The equations for
 factorization through it are literally \cref{eq:exterior} with these
-coactions, proving cartesianness. Units are proved in
+coactions, proving cartesianness.
+
+\item \textbf{Supply units.} Units are proved in
 \cref{lem:bicomodunit} below. This also directly verifies the units
 and restrictions supplied abstractly by
-\cite[Propositions 5.5 and 7.4]{CruttwellShulman2010}.
+\cite[Propositions 5.5 and 7.4]{CruttwellShulman2010}.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{lemma}[The nullary representative]\label{lem:bicomodunit}
@@ -494,18 +509,21 @@ For a comonoid $C$, its regular bicomodule
 $(C,\delta_C,\delta_C)$ represents $\emp C$ in $\Ccal(\V)$.
 The universal cell $\emp C\cell C$ is represented by $\eps_C$.
 \end{lemma}
-\begin{proof}
-First consider a globular nullary cell $\phi:N\to I$. By
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Construct the nullary factor.} First consider a globular nullary cell $\phi:N\to I$. By
 \cref{eq:nullbalance},
 \[
  q=(1_C\otimes\phi)\lambda_N
    =(\phi\otimes1_C)\rho_N:N\to C.
 \]
-Coassociativity of $\lambda_N$ gives
+
+\item \textbf{Verify equivariance.} Coassociativity of $\lambda_N$ gives
 $\delta_Cq=(1_C\otimes q)\lambda_N$, and that of $\rho_N$ gives
 $\delta_Cq=(q\otimes1_C)\rho_N$; in each equation use the
 corresponding expression for $q$. Thus $q$ is a bicomodule map.
-Counitality gives the factorization triangle
+
+\item \textbf{Prove nullary uniqueness.} Counitality gives the factorization triangle
 \[
 \begin{tikzcd}[column sep=3em]
 N \arrow[r,dashed,"\exists!\,q"] \arrow[dr,"\phi"'] &
@@ -517,23 +535,29 @@ Conversely a bicomodule map
 $q:N\to C$ satisfies both displayed expressions with
 $\phi=\eps_Cq$, proving uniqueness.
 
-For a contextual instance, take a balanced map
+\item \textbf{Insert the unit in a context.} For a contextual instance, take a balanced map
 $\phi:N\to\bigotimes L\otimes\bigotimes R$ in which the two
 paths meet at $C$. If $L$ is nonempty, insert $C$ by the right
 coaction of its last factor. If $R$ is nonempty, one can instead use
 the left coaction of its first factor. Interior balance says these
 two constructions agree when both apply. If both are empty, use the
 map $q$ just constructed. If only one side is present, the exterior
-equation supplies the missing endpoint calculation. Coassociativity
+equation supplies the missing endpoint calculation.
+
+\item \textbf{Check the contextual equations.} Coassociativity
 gives balance at the two new interfaces, and commuting coactions give
-the unchanged exterior equations. Removing the inserted factor by
+the unchanged exterior equations.
+
+\item \textbf{Prove contextual uniqueness.} Removing the inserted factor by
 $\eps_C$ recovers $\phi$. Conversely, either balance equation
 adjacent to an inserted $C$, followed by its counit, forces this
 insertion formula. Thus the factorization is unique in all contexts.
-For nonidentity exterior maps, corestrict the two exterior coactions
+
+\item \textbf{Allow changing exterior maps.} For nonidentity exterior maps, corestrict the two exterior coactions
 by the explicit restriction construction above. The resulting
 factorization is the globular one just proved, with the same underlying
-maps in $\V$.
+maps in $\V$.\qedhere
+\end{enumerate}
 \end{proof}
 
 \section{Two-sided cells and tree pastings}\label{sec:typed}
@@ -568,17 +592,17 @@ horizontal pasting requires equality of the common vertical arrow, not
 merely agreement of its endpoints. Empty strips compose as the arrows of
 $\mathcal C$ do.
 
-The \emph{wire graph} of a scheme is the finite multigraph whose vertices
+The \textbf{wire graph} of a scheme is the finite multigraph whose vertices
 are its labelled rectangles and whose edges are its internal atomic horizontal
 wires; structural identity strips are contracted. Acyclicity is understood for
 this multigraph, so in particular two parallel edges form a cycle. A
-\emph{tree scheme} is a rectangular scheme whose wire graph is nonempty,
+\textbf{tree scheme} is a rectangular scheme whose wire graph is nonempty,
 connected, and acyclic, and which has no separate
 horizontal wire component meeting no labelled rectangle. The last
 condition excludes adjoining unused through-wires as a tree operation.
 For the poly-virtual calculus the permitted schemes with no labelled
 rectangle are a single identity wire and an empty horizontal square on
-a vertical arrow. Call these \emph{elementary structural schemes}.
+a vertical arrow. Call these \textbf{elementary structural schemes}.
 Two schemes describe the same pasting
 when they differ by planar deformation, insertion or deletion of structural
 identity strips, associativity of pasting, or interchange of rectangular
@@ -593,23 +617,30 @@ substitution is associative and has one-rectangle schemes as identities.
 Evaluation orders related by contracting connected rectangular subtrees
 describe the same substituted scheme.
 \end{lemma}
-\begin{proof}
-Rectangular substitution preserves every boundary label and replaces one
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Preserve the tree shape.} Rectangular substitution preserves every boundary label and replaces one
 graph vertex by a tree. Each old incident edge attaches to its designated
 port. The resulting graph is connected. A cycle entirely in the inserted
 graph is impossible; any other cycle would contract to a cycle in the old
-graph. Substitution of finite labelled rectangles is associative before
+graph.
+
+\item \textbf{Prove substitution associativity.} Substitution of finite labelled rectangles is associative before
 passing to planar equivalence. The equivalence respects substitution since
 each of its generating moves can be performed inside the substituted
-rectangle. A single identity wire removes a vertex having one input and
+rectangle.
+
+\item \textbf{Check structural substitutions.} A single identity wire removes a vertex having one input and
 one output, preserving connectivity and acyclicity. An empty structural
 square can replace only a zero-port vertex, which in a connected scheme
 must be its sole vertex. These observations prove the structural cases.
-The last assertion is the resulting associativity identity.
+
+\item \textbf{Obtain the evaluation identity.} The last assertion is the resulting associativity identity.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{definition}[Poly-virtual and merge calculi]\label{def:poly}
-A \emph{poly-virtual double calculus} on a boundary signature assigns a
+A \textbf{poly-virtual double calculus} on a boundary signature assigns a
 collection $\Pcal_{f,g}(\Gamma;\Delta)$ to every profile and evaluates every
 labelled tree scheme. It supplies the cells for single identity wires and
 structural empty squares, and evaluates elementary structural schemes.
@@ -617,14 +648,14 @@ Evaluation respects the equivalences of
 schemes and substitution of schemes into rectangles, and evaluation of a
 one-rectangle scheme is its label. A map preserves this data.
 
-A \emph{merge calculus} has evaluation of all rectangular schemes, with
+A \textbf{merge calculus} has evaluation of all rectangular schemes, with
 the same equations, including all structural schemes on arbitrary paths.
-Its \emph{poly-virtual reduct} $\Up\Bcal$ keeps the
+Its \textbf{poly-virtual reduct} $\Up\Bcal$ keeps the
 same cell collections and equalities and restricts the specified evaluation
 operations to tree and elementary structural schemes. In particular an
 identity cell on a longer path remains a cell, but its empty multiwire
 scheme is not a designated poly-virtual operation. Original horizontal arrows are
-called \emph{atomic} when a calculus is presented using their paths.
+called \textbf{atomic} when a calculus is presented using their paths.
 \end{definition}
 
 This is an algebraic definition: \cref{lem:shapes} constructs the
@@ -662,16 +693,24 @@ category. Its single-input fragment is the vertically reversed version of
 a virtual double category. Ordinary virtual substitution, including its
 changing-base and nullary instances, is an allowed tree operation.
 \end{proposition}
-\begin{proof}
-An outer single-output rectangle and a compatible family of single-output
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Identify the substitution tree.} An outer single-output rectangle and a compatible family of single-output
 rectangles above its input ports form a rooted tree. Shared lateral maps
-are precisely the compatibility data of virtual substitution. Replacing
+are precisely the compatibility data of virtual substitution.
+
+\item \textbf{Verify the virtual laws.} Replacing
 vertices of this tree gives associativity by \cref{lem:shapes}; structural
 strips give the identity laws. A nullary vertex has no incoming wire and
-causes no change in this argument. Reversing the upper and lower boundaries
-proves the single-input assertion. Vertical maps must be matched for the
+causes no change in this argument.
+
+\item \textbf{Reverse the boundaries.} Reversing the upper and lower boundaries
+proves the single-input assertion.
+
+\item \textbf{Match the whole family.} Vertical maps must be matched for the
 whole family; they need not allow the family to be pasted one member at a
-time with other members held fixed.
+time with other members held fixed.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{remark}[Empty profiles]
@@ -687,7 +726,7 @@ identifying an empty boundary with an atomic horizontal unit.
 \section{Formal categories and their homomorphisms}\label{sec:monads}
 
 \begin{definition}\label{def:formalcat}
-A \emph{formal category} in $\Pcal$ is a quadruple $(X,A,\mu,\eta)$,
+A \textbf{formal category} in $\Pcal$ is a quadruple $(X,A,\mu,\eta)$,
 where $A:X\harr X$ is an atomic arrow and
 $\mu:(A,A)\cell A$, $\eta:\emp X\cell A$ are globular cells such that
 \begin{equation}\label{eq:monadlaws}
@@ -730,10 +769,12 @@ is not itself a designated tree operation.
 \begin{proposition}\label{prop:cat}
 Formal categories and their homomorphisms form a category $\FCat(\Pcal)$.
 \end{proposition}
-\begin{proof}
-Compose $(f,F)$ and $(g,G)$ by $(gf,GF)$, using unary tree pasting.
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Define composition.} Compose $(f,F)$ and $(g,G)$ by $(gf,GF)$, using unary tree pasting.
 Associativity and identities follow from the corresponding tree equations.
-For multiplication, the homomorphism equations for $F$ and $G$,
+
+\item \textbf{Preserve multiplication.} For multiplication, the homomorphism equations for $F$ and $G$,
 interleaved with substitution associativity, give
 \begin{align*}
  (GF)\mu_A
@@ -741,11 +782,13 @@ interleaved with substitution associativity, give
  &=(G\mu_B)(F,F)=\mu_C(G,G)(F,F)
    =\mu_C(GF,GF).
 \end{align*}
-For units, the structural empty squares compose with their vertical
+
+\item \textbf{Preserve units.} For units, the structural empty squares compose with their vertical
 arrows, so
 $(GF)\eta_A=G\eta_B[f]=\eta_C[g][f]=\eta_C[gf]$.
 Thus the composite satisfies both homomorphism equations. The same
-equations hold for identity cells by the substitution identity laws.
+equations hold for identity cells by the substitution identity laws.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{theorem}[Invariance under the reduct]\label{thm:reduct}
@@ -755,13 +798,19 @@ data induces an isomorphism of categories
  \FCat(\Bcal)\cong\FCat(\Up\Bcal).
 \]
 \end{theorem}
-\begin{proof}
-All cells specifying an object or morphism occur in the retained cell
-collections. Every operation in \cref{eq:monadlaws,eq:functorlaws} is a
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Retain the defining cells.} All cells specifying an object or morphism occur in the retained cell
+collections.
+
+\item \textbf{Retain the defining equations.} Every operation in \cref{eq:monadlaws,eq:functorlaws} is a
 tree or structural operation. The reduct retains their values and the
-equalities between them. Finally, identity and composite homomorphisms use
+equalities between them.
+
+\item \textbf{Retain category composition.} Finally, identity and composite homomorphisms use
 only structural and unary tree operations. Consequently the object sets,
-hom-sets, identities, and compositions agree.
+hom-sets, identities, and compositions agree.\qedhere
+\end{enumerate}
 \end{proof}
 
 \section{The typed forest envelope}\label{sec:forest}
@@ -796,18 +845,28 @@ These operations make $\Forest(P)$ a strict $2$-category, and
 for atomic $H$. A map from $P$ to the single-output part of a strict path
 $2$-category extends uniquely to a strict $2$-functor from $\Forest(P)$.
 \end{lemma}
-\begin{proof}
-Associativity of substitution proves vertical associativity; concatenation
-proves horizontal associativity. Substitution on disjoint consecutive blocks
-commutes, which is interchange. The forest of unary identities and the
-empty forest give the identity laws. With one output the subdivision has
-only one block, proving \cref{eq:forestsingle}. A forest must be sent to
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Prove associativity.} Associativity of substitution proves vertical associativity; concatenation
+proves horizontal associativity.
+
+\item \textbf{Prove interchange.} Substitution on disjoint consecutive blocks
+commutes, which is interchange.
+
+\item \textbf{Verify the identity laws.} The forest of unary identities and the
+empty forest give the identity laws.
+
+\item \textbf{Recover single-output cells.} With one output the subdivision has
+only one block, proving \cref{eq:forestsingle}.
+
+\item \textbf{Prove the extension property.} A forest must be sent to
 the horizontal composite of the images of its roots, so an extension is
-unique, and the same substitution identities show that it is a functor.
+unique, and the same substitution identities show that it is a functor.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{definition}[Intrinsic comparison class]\label{def:universal}
-A cell $s\in P(\Omega;T)$ is \emph{contextually universal} if for
+A cell $s\in P(\Omega;T)$ is \textbf{contextually universal} if for
 every compatible pair of paths $L,R$ and every atomic output $B$, each
 $\alpha\in P(L,\Omega,R;B)$ factors uniquely as
 \begin{equation}\label{eq:universal}
@@ -820,7 +879,7 @@ $\alpha\in P(L,\Omega,R;B)$ factors uniquely as
 Equivalently, substitution gives a bijection
 $s^*:P(L,T,R;B)\to P(L,\Omega,R;B)$.
 Let $S(P)$ be the class of all such cells, including those with empty
-source. We say that $\Omega$ is \emph{represented by $T$} when such an
+source. We say that $\Omega$ is \textbf{represented by $T$} when such an
 $s$ exists.
 \end{definition}
 
@@ -830,14 +889,20 @@ universal comparisons into a contextually universal comparison is
 contextually universal. Contextual instances of such comparisons are
 stable under further adjoining contexts.
 \end{lemma}
-\begin{proof}
-The first assertion is the identity law. For the second, the substitution
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Include identities.} The first assertion is the identity law.
+
+\item \textbf{Close under substitution.} For the second, the substitution
 map of the resulting cell is the composite of the substitution maps for
 the outer comparison and its inputs, in their specified contexts. These
-maps are bijections. For the last assertion, enlarge $L,R$ in
+maps are bijections.
+
+\item \textbf{Enlarge the context.} For the last assertion, enlarge $L,R$ in
 \cref{eq:universal}. This last statement concerns instances in the forest
 envelope, which may have several outputs; it does not change the definition
-of $S(P)$ as single-output cells.
+of $S(P)$ as single-output cells.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{lemma}[Globular detection in an equipment]\label{lem:globdet}
@@ -845,15 +910,20 @@ If $P$ is the globular part of a virtual equipment $\D$, then
 \cref{eq:universal} is equivalent to the same factorization property with
 arbitrary exterior vertical boundaries in $\D$.
 \end{lemma}
-\begin{proof}
-For a target $B$ and exterior arrows $f,g$, its cartesian restriction gives
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Restrict the target.} For a target $B$ and exterior arrows $f,g$, its cartesian restriction gives
 \[
  \D_{f,g}(\Xi;B)\cong P(\Xi;B[f,g]).
 \]
-This bijection commutes with substitution in $\Xi$. Apply it to both
+
+\item \textbf{Transport the factorization test.} This bijection commutes with substitution in $\Xi$. Apply it to both
 sides of the desired factorization map and use
-\cref{eq:universal} with output $B[f,g]$. The converse takes identity
-vertical boundaries.
+\cref{eq:universal} with output $B[f,g]$.
+
+\item \textbf{Recover the globular case.} The converse takes identity
+vertical boundaries.\qedhere
+\end{enumerate}
 \end{proof}
 
 \section{Conservative localization}\label{sec:localization}
@@ -885,38 +955,54 @@ It takes every contextual comparison to a bijection and therefore extends
 uniquely to a presheaf $\overline\Phi_A$ on $L(P)(X,Y)$.
 The map $P(\Gamma;A)\to L(P)(\Gamma;A)$ is injective.
 \end{lemma}
-\begin{proof}
-The action of a forest is simultaneous substitution into its consecutive
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Define the forest action.} The action of a forest is simultaneous substitution into its consecutive
 blocks. Identity and composition follow from the virtual identities.
-The assertion about comparisons is precisely \cref{eq:universal}.
+
+\item \textbf{Extend across inverses.} The assertion about comparisons is precisely \cref{eq:universal}.
 Thus the action of a formal inverse is the inverse bijection, and this
-defines the extension. If original cells $a,b$ have equal images, apply
+defines the extension.
+
+\item \textbf{Separate original cells.} If original cells $a,b$ have equal images, apply
 their presheaf actions to $1_A\in P(A;A)$. The results are $a$ and $b$,
-respectively, so $a=b$.
+respectively, so $a=b$.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{lemma}[Backward evaluation]\label{lem:backward}
 Every $z\in L(P)(\Gamma;A)$ with atomic output $A$ equals the image of
 the original cell $\overline\Phi_A(z)(1_A)$.
 \end{lemma}
-\begin{proof}
-Write $z$ as a finite vertical sequence of forests and inverses of
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Choose a layered expression.} Write $z$ as a finite vertical sequence of forests and inverses of
 contextual comparisons. Such a sequence exists: distribute horizontal
 composites of generators into vertical layers by interchange, adding
-identity forests. Start at the final boundary $A$ with $1_A$ and traverse
-the sequence backwards. At an ordinary forest $a:\Xi\cell\Psi$,
+identity forests.
+
+\item \textbf{Initialize backward evaluation.} Start at the final boundary $A$ with $1_A$ and traverse
+the sequence backwards.
+
+\item \textbf{Pass an ordinary forest.} At an ordinary forest $a:\Xi\cell\Psi$,
 replace the current $b\in P(\Psi;A)$ by its substitution $ba$.
-At the inverse of
+
+\item \textbf{Pass an inverse comparison.} At the inverse of
 \[
  t=1_L\wh s\wh1_R:(L,\Omega,R)\cell(L,T,R),
 \]
 the current cell has source $(L,\Omega,R)$. Let $c$ be its unique factor
 through $t$ using \cref{eq:universal}, so that $b=ct$.
-Then in the localization $bt^{-1}=c$. In either case the original cell
+Then in the localization $bt^{-1}=c$.
+
+\item \textbf{Complete the induction.} In either case the original cell
 now obtained equals the localized suffix that it replaces. Induction over
-the finite sequence proves the assertion. These two backward operations
+the finite sequence proves the assertion.
+
+\item \textbf{Prove independence of expression.} These two backward operations
 are exactly the actions defining $\overline\Phi_A$, which also proves
-independence from the sequence used.
+independence from the sequence used.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{theorem}[Conservativity]\label{thm:conservative}
@@ -928,10 +1014,16 @@ for every original path and atomic output. It respects all original
 substitutions. Reversing cells gives the corresponding single-input
 statement for the dual construction.
 \end{theorem}
-\begin{proof}
-Injectivity is \cref{lem:presheaf} and surjectivity is
-\cref{lem:backward}. The canonical map respects substitution by its
-definition. Reversing the displayed bijections proves the dual assertion.
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Establish the bijection.} Injectivity is \cref{lem:presheaf} and surjectivity is
+\cref{lem:backward}.
+
+\item \textbf{Preserve substitution.} The canonical map respects substitution by its
+definition.
+
+\item \textbf{Obtain the dual assertion.} Reversing the displayed bijections proves the dual assertion.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{theorem}[Detection of represented paths]\label{thm:detection}
@@ -944,14 +1036,22 @@ For an original path $\Gamma$ and atomic arrow $T$,
 More precisely, an original cell $s:\Gamma\cell T$ is invertible in
 $L(P)$ if and only if $s\in S(P)$.
 \end{theorem}
-\begin{proof}
-The reverse implication is the construction. Conversely an isomorphism
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Invert universal comparisons.} The reverse implication is the construction.
+
+\item \textbf{Recover an original comparison.} Conversely an isomorphism
 $\Gamma\to T$ is the image of a unique original cell $s$ by
-\cref{thm:conservative}. Whiskering it by any $L,R$ is an isomorphism.
+\cref{thm:conservative}.
+
+\item \textbf{Verify contextual universality.} Whiskering it by any $L,R$ is an isomorphism.
 Precomposition with that isomorphism is a bijection into every atomic
 output $B$. Apply \cref{eq:conservative} to both its source profiles;
-the resulting bijection is \cref{eq:universal}. The same argument applies
-to any specified $s$ whose image is invertible.
+the resulting bijection is \cref{eq:universal}.
+
+\item \textbf{Test a specified comparison.} The same argument applies
+to any specified $s$ whose image is invertible.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{theorem}[Universal property]\label{thm:localUP}
@@ -960,11 +1060,19 @@ $2$-category extends to $L(P)$ if and only if it sends every member of
 $S(P)$ to an invertible comparison. The extension is unique once its
 values on the original signature are fixed.
 \end{theorem}
-\begin{proof}
-Extend first to forests by \cref{lem:forest}. Necessity follows from
-\cref{eq:inverserel}. For sufficiency send $s^{-1}$ to the inverse of
-the interpreted $s$; all defining equations hold. An inverse, when it
-exists, is unique, so all values of the extension are forced.
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Extend to forests.} Extend first to forests by \cref{lem:forest}.
+
+\item \textbf{Prove necessity.} Necessity follows from
+\cref{eq:inverserel}.
+
+\item \textbf{Define the inverse images.} For sufficiency send $s^{-1}$ to the inverse of
+the interpreted $s$; all defining equations hold.
+
+\item \textbf{Prove uniqueness.} An inverse, when it
+exists, is unique, so all values of the extension are forced.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{remark}
@@ -983,7 +1091,7 @@ the finitely many objects and vertical arrows involved and write
 $f_*:X\harr X'$ and $f^*:X'\harr X$ for the resulting companion and
 conjoint. No simultaneous choice of such representatives is part of the
 construction: \cref{prop:choices} below quotients all local presentations by
-their unique binding-compatible comparisons. This is the usual binding or
+their unique binding-compatible comparisons. This is the familiar binding or
 base-change calculus; compare \cite[Sections 4--5]{Shulman2008}.
 
 \begin{lemma}[Binding and restriction comparisons]\label{lem:binding}
@@ -1022,20 +1130,25 @@ They are associative and unital, and identify the displayed adjunction
 for $uf$ with the composite adjunction.
 \end{enumerate}
 \end{lemma}
-\begin{proof}
-We recall the binding argument, to specify which universal properties are
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Construct the binding pairs.} We recall the binding argument, to specify which universal properties are
 used. The cartesian cell $f_*\cell U_{X'}$ has sides $(f,1)$.
 Factoring the unit cell on $f$ through it gives the other companion
 binding cell, with sides $(1,f)$. The corresponding two cells for $f^*$
 have the reversed sides. A vertical paste of each pair is the unit square
-on $f$. The horizontal binding identity is proved by postcomposing with
+on $f$.
+
+\item \textbf{Prove the horizontal binding identity.} The horizontal binding identity is proved by postcomposing with
 the defining cartesian cell: both sides then give that same unit square,
 and uniqueness of cartesian factorization makes them equal.
 
-Paste the cartesian companion and conjoint cells on the two ends of
+\item \textbf{Construct the restriction comparison.} Paste the cartesian companion and conjoint cells on the two ends of
 $H$, and remove the displayed copies of $U_{X'}$ and $U_{Y'}$ by their
 unit universal properties. Factoring through $H[f,g]$ gives
-\cref{eq:restrictioncomparison}. To factor a cell having $f_*Hg^*$
+\cref{eq:restrictioncomparison}.
+
+\item \textbf{Prove contextual universality.} To factor a cell having $f_*Hg^*$
 in its source, insert the other two binding cells on its sides and then
 use the cartesian factorization defining $H[f,g]$. Substitution back gives
 the original cell by the horizontal binding identities. In the opposite
@@ -1044,20 +1157,23 @@ inside any $L,R$ and with arbitrary exterior maps; hence the comparison
 belongs to $S(P)$. This is the binding form of the opcartesian base-change
 comparison of \cite[Theorem 7.16]{CruttwellShulman2010}.
 
-For the first assertion, the same argument with $H=U_{X'}$ makes
+\item \textbf{Construct the adjunction unit.} For the first assertion, the same argument with $H=U_{X'}$ makes
 $f_*f^*$ a representative of $U_{X'}[f,f]$, after removal of a unit
 factor. Let $t_f:\emp X\cell U_{X'}[f,f]$ be the factor of the
 nullary unit at $X'$ with sides $(f,f)$. Define $j_f$ by composing
-$t_f$ with the inverse representing comparison. The two cartesian
+$t_f$ with the inverse representing comparison.
+
+\item \textbf{Construct the adjunction counit.} The two cartesian
 binding cells, followed by unit composition, give
 $f^*f_*\cell U_{X'}$; compose with the inverse of
 $\emp{X'}\cell U_{X'}$ to obtain $e_f$.
-The two composites in \cref{eq:triangles}, on expanding these
+
+\item \textbf{Verify the triangle identities.} The two composites in \cref{eq:triangles}, on expanding these
 definitions, are the horizontal binding pastes just proved. Removal and
 insertion of the representing comparisons cancel. Thus they are the
 identity cells.
 
-For composable $f:X\to Y$ and $u:Y\to Z$, paste their companion binding
+\item \textbf{Construct composite binding comparisons.} For composable $f:X\to Y$ and $u:Y\to Z$, paste their companion binding
 pairs. Factoring the resulting binding pair through a companion binding
 pair for $uf$ gives a comparison
 $k_{f,u}:f_*u_*\cell(uf)_*$. By
@@ -1072,15 +1188,18 @@ the pasted conjoint binding pairs give
 $l_{f,u}:u^*f^*\cell(uf)^*$, which likewise belongs to $S(P)$ and is
 invertible in $L(P)$.
 
-Two comparisons between binding pairs which respect the binding cells are
+\item \textbf{Prove comparison coherence.} Two comparisons between binding pairs which respect the binding cells are
 equal: postcompose with a cartesian binding cell and use its uniqueness.
 For three composable vertical arrows, the two composites of the $k$'s
 carry the same pasted companion binding pair to the binding pair of the
 threefold composite, so they agree; the same argument applies to the
-$l$'s. Identity comparisons are proved similarly. Finally the constructions
+$l$'s. Identity comparisons are proved similarly.
+
+\item \textbf{Identify composite adjunctions.} Finally the constructions
 of $j_f,e_f$ from the binding cells show, again by uniqueness, that these
 comparisons identify the displayed adjunction for a composite with the
-composite adjunction.
+composite adjunction.\qedhere
+\end{enumerate}
 \end{proof}
 
 We normalize a local presentation of a vertical identity to the empty path
@@ -1134,23 +1253,27 @@ For every cloven presentation $\mathfrak b$, the operations of
 double category with paths as horizontal arrows, and hence a merge
 calculus on the original atomic graph.
 \end{theorem}
-\begin{proof}
-For three horizontally adjacent squares, either association tensors their
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Prove horizontal associativity.} For three horizontally adjacent squares, either association tensors their
 representatives and contracts the two disjoint strings $g^*g_*$ and
 $h^*h_*$. The contractions commute by interchange in $L(P)$.
-Horizontal composition with $j_f$ or $j_g$ is an identity by the two
+
+\item \textbf{Verify horizontal identities.} Horizontal composition with $j_f$ or $j_g$ is an identity by the two
 triangle identities \cref{eq:triangles}.
 
-For three vertically adjacent squares, either association first substitutes
+\item \textbf{Prove vertical associativity.} For three vertically adjacent squares, either association first substitutes
 all three representatives and then compares the three successive
 companions and the three successive conjoints with those of the composite
 vertical maps. Associativity of $k,l$ from \cref{lem:binding} makes
-these results equal. Their identity comparisons are normalized, proving
+these results equal.
+
+\item \textbf{Verify vertical identities.} Their identity comparisons are normalized, proving
 the vertical identity laws. Equation~\eqref{eq:unitcomp} states exactly
 that the horizontal identity on $uf$ is the vertical paste of those on
 $f$ and $u$.
 
-It remains to check interchange. At an interior vertical side, write its
+\item \textbf{Prove interchange.} It remains to check interchange. At an interior vertical side, write its
 upper and lower segments as $g$ and $v$. After expanding the four square
 representatives, either order of evaluation has the same uncontracted
 string. Pasting horizontally first contracts $g^*g_*$, then $v^*v_*$,
@@ -1159,7 +1282,8 @@ $v^*g^*g_*v_*$ by $(vg)^*(vg)_*$ using $l,k$, and contracts by
 $e_{vg}$. These operations are equal by \cref{eq:counitcomp}.
 Every other part of the two expressions agrees by functoriality of
 whiskering. This proves interchange. It also proves compatibility with
-structural subdivisions and hence evaluation of all rectangular schemes.
+structural subdivisions and hence evaluation of all rectangular schemes.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{proposition}[Choice-free global merge realization]\label{prop:choices}
@@ -1203,15 +1327,20 @@ $\E_{\mathfrak b}(\D)$ is canonically isomorphic to $\E(\D)$, and the
 canonical isomorphisms between cloven presentations satisfy the cocycle
 identity.
 \end{proposition}
-\begin{proof}
-For two represented units, universal factorization gives a unique
-isomorphism carrying one nullary universal cell to the other. For two
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Compare represented units.} For two represented units, universal factorization gives a unique
+isomorphism carrying one nullary universal cell to the other.
+
+\item \textbf{Compare binding pairs.} For two
 companion binding pairs, factor the cartesian binding cell of the first
 through that of the second and conversely. Each resulting composite has
 the same factorization through a cartesian binding cell as the identity,
 so cartesian uniqueness makes the two factors inverse. This gives
 $\kappa_{\mathfrak f,\mathfrak f'}$; the conjoint argument gives
-$\lambda_{\mathfrak f,\mathfrak f'}$. A composite of two
+$\lambda_{\mathfrak f,\mathfrak f'}$.
+
+\item \textbf{Prove the cocycle identities.} A composite of two
 binding-compatible comparisons is binding-compatible, so uniqueness gives
 \[
  \kappa_{\mathfrak f',\mathfrak f''}
@@ -1224,29 +1353,34 @@ binding-compatible comparisons is binding-compatible, so uniqueness gives
 together with the identity equations. Hence \cref{eq:choicefreerel} is
 an equivalence relation.
 
-Binding-compatible isomorphisms preserve $j$ and $e$: after expanding
+\item \textbf{Preserve the binding operations.} Binding-compatible isomorphisms preserve $j$ and $e$: after expanding
 these cells by their defining binding factorizations, both possible
 transports have the same composite with the relevant cartesian binding
 cell, so uniqueness identifies them. They likewise preserve $k$ and $l$,
 since the transported and untransported composites respect the same
-pasted binding pairs. Therefore changing any representative or seam in a
+pasted binding pairs.
+
+\item \textbf{Make pasting independent of choices.} Therefore changing any representative or seam in a
 finite rectangular pasting transports its cloven value exactly by the
 relation \cref{eq:choicefreerel}. The class of the value is independent
 of the choices. Only finitely many representatives are needed for a finite
 scheme, so this definition requires no simultaneous cleavage.
 
-Evaluate the two sides of any associativity, identity, or interchange law
+\item \textbf{Descend the double-category laws.} Evaluate the two sides of any associativity, identity, or interchange law
 using the same finite choices. The calculation in the proof of
 \cref{thm:globalcoherence} uses only those finitely many choices and makes
 the two values equal; hence they determine the same quotient class. Thus
-the quotient is a strict double category and a merge calculus. If a
+the quotient is a strict double category and a merge calculus.
+
+\item \textbf{Recover each cloven presentation.} If a
 cloven presentation $\mathfrak b$ is given, send
 $a\in L(P)(\Gamma;f_*\Delta g^*)$ to its class. Every quotient class has
 a unique representative after transport to the $\mathfrak b$-presentation
 of its two exterior arrows, so this map is bijective on every cell
 collection and respects all pasting. It is therefore a canonical
 isomorphism $\E_{\mathfrak b}(\D)\cong\E(\D)$. The cocycle identity is
-the one already proved for the binding-compatible comparisons.
+the one already proved for the binding-compatible comparisons.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{theorem}[Global conservativity]\label{thm:globalembedding}
@@ -1257,11 +1391,14 @@ signature, inducing bijections
 \end{equation}
 for every atomic $H$. It preserves and reflects original cartesian cells.
 \end{theorem}
-\begin{proof}
-For the fixed profile in question, choose binding presentations of the two
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Select local representatives.} For the fixed profile in question, choose binding presentations of the two
 exterior arrows. By \cref{prop:choices}, every class in
 $\E(\D)_{f,g}(\Gamma;H)$ has a unique representative in the corresponding
-summand of \cref{eq:choicefreecells}. The desired bijection is therefore
+summand of \cref{eq:choicefreecells}.
+
+\item \textbf{Construct the cell bijection.} The desired bijection is therefore
 the top edge of
 \[
 \begin{tikzcd}[column sep=3.2em]
@@ -1277,7 +1414,9 @@ representative of the quotient class. The construction
 is independent of the two local binding presentations by
 \cref{eq:choicefreerel}.
 
-Identities are preserved by the binding identities. For substitution of a
+\item \textbf{Preserve identities.} Identities are preserved by the binding identities.
+
+\item \textbf{Preserve virtual substitution.} For substitution of a
 compatible family, choose binding presentations for the finitely many
 vertical seams and apply the displayed construction to every cell. At each
 internal side the two binding cells are adjacent and contract by $e_g$, as
@@ -1286,15 +1425,17 @@ compared by $k,l$, as in \cref{eq:vcomp}. The horizontal binding identity
 cancels each inserted pair. The remaining cartesian factor is precisely
 that of the original substituted cell. Passing to quotient classes proves
 compatibility with all virtual substitution, including empty blocks.
-Finally, the test for an original unary cartesian cell is a bijection of
+
+\item \textbf{Preserve and reflect cartesianness.} Finally, the test for an original unary cartesian cell is a bijection of
 original single-output cell collections for every top path and exterior
 boundary. The displayed bijections identify all these tests and their
 substitution maps in the two calculi, proving both preservation and
-reflection.
+reflection.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{definition}[Equipment boundary transport]\label{def:equipment}
-A \emph{boundary presentation} of a vertical arrow $f:X\to X'$ consists
+A \textbf{boundary presentation} of a vertical arrow $f:X\to X'$ consists
 of arrows $f_*:X\harr X'$ and $f^*:X'\harr X$ (empty paths are permitted
 for identities) and cells
 \[
@@ -1302,7 +1443,7 @@ for identities) and cells
  e_f:f^*f_*\cell\emp{X'}
 \]
 satisfying \cref{eq:triangles}. A poly-virtual calculus has
-\emph{equipment boundary transport} when every vertical arrow admits a
+\textbf{equipment boundary transport} when every vertical arrow admits a
 boundary presentation and, for every local choice of presentations for
 $f,g$, there are bijections
 \[
@@ -1323,7 +1464,7 @@ bijections generated by inserting identity vertical maps, reassociating a
 composable string of vertical maps, changing local boundary presentations
 by their canonical comparisons, and the defined tree substitutions
 commute. This is coherence of functions on cell collections; it does not
-declare a multiwire merge to be a tree operation. A \emph{poly-virtual
+declare a multiwire merge to be a tree operation. A \textbf{poly-virtual
 equipment} is a poly-virtual calculus having this property. Transported
 boundaries such as $f_*\Delta g^*$ need not have atomic representatives.
 In the realizations constructed below the comparison and coherence clauses
@@ -1346,10 +1487,13 @@ The second bijection and its inverse use only single-wire cuts.
 Together with \cref{prop:transportcoherence}, these bijections give
 $\Up\E(\D)$ equipment boundary transport.
 \end{proposition}
-\begin{proof}
-The first bijection chooses the unique representative of the quotient class
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Choose the quotient representative.} The first bijection chooses the unique representative of the quotient class
 in the selected summand of \cref{eq:choicefreecells}; equivalently it is
-\cref{eq:globalcells} in that cloven presentation. For the second, cut the
+\cref{eq:globalcells} in that cloven presentation.
+
+\item \textbf{Construct the mate.} For the second, cut the
 leftmost exposed $f_*$ output against $e_f$, adjoining the input $f^*$;
 cut the rightmost $g^*$ output against $e_g$, adjoining $g_*$. In merge
 notation the resulting map is
@@ -1357,13 +1501,17 @@ notation the resulting map is
  a\longmapsto
  (e_f\wh1_\Delta\wh e_g)(1_{f^*}\wh a\wh1_{g_*}).
 \]
-For its inverse, cut the $f^*$ output of $j_f$ into the leftmost input
+
+\item \textbf{Construct and verify the inverse.} For its inverse, cut the $f^*$ output of $j_f$ into the leftmost input
 and the $g_*$ output of $j_g$ into the rightmost input. Each cut satisfies
 \cref{eq:cutplacement}. The two composites reduce to identity by
-\cref{eq:triangles}. Their naturality under tree substitution follows
+\cref{eq:triangles}.
+
+\item \textbf{Prove substitution and composition compatibility.} Their naturality under tree substitution follows
 by substituting the same cuts into the corresponding trees. Compatibility
 with vertical composition is \cref{eq:unitcomp,eq:counitcomp}. All
-these operations and equalities are retained by the reduct.
+these operations and equalities are retained by the reduct.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{proposition}[Finite coherence for boundary transport]\label{prop:transportcoherence}
@@ -1384,24 +1532,40 @@ normal form built from $j,e,K,L$, and all the coherence diagrams required
 there commute. Hence no further boundary-transport coherence equations
 are imposed in the realization.
 \end{proposition}
-\begin{proof}
-For three arrows, independence of bracketing is the associativity of $k$
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Normalize composite comparisons.} For three arrows, independence of bracketing is the associativity of $k$
 and $l$ proved in \cref{lem:binding}; induction gives the assertion for
 any finite string. The identity cases use the normalized empty-path
-presentations. Expand an iterated bending into insertions of $j$, cuts
+presentations.
+
+\item \textbf{Expand boundary bending.} Expand an iterated bending into insertions of $j$, cuts
 against $e$, and the comparison cells joining successive companion or
 conjoint paths. Reassociate the latter to $K$ and $L$. There are four
-possible local changes of evaluation order. Cuts on disjoint wires commute
-by interchange. Adjacent $j,e$ pairs cancel by the triangle identities
-\cref{eq:triangles}. Rebracketings of companion or conjoint strings agree
-by the just-proved independence of $K,L$. Replacing bending successively
+possible local changes of evaluation order.
+
+\item \textbf{Commute disjoint cuts.} Cuts on disjoint wires commute
+by interchange.
+
+\item \textbf{Cancel adjacent unit and counit cells.} Adjacent $j,e$ pairs cancel by the triangle identities
+\cref{eq:triangles}.
+
+\item \textbf{Rebracket binding strings.} Rebracketings of companion or conjoint strings agree
+by the just-proved independence of $K,L$.
+
+\item \textbf{Combine successive boundary maps.} Replacing bending successively
 along $f,u$ by bending along $uf$ is exactly
-\cref{eq:unitcomp,eq:counitcomp}. Thus any two evaluations with the same
+\cref{eq:unitcomp,eq:counitcomp}.
+
+\item \textbf{Identify all evaluation orders.} Thus any two evaluations with the same
 typed exterior reduce to the same expression. These calculations are
-spelled out in \cref{app:bindings}. Finally, changing the local binding
+spelled out in \cref{app:bindings}.
+
+\item \textbf{Descend through changes of presentation.} Finally, changing the local binding
 presentations transports every term by the unique comparisons of
 \cref{prop:choices}, so the conclusion descends to the choice-free
-realization.
+realization.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{remark}[Restrictions, extensions, and laxity]\label{rem:lax}
@@ -1435,13 +1599,18 @@ where $\Mon(\D)$ denotes the category of monoids and monoid
 homomorphisms in $\D$, and carriers on the left are the original atomic
 arrows.
 \end{theorem}
-\begin{proof}
-The tree calculus and transport follow from
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Assemble the calculus and transport.} The tree calculus and transport follow from
 \cref{thm:globalcoherence,prop:choices,prop:mates,prop:transportcoherence}.
-Global conservativity is
+
+\item \textbf{Identify the monoid data and equations.} Global conservativity is
 \cref{thm:globalembedding}, and identifies all multiplication, unit,
 and homomorphism cells. Its compatibility with substitution identifies
-all their equations and compositions. Finally apply \cref{thm:reduct}.
+all their equations and compositions.
+
+\item \textbf{Pass to the reduct.} Finally apply \cref{thm:reduct}.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{theorem}[Exact extension criterion]\label{thm:functoriality}
@@ -1453,18 +1622,28 @@ the extension globalizes canonically to the choice-free merge realizations.
 In cloven presentations it is represented by the unique binding-compatible
 comparisons of \cref{prop:choices}.
 \end{theorem}
-\begin{proof}
-By \cref{thm:localUP}, extension is equivalent to invertibility of
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Recognize the extension condition.} By \cref{thm:localUP}, extension is equivalent to invertibility of
 every $F(s)$ in $L(P')$. By \cref{thm:detection}, this is precisely
-membership in $S(P')$. For globalization, the image of an original unit comparison becomes
+membership in $S(P')$.
+
+\item \textbf{Transport the binding cells.} For globalization, the image of an original unit comparison becomes
 invertible. Hence the image binding cells define a companion and conjoint
-presentation for the image vertical map in the target realization. Compare
+presentation for the image vertical map in the target realization.
+
+\item \textbf{Compare local presentations.} Compare
 this local presentation with any other one by the unique binding-compatible
 comparisons of \cref{prop:choices}, and use these at the two ends of the
-image of \cref{eq:globalcells}. Their compatibility with $j,e,k,l$ proves
-that \cref{eq:hcomp,eq:vcomp} are respected. The cocycle identity makes
+image of \cref{eq:globalcells}.
+
+\item \textbf{Preserve the two compositions.} Their compatibility with $j,e,k,l$ proves
+that \cref{eq:hcomp,eq:vcomp} are respected.
+
+\item \textbf{Prove independence and functoriality.} The cocycle identity makes
 the resulting quotient class independent of the local presentations, and
-uniqueness proves compatibility with compositions of such functors.
+uniqueness proves compatibility with compositions of such functors.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{proposition}[Path presentation]\label{prop:pathpresentation}
@@ -1472,15 +1651,21 @@ A merge calculus on a horizontal graph is equivalently a strict double
 category whose horizontal category is the free path category on that
 graph, with the graph retained as designated atomic arrows.
 \end{proposition}
-\begin{proof}
-From a merge calculus, regard a boundary path as a horizontal arrow and
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Construct a strict double category.} From a merge calculus, regard a boundary path as a horizontal arrow and
 use its cell collections as squares. Two-box rectangular evaluations
 give the two compositions, and scheme substitution gives associativity,
-units, and interchange. Conversely, compose a rectangular expression
+units, and interchange.
+
+\item \textbf{Evaluate rectangular expressions.} Conversely, compose a rectangular expression
 in a strict double category. The double-category laws identify the
-generating equivalent schemes, so its value is well defined. These
+generating equivalent schemes, so its value is well defined.
+
+\item \textbf{Check that the constructions are inverse.} These
 constructions recover exactly the specified cell collections and pasting
-operations in either direction.
+operations in either direction.\qedhere
+\end{enumerate}
 \end{proof}
 
 This is a presentation equivalence for the strict path realization used
@@ -1490,13 +1675,13 @@ calculus, nor assert that forgetting merges is invertible.
 \section{Formal internal categories in an arbitrary monoidal base}\label{sec:formalinternal}
 
 \begin{definition}\label{def:Q}
-The \emph{bicomodule poly-virtual equipment} is
+The \textbf{bicomodule poly-virtual equipment} is
 \begin{equation}\label{eq:Q}
  \Q(\V)=\Up\bigl(\E(\Ccal(\V))^{\vop}\bigr).
 \end{equation}
 Vertical reversal reverses the vertical category and the upper and
 lower boundaries of every square, retaining horizontal orientations.
-A \emph{formal internal category in $\V$} is a formal category in
+A \textbf{formal internal category in $\V$} is a formal category in
 $\Q(\V)$ on an atomic bicomodule carrier.
 \end{definition}
 
@@ -1524,19 +1709,27 @@ cell, including a unary changing-base cell, is preserved and reflected.
 All its cells admit finite expressions in primitive cells, pasting, and
 inverses of intrinsically universal comparisons.
 \end{theorem}
-\begin{proof}
-Apply \cref{prop:modinput,lem:bicomodunit,thm:completion}, then
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Complete and reverse the calculus.} Apply \cref{prop:modinput,lem:bicomodunit,thm:completion}, then
 reverse the vertical category and the squares. Under reversal the
 original companion and conjoint exchange their roles, as do their unit
-and counit. Use the second mate description in \cref{eq:mates} to
+and counit.
+
+\item \textbf{Identify equipment transport.} Use the second mate description in \cref{eq:mates} to
 rewrite the reversed square correspondence in the form required by
 \cref{def:equipment}. The triangle and composition identities are
 preserved by this reversal, and \cref{prop:transportcoherence} gives the
-required coherent equipment transport. The cell assertion is the
-dual of \cref{thm:globalembedding}. The finite-expression assertion
+required coherent equipment transport.
+
+\item \textbf{Recover primitive cells.} The cell assertion is the
+dual of \cref{thm:globalembedding}.
+
+\item \textbf{Verify the finite presentation.} The finite-expression assertion
 is \cref{def:localization,def:global}; the latter's adjunction cells
 were themselves constructed as finite expressions in
-\cref{lem:binding}. The reduct changes none of these collections.
+\cref{lem:binding}. The reduct changes none of these collections.\qedhere
+\end{enumerate}
 \end{proof}
 
 A multiplication is therefore an element of the constructed collection
@@ -1576,8 +1769,9 @@ making $i_{M,N}$ equivariant for the exterior coactions of $M,N$.
 It is a $C$--$E$ bicomodule. Its inclusion is a contextually universal
 cell $(M,N)\cell T$ of $\Ccal(\V)$.
 \end{lemma}
-\begin{proof}
-The map $(\lambda_M\otimes1)i_{M,N}$ satisfies the balance equation
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Construct the induced coactions.} The map $(\lambda_M\otimes1)i_{M,N}$ satisfies the balance equation
 in $C\otimes M\otimes N$: this follows by commuting $\lambda_M$
 past $\rho_M$ in \cref{eq:bicomodcommute}. Since
 $1_C\otimes i_{M,N}$ is the corresponding equalizer, there is a
@@ -1589,7 +1783,9 @@ M\otimes N \arrow[d,"\lambda_M\otimes1"]\\
 C\otimes T \arrow[r,hook,"1_C\otimes i_{M,N}"'] & C\otimes M\otimes N.
 \end{tikzcd}
 \]
-Construct $\rho_T$ similarly. Postcomposing the two coassociativity
+Construct $\rho_T$ similarly.
+
+\item \textbf{Verify the bicomodule laws.} Postcomposing the two coassociativity
 maps with $1_C\otimes1_C\otimes i_{M,N}$ proves their equality,
 because this map is monic; counitality uses $i_{M,N}$ in the same
 way. The right coaction and commuting-coaction equations follow by
@@ -1597,21 +1793,26 @@ postcomposing with $i_{M,N}\otimes1_E\otimes1_E$ and
 $1_C\otimes i_{M,N}\otimes1_E$, respectively. All these maps are
 monic by stability.
 
-Now take a balanced map
+\item \textbf{Factor a contextual balanced map.} Now take a balanced map
 $b:B\to\bigotimes L\otimes M\otimes N\otimes\bigotimes R$.
 Its balance equation at $D$ gives a unique factor
 \[
  \bar b:B\longrightarrow\bigotimes L\otimes T\otimes\bigotimes R
 \]
-through $1\otimes i_{M,N}\otimes1$, by stability. For every remaining
+through $1\otimes i_{M,N}\otimes1$, by stability.
+
+\item \textbf{Reflect the remaining equations.} For every remaining
 balance or exterior equation for $\bar b$, postcompose both sides
 with the tensor of $i_{M,N}$ and the additional coaction base. The
 defining equations for $\lambda_T,\rho_T$ turn the two resulting
 maps into the corresponding equal maps for $b$. The postcomposed map
-is monic, so the equation for $\bar b$ holds. Conversely such a
+is monic, so the equation for $\bar b$ holds.
+
+\item \textbf{Prove the universal bijection.} Conversely such a
 balanced $\bar b$ gives a balanced $b$ by composition. Uniqueness
 is that of the equalizer factorization. This is exactly
-\cref{eq:universal} in $\Ccal(\V)$.
+\cref{eq:universal} in $\Ccal(\V)$.\qedhere
+\end{enumerate}
 \end{proof}
 
 Let $\mathbb B(\V)=\E(\Ccal(\V))^{\vop}$ denote the merge
@@ -1637,15 +1838,23 @@ in $\mathbb B(\V)$. In its poly-virtual reduct, the operation
 is a bijection for all compatible paths. Likewise there is a nullary
 comparison $\tau_0:\emp C\cell C$ with this property.
 \end{proposition}
-\begin{proof}
-By \cref{lem:cotensorstructure}, the comparison in
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Invert the stable comparison.} By \cref{lem:cotensorstructure}, the comparison in
 $\Ccal(\V)$ belongs to $S(P)$. Its image is inverted in $L(P)$;
-after reversal its inverse has the stated profile. Whiskered
-precomposition with it is a bijection in the merge calculus. The map
+after reversal its inverse has the stated profile.
+
+\item \textbf{Obtain contextual factorization.} Whiskered
+precomposition with it is a bijection in the merge calculus.
+
+\item \textbf{Retain the bijection in the reduct.} The map
 in \cref{eq:tauuniversal} is a single cut along $T$, so the reduct
 retains this map, its domain and codomain, and their equalities.
-Consequently it retains the bijection. The nullary assertion follows
-identically from \cref{lem:bicomodunit}.
+Consequently it retains the bijection.
+
+\item \textbf{Include nullary comparisons.} The nullary assertion follows
+identically from \cref{lem:bicomodunit}.\qedhere
+\end{enumerate}
 \end{proof}
 
 The inverse comparison identifies two formal boundaries. The cotensor
@@ -1705,15 +1914,18 @@ cone functor. There is a unique comparison between any two of them
 commuting with their maps to the unparenthesized tensor. These comparisons
 are isomorphisms and satisfy the pentagon and triangle identities.
 \end{lemma}
-\begin{proof}
-For a triple, the object $(M\square_D N)\square_E K$, mapped into
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Identify the triple cone functor.} For a triple, the object $(M\square_D N)\square_E K$, mapped into
 $M\otimes N\otimes K$, receives a map from $B$ exactly when a map
 from $B$ into that tensor satisfies both adjacent balance equations.
 Indeed the first equation uniquely factors it through
 $i_{M,N}\otimes1_K$, and the second then becomes the balance
 equation for the second cotensor. Monicity after tensoring verifies
 this equivalence, including exterior equivariance, as in
-\cref{lem:cotensorstructure}. Reversing the order of these two
+\cref{lem:cotensorstructure}.
+
+\item \textbf{Construct the associator.} Reversing the order of these two
 factorizations gives $M\square_D(N\square_E K)$ and the same
 cone functor. Put $T_L=(M\square_D N)\square_E K$ and
 $T_R=M\square_D(N\square_E K)$, with cone maps
@@ -1727,12 +1939,16 @@ T_R \arrow[d,"I_R"]\\
 & M\otimes N\otimes K.
 \end{tikzcd}
 \]
-The tensor associator is understood on the lower vertex. Induction
-establishes the same property for any finite path. Two routes around
+The tensor associator is understood on the lower vertex.
+
+\item \textbf{Extend to finite paths.} Induction
+establishes the same property for any finite path.
+
+\item \textbf{Prove the pentagon identity.} Two routes around
 the pentagon give maps between representatives with the same composite
 to the unparenthesized fourfold tensor, so uniqueness makes them equal.
 
-For units, $\lambda_M:M\to C\otimes M$ is the equalizer of
+\item \textbf{Identify the stable unit cones.} For units, $\lambda_M:M\to C\otimes M$ is the equalizer of
 $\delta_C\otimes1$ and $1\otimes\lambda_M$. If $x:B\to C\otimes M$
 equalizes them, apply $\eps_C$ to their first tensor factor to obtain
 \[
@@ -1740,10 +1956,13 @@ equalizes them, apply $\eps_C$ to their first tensor factor to obtain
 \]
 Counitality proves uniqueness. This formula survives arbitrary tensoring,
 so the cone is stable. It gives an isomorphism $C\square_C M\cong M$;
-the right coaction gives $M\square_D D\cong M$. Inserting a unit
+the right coaction gives $M\square_D D\cong M$.
+
+\item \textbf{Prove the triangle identities.} Inserting a unit
 factor and removing it by its counit preserves the universal cone.
 Thus the two routes in each triangle have the same cone and agree
-by uniqueness. This also verifies the nullary cases of the induction.
+by uniqueness. This also verifies the nullary cases of the induction.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{theorem}[Fixed-base recovery]\label{thm:aguiar}
@@ -1771,8 +1990,9 @@ with actual maps by unary full faithfulness.
 In particular this recovers Aguiar internal categories in every regular
 monoidal category.
 \end{theorem}
-\begin{proof}
-By \cref{prop:tau} and unary full faithfulness from
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Transport multiplication and unit cells.} By \cref{prop:tau} and unary full faithfulness from
 \cref{thm:arbitraryV},
 \begin{align*}
  \Q(\V)((A,A);A)&\cong
@@ -1785,14 +2005,16 @@ By \cref{prop:tau} and unary full faithfulness from
 These are the formulas~\eqref{eq:mutransport}. Their forward
 operations each use one cut. We verify all equations.
 
-Write $T=A\square_C A$, $T_L=T\square_C A$, $T_R=A\square_C T$,
+\item \textbf{Compare the triple cones.} Write $T=A\square_C A$, $T_L=T\square_C A$, $T_R=A\square_C T$,
 and let
 \[
  I_L=(\iota_{A,A}\wh1_A)\iota_{T,A}:T_L\cell(A,A,A),\qquad
  I_R=(1_A\wh\iota_{A,A})\iota_{A,T}:T_R\cell(A,A,A).
 \]
 The defining cone equality of \cref{lem:cotensorcoherence} says
-$I_Ra_{A,A,A}=I_L$. Functoriality of cotensor maps, defined by
+$I_Ra_{A,A,A}=I_L$.
+
+\item \textbf{Identify the multiplication squares.} Functoriality of cotensor maps, defined by
 equalizer factorization, says that the squares
 \[
 \begin{tikzcd}[column sep=3em]
@@ -1812,7 +2034,8 @@ monoid laws, compose their upper maps with the cotensor inclusions.
 The equalities become the defining factorizations for
 $m\square_C1$ and $1\square_Cm$, followed by cancellation of
 $\tau_{A,A}\iota_{A,A}=1_T$.
-Postcomposing with $\mu$ therefore transports the two associativity
+
+\item \textbf{Preserve and reflect associativity.} Postcomposing with $\mu$ therefore transports the two associativity
 trees to
 \begin{equation}\label{eq:ordinaryassoc}
  m(m\square_C1_A),\qquad
@@ -1822,7 +2045,7 @@ Since $I_L$ is invertible in the merge calculus and unary maps embed
 faithfully, formal associativity is equivalent to equality of the
 actual maps in \cref{eq:ordinaryassoc}.
 
-Let $\ell_A:C\square_C A\to A$ and $r_A:A\square_C C\to A$
+\item \textbf{Preserve and reflect the unit laws.} Let $\ell_A:C\square_C A\to A$ and $r_A:A\square_C C\to A$
 be the unitors from \cref{lem:cotensorcoherence}. Their cone
 descriptions identify the left unit tree with
 $m(u\square_C1_A)\ell_A^{-1}$ and the right unit tree with
@@ -1832,9 +2055,11 @@ $m(1_A\square_Cu)r_A^{-1}$. Thus the formal unit laws are precisely
  m(1_A\square_Cu)=r_A.
 \]
 This proves preservation and reflection of the full monoid structure.
-Aguiar's internal category is a monoid in this bicomodule monoidal
+
+\item \textbf{Identify internal categories.} Aguiar's internal category is a monoid in this bicomodule monoidal
 category \cite[Theorem 2.2.1 and Definition 2.3.1]{Aguiar1997};
-regularity supplies every stable cone used above.
+regularity supplies every stable cone used above.\qedhere
+\end{enumerate}
 \end{proof}
 
 The recovery proof is local to its displayed stable paths. If all finite
@@ -1853,15 +2078,21 @@ boundaries identifies every completed square with an ordinary
 equivariant bicomodule map between the represented boundaries.
 This identification respects mixed bases and all pasting.
 \end{corollary}
-\begin{proof}
-Replace each boundary by its representative using the invertible cone
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Represent the square by an actual map.} Replace each boundary by its representative using the invertible cone
 comparisons. This gives a unary square, and unary full faithfulness
-identifies it with an actual equivariant map. Independence from
+identifies it with an actual equivariant map.
+
+\item \textbf{Prove independence of replacements.} Independence from
 parenthesization and from the sequence of replacements follows from
-\cref{lem:cotensorcoherence}. For adjacent squares, pasting the
+\cref{lem:cotensorcoherence}.
+
+\item \textbf{Identify composition over the same boundaries.} For adjacent squares, pasting the
 representing cones gives the representing cone of their composite;
 uniqueness therefore makes composition agree. The exterior vertical
-maps have not been changed during any replacement.
+maps have not been changed during any replacement.\qedhere
+\end{enumerate}
 \end{proof}
 
 \section{Changing-base functors and bimodule actions}\label{sec:changing}
@@ -1884,25 +2115,32 @@ M'\square_{D'}N' \arrow[r,hook,"i_{M',N'}"'] & M'\otimes N'.
 \end{equation}
 These maps respect identities and composition of all three base maps.
 \end{lemma}
-\begin{proof}
-Using equivariance, the two balance maps of
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Construct the balance factorization.} Using equivariance, the two balance maps of
 $(F\otimes G)i_{M,N}$ in \cref{eq:changefactor} are
 \[
  (F\otimes g\otimes G)(\rho_M\otimes1)i_{M,N},\qquad
  (F\otimes g\otimes G)(1\otimes\lambda_N)i_{M,N}.
 \]
 They agree. The equalizer property gives the unique factorization.
-Postcompose its proposed exterior equivariance equations with
+
+\item \textbf{Verify exterior equivariance.} Postcompose its proposed exterior equivariance equations with
 $1\otimes i_{M',N'}$ or $i_{M',N'}\otimes1$. The results follow
 from exterior equivariance of $F,G$; stability makes these testing maps
-monic. Identity maps satisfy the characterization, so their factor is
-the identity. For successive pairs $(F,G)$ and $(F',G')$, either
+monic.
+
+\item \textbf{Preserve identity maps.} Identity maps satisfy the characterization, so their factor is
+the identity.
+
+\item \textbf{Preserve composition.} For successive pairs $(F,G)$ and $(F',G')$, either
 factorization has composite with the final inclusion
 $(F'F\otimes G'G)i_{M,N}$, so uniqueness proves
 \[
  (F'\square_{g'}G')(F\square_g G)
        =(F'F)\square_{g'g}(G'G).\qedhere
 \]
+\end{enumerate}
 \end{proof}
 
 \begin{theorem}[Global category recovery]\label{thm:globalaguiar}
@@ -1915,10 +2153,12 @@ map $f:C\to D$ and an equivariant map $F:A\to B$ satisfying
  Fm_A=m_B(F\square_f F).
 \end{equation}
 \end{theorem}
-\begin{proof}
-Unary global full faithfulness from \cref{thm:arbitraryV} identifies
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Identify the carrier map.} Unary global full faithfulness from \cref{thm:arbitraryV} identifies
 the formal carrier square with exactly the equivariant map $F$.
-For multiplication, replace the upper boundary $(A,A)$ by
+
+\item \textbf{Transport the multiplication equation.} For multiplication, replace the upper boundary $(A,A)$ by
 $A\square_C A$. Naturality of the representing comparisons is
 \cref{eq:changefactor}. Consequently the two formal homomorphism
 trees become the two maps in
@@ -1929,14 +2169,17 @@ trees become the two maps in
  B\square_D B \arrow[r,"m_B"'] &B.
 \end{tikzcd}
 \]
-For units, the primitive map $f:C\to D$ intertwines the regular
+
+\item \textbf{Transport the unit equation.} For units, the primitive map $f:C\to D$ intertwines the regular
 coactions and satisfies $\eps_Df=\eps_C$. Thus it is the map
 between the nullary representatives over $f$, and the unit tree
 becomes the left equality in \cref{eq:actualfunctors}.
-Full faithfulness reflects both equations. The identity and composite
+
+\item \textbf{Identify the functor category.} Full faithfulness reflects both equations. The identity and composite
 comparisons follow from \cref{lem:changebase}, so this is an
 isomorphism of categories. These are the internal-functor equations
-in the cotensor formulation \cite[Section 4.1]{Aguiar1997}.
+in the cotensor formulation \cite[Section 4.1]{Aguiar1997}.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{definition}[Atomic bimodule action data]\label{def:bimodule}
@@ -2008,31 +2251,39 @@ Equivariant maps satisfy
  \theta q_0=q'_0(\theta\square_g G).
 \]
 \end{theorem}
-\begin{proof}
-Every expression in
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Retain the formal bimodule equations.} Every expression in
 \cref{eq:leftaction,eq:rightaction,eq:commutingactions,eq:modulemap}
 is a tree evaluation, so the first assertion follows exactly as in
 \cref{thm:reduct}. Composition of maps respects these equations by
 substitution associativity.
 
-For the second assertion, apply \cref{prop:tau} to $A,M$ and $M,B$
-and then use unary full faithfulness. The left associativity equation,
+\item \textbf{Represent the two actions.} For the second assertion, apply \cref{prop:tau} to $A,M$ and $M,B$
+and then use unary full faithfulness.
+
+\item \textbf{Transport action associativity.} The left associativity equation,
 tested on $(A\square_C A)\square_C M$, becomes
 \[
  p_0(m_A\square_C1_M)
    =p_0(1_A\square_Cp_0)a_{A,A,M}.
 \]
 The right associativity equation is the same comparison for $M,B,B$.
-The commuting equation, tested on $(A\square_C M)\square_D B$,
+
+\item \textbf{Transport commuting actions.} The commuting equation, tested on $(A\square_C M)\square_D B$,
 becomes
 \[
  q_0(p_0\square_D1_B)
    =p_0(1_A\square_Cq_0)a_{A,M,B}.
 \]
-The unit equations become the left and right cotensor unitors, by the
-nullary calculation in \cref{thm:aguiar}. Finally
+
+\item \textbf{Transport action units.} The unit equations become the left and right cotensor unitors, by the
+nullary calculation in \cref{thm:aguiar}.
+
+\item \textbf{Transport bimodule maps.} Finally
 \cref{lem:changebase} transports \cref{eq:modulemap} to the two
-displayed equivariant-map equations. Every step is reversible.
+displayed equivariant-map equations. Every step is reversible.\qedhere
+\end{enumerate}
 \end{proof}
 
 This proves the recovery assertions of \cref{thm:main}, including
@@ -2073,7 +2324,7 @@ the right. The underlying path of an empty list of carriers is the empty
 bicomodule path at its specified vertex.
 \end{definition}
 
-A cell of \cref{eq:carriercells} has one output \emph{carrier}, even
+A cell of \cref{eq:carriercells} has one output \textbf{carrier}, even
 when that carrier contains several bicomodules. This use of the path
 presentation is part of the construction. For example, composition along
 a carrier with several bicomodules is a merge operation in the original
@@ -2088,13 +2339,14 @@ $K:X'\harr Y'$ has carrier
  K[f,g]=f_*Kg^*.
 \end{equation}
 \end{lemma}
-\begin{proof}
-The strict double-category laws of \cref{thm:globalcoherence}, retained
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Establish substitution and represented units.} The strict double-category laws of \cref{thm:globalcoherence}, retained
 under vertical reversal, give the virtual substitution laws in
 \cref{eq:carriercells}. Concatenation represents every list of carriers,
 including the empty list, so $\emp X$ is the represented unit.
 
-Use the reversed companion and conjoint data from
+\item \textbf{Construct the restriction cell.} Use the reversed companion and conjoint data from
 \cref{thm:arbitraryV}. Boundary bending gives
 \[
  \mathbb B_{f,g}(H;K)
@@ -2110,7 +2362,8 @@ X' \arrow[r,proarrow,"K"',""{name=bottom,above}] & Y'
 \arrow[Rightarrow,from=top,to=bottom,shorten <=2pt,shorten >=2pt,"\chi_{f,K,g}"]
 \end{tikzcd}
 \]
-To verify its full cartesian property,
+
+\item \textbf{Verify the full cartesian property.} To verify its full cartesian property,
 allow exterior arrows $r:Z\to X$ and $s:W\to Y$. The comparison
 maps for composite companions and conjoints identify
 \begin{align*}
@@ -2121,7 +2374,8 @@ maps for composite companions and conjoints identify
 \end{align*}
 Under these bijections the map is postcomposition with $\chi_{f,K,g}$.
 The same calculation applies when $H$ is a concatenation of any list of
-carriers. This is cartesianness in $\Kcal(\V)$.
+carriers. This is cartesianness in $\Kcal(\V)$.\qedhere
+\end{enumerate}
 \end{proof}
 
 \subsection{Distributors and balanced multicells}
@@ -2138,7 +2392,7 @@ $H_M:X\harr Y$ in $\Kcal(\V)$ and cells
 satisfying the associativity, unit, and commuting-action diagrams
 \eqref{eq:leftaction}--\eqref{eq:commutingactions}, with $M$ replaced
 by $H_M$ and substitution evaluated in $\Kcal(\V)$.
-We call it \emph{bicomodule-carried} when $H_M$ consists of one actual
+We call it \textbf{bicomodule-carried} when $H_M$ consists of one actual
 bicomodule.
 \end{definition}
 
@@ -2211,23 +2465,31 @@ The restriction in \cref{eq:distMod} is full on the displayed objects:
 all distributors between them are retained. Its vertical category is
 exactly $\FCat(\Q(\V))$.
 \end{proposition}
-\begin{proof}
-Define substitution by that of $\Kcal(\V)$. Consider an inserted
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Check balance within a substituted block.} Define substitution by that of $\Kcal(\V)$. Consider an inserted
 category action in a substituted cell. If its position is internal to
 one substituted block, the balance equation for that block identifies the
-two results. At the interface between two nonempty blocks, their exterior
+two results.
+
+\item \textbf{Check nonempty interfaces.} At the interface between two nonempty blocks, their exterior
 equations move the action to the corresponding inputs of the outer cell;
-the outer balance equation then identifies the results. At an empty block,
+the outer balance equation then identifies the results.
+
+\item \textbf{Check empty blocks.} At an empty block,
 \cref{eq:distnullary} identifies the actions through its two boundary
 functors. Repeating this step moves the action past any finite string of
 empty blocks. It also covers the case in which every block is empty.
-At the two exterior boundaries, the same calculation uses the exterior
+
+\item \textbf{Check exterior equivariance.} At the two exterior boundaries, the same calculation uses the exterior
 equations of the outer cell and composition of the boundary functors.
 Thus the substituted cell satisfies all the defining equations.
 
-Unary identity cells satisfy exterior equivariance, and have no interior
+\item \textbf{Verify the virtual-category laws.} Unary identity cells satisfy exterior equivariance, and have no interior
 balance equations. Associativity and identities now follow from the
-corresponding identities in $\Kcal(\V)$. The definition of a monoid in
+corresponding identities in $\Kcal(\V)$.
+
+\item \textbf{Identify the module construction.} The definition of a monoid in
 $\Kcal(\V)$ on an original atomic bicomodule is exactly
 \cref{def:formalcat}: the comparison with $\Q(\V)$ is
 \cref{thm:reduct}. Its homomorphisms are exactly the same pairs $(f,F)$
@@ -2235,7 +2497,8 @@ and equations. Bimodules and their multicells in the module construction
 are the displayed action, exterior, and balance equations, proving
 \cref{eq:distMod}. This is the explicit instance of Leinster's monoids-and-modules
 construction \cite[Section 5.3]{Leinster2004}, in the formulation of
-\cite[Definition 2.8]{CruttwellShulman2010}, used here.
+\cite[Definition 2.8]{CruttwellShulman2010}, used here.\qedhere
+\end{enumerate}
 \end{proof}
 
 \subsection{Regular distributors and restrictions}
@@ -2248,19 +2511,24 @@ For a formal category $\mathsf A$, the distributor
 represents the empty distributor path at $\mathsf A$ in $\Ddist(\V)$.
 Its universal cell is the original unit $\eta_A$.
 \end{lemma}
-\begin{proof}
-The monad laws make the displayed data a distributor, and the two unit
-laws give \cref{eq:distnullary} for $\eta_A$. We prove the contextual
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Verify the regular distributor.} The monad laws make the displayed data a distributor, and the two unit
+laws give \cref{eq:distnullary} for $\eta_A$.
+
+\item \textbf{Insert a unit beside a nonempty context.} We prove the contextual
 universal property directly. Let $\alpha:(L,R)\cell N$ be a
 distributor multicell whose two paths meet at $\mathsf A$. If $L$ is
 nonempty, insert $U_{\mathsf A}$ by the right action on its last
 distributor. If $R$ is nonempty, use instead the left action on its first
 distributor. Interior balance for $\alpha$ says that the two formulas
-agree when both are available. Associativity of the adjacent action
+agree when both are available.
+
+\item \textbf{Check the inserted equations.} Associativity of the adjacent action
 gives balance against the regular action on $U_{\mathsf A}$, and the
 remaining balance and exterior equations are inherited from $\alpha$.
 
-If both contexts are empty, write the boundary functors as
+\item \textbf{Treat empty contexts and endpoints.} If both contexts are empty, write the boundary functors as
 $\mathsf F=(f,F)$ and $\mathsf G=(g,G)$. Define the inserted cell by
 \[
  \beta=p_N(F,\alpha)=q_N(\alpha,G).
@@ -2271,15 +2539,18 @@ $\beta$. Its two possible expressions prove compatibility with both
 exterior actions. When exactly one context is empty, the corresponding
 exterior equation supplies the same endpoint calculation.
 
-Substitution of $\eta_A$ into the inserted factor recovers $\alpha$
-by the action unit laws. Conversely, for a balanced cell $\beta$ with
+\item \textbf{Recover the original multicell.} Substitution of $\eta_A$ into the inserted factor recovers $\alpha$
+by the action unit laws.
+
+\item \textbf{Prove uniqueness in every context.} Conversely, for a balanced cell $\beta$ with
 an inserted $U_{\mathsf A}$, its balance equation at an adjacent
 distributor, followed by substitution of $\eta_A$, forces the insertion
 formula just given. If both contexts are empty, exterior equivariance
 and $\mu_A(1,\eta_A)=1_A$ give
 $\beta=p_N(F,\beta\eta_A)$; the right formula follows similarly.
 This proves uniqueness in every context and over every exterior pair
-of functors.
+of functors.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{theorem}[Distributor restriction]\label{thm:distrestriction}
@@ -2311,11 +2582,14 @@ H \arrow[d,"\chi"]\\
 \end{equation}
 These restrictions are coherent under identities and iterated restriction.
 \end{theorem}
-\begin{proof}
-\Cref{lem:carrierequipment} supplies $H$ and $\chi$.
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Construct the restricted actions.} \Cref{lem:carrierequipment} supplies $H$ and $\chi$.
 Cartesian factorization of the two right sides of
 \cref{eq:distrestrictionactions} constructs unique globular actions
-on $H$. To prove their laws it suffices, by the same cartesian
+on $H$.
+
+\item \textbf{Prove left associativity.} To prove their laws it suffices, by the same cartesian
 uniqueness, to postcompose with $\chi$. Left associativity is the
 calculation
 \begin{align*}
@@ -2325,15 +2599,18 @@ calculation
  &=p_N\bigl(F,p_N(F,\chi)\bigr)
  =\chi p_H(1,p_H).
 \end{align*}
-For the left unit, the functor unit equation and the action unit equation
+
+\item \textbf{Verify the left unit law.} For the left unit, the functor unit equation and the action unit equation
 give
 \[
  \chi p_H(\eta_A,1)
  =p_N(F\eta_A,\chi)
  =p_N(\eta_{A'}[f],\chi)=\chi.
 \]
-Right associativity and its unit equation use $G$ in the same way.
-For commuting actions,
+
+\item \textbf{Verify the right action laws.} Right associativity and its unit equation use $G$ in the same way.
+
+\item \textbf{Prove that the actions commute.} For commuting actions,
 \begin{align*}
  \chi q_H(p_H,1)
  &=q_N\bigl(p_N(F,\chi),G\bigr)\\
@@ -2344,7 +2621,7 @@ Thus $H$ is a distributor, and \cref{eq:distrestrictionactions} says
 that $\chi$ is its equivariant distributor map over
 $(\mathsf F,\mathsf G)$.
 
-To verify cartesianness in $\Ddist(\V)$, take a distributor multicell
+\item \textbf{Verify distributor cartesianness.} To verify cartesianness in $\Ddist(\V)$, take a distributor multicell
 $\alpha$ with target $N$ whose exterior functors factor through
 $\mathsf F,\mathsf G$. Its unique underlying factor through $\chi$
 exists in $\Kcal(\V)$. Postcomposing each proposed exterior equation
@@ -2355,26 +2632,31 @@ case the same argument gives \cref{eq:distnullary}. Cartesian uniqueness
 reflects these equalities, so the factor is a distributor multicell.
 Its uniqueness is already the underlying cartesian uniqueness.
 
-For further functors $\mathsf R=(r,R)$ and $\mathsf S=(s,S)$,
+\item \textbf{Compare successive restrictions.} For further functors $\mathsf R=(r,R)$ and $\mathsf S=(s,S)$,
 the composite ambient cartesian cell identifies the carriers
 $r_*f_*H_Ng^*s^*$ and $(fr)_*H_N(gs)^*$ by the companion and conjoint
 comparisons. Both induced distributor actions are uniquely characterized
 by their composites to $N$, with boundary functors
 $\mathsf F\mathsf R$ and $\mathsf G\mathsf S$. Therefore the
-comparison is an invertible distributor map. The identity comparisons and
+comparison is an invertible distributor map.
+
+\item \textbf{Prove restriction coherence.} The identity comparisons and
 every association comparison respect the same cartesian cells; uniqueness
-proves their coherence.
+proves their coherence.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{corollary}\label{cor:distequipment}
 For every monoidal $\V$, $\Ddist(\V)$ is a virtual equipment with
 vertical category $\FCat(\Q(\V))$.
 \end{corollary}
-\begin{proof}
-Combine \cref{prop:distvirtual,lem:distunit,thm:distrestriction}.
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Assemble the virtual equipment.} Combine \cref{prop:distvirtual,lem:distunit,thm:distrestriction}.
 These constructions also verify explicitly the units and restrictions
 provided abstractly for $\Mod$ by
-\cite[Propositions 5.5 and 7.4]{CruttwellShulman2010}.
+\cite[Propositions 5.5 and 7.4]{CruttwellShulman2010}.\qedhere
+\end{enumerate}
 \end{proof}
 
 The objects selected in \cref{eq:distMod} have not been enlarged:
@@ -2414,18 +2696,22 @@ They preserve all distributor substitutions and reflect their equations.
 Every many-sided cell has a finite expression in distributor multicells,
 pasting, and inverses of intrinsic contextual comparisons.
 \end{theorem}
-\begin{proof}
-Apply \cref{thm:completion,thm:globalembedding} to the virtual equipment
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Apply the conservative completion.} Apply \cref{thm:completion,thm:globalembedding} to the virtual equipment
 of \cref{cor:distequipment}. These theorems keep its object and vertical
 categories, which are identified by \cref{prop:distvirtual}, and all
 its designated horizontal arrows. They give
 \cref{eq:distconservative}, its substitution compatibility, and the
-poly-virtual equipment structure. The finite-expression assertion is the
+poly-virtual equipment structure.
+
+\item \textbf{Verify the finite presentation.} The finite-expression assertion is the
 forest and localization presentation, together with the finite binding
 construction used to globalize it. Each primitive distributor multicell
 is itself a cell of $\mathbb B(\V)$ with the equations of
 \cref{def:distcell}. Thus the whole construction is specified by the
-existing finite-term calculus and the displayed equations.
+existing finite-term calculus and the displayed equations.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{corollary}[Preservation of actual bicomodule distributors]\label{cor:atomicdistributors}
@@ -2436,15 +2722,21 @@ reflects all its single-output cells. In particular, for actual bicomodule carri
 $M,N$, its unary cells are exactly actual equivariant bicomodule maps
 $\theta:M\to N$ satisfying \cref{eq:modulemap}.
 \end{corollary}
-\begin{proof}
-The indicated restriction on horizontal arrows is closed under virtual
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Close the atomic fragment under substitution.} The indicated restriction on horizontal arrows is closed under virtual
 substitution, which does not form a new carrier. It contains the regular
-distributor at every object. Its multicells are the same as those of
+distributor at every object.
+
+\item \textbf{Apply distributor conservativity.} Its multicells are the same as those of
 $\Ddist(\V)$ on these profiles, so \cref{eq:distconservative}
-gives the assertion. For unary cells, \cref{thm:arbitraryV} identifies
+gives the assertion.
+
+\item \textbf{Identify unary distributor maps.} For unary cells, \cref{thm:arbitraryV} identifies
 the underlying square with an actual equivariant bicomodule map, and
 \cref{eq:distexterior} become exactly
-\cref{eq:modulemap}.
+\cref{eq:modulemap}.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{proposition}[Functor companions and conjoints]\label{prop:distmates}
@@ -2473,21 +2765,30 @@ with the triangle identities. There are coherent bijections
 They respect the defined tree substitutions and compositions of formal
 functors.
 \end{proposition}
-\begin{proof}
-The two restrictions in \cref{eq:distcompanions} exist by
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Construct the distributor restrictions.} The two restrictions in \cref{eq:distcompanions} exist by
 \cref{thm:distrestriction}; \cref{eq:distrestrictioncarrier} computes
-their carriers. Use these restriction cells and the unit comparison of
+their carriers.
+
+\item \textbf{Obtain coherent binding data.} Use these restriction cells and the unit comparison of
 \cref{lem:distunit} in \cref{lem:binding}, now with input
 $\Ddist(\V)$. That lemma constructs $j_{\mathsf F},e_{\mathsf F}$,
 proves the triangle identities, and supplies the coherent comparisons
-for composite functors. \Cref{prop:mates} gives
+for composite functors.
+
+\item \textbf{Construct the mate bijections.} \Cref{prop:mates} gives
 \cref{eq:distmates}. Its inverse and its second mate description use
 the single-wire cuts of that proposition, now on distributor wires.
-The unit and counit composition equations prove compatibility with
+
+\item \textbf{Verify composition and substitution compatibility.} The unit and counit composition equations prove compatibility with
 vertical composition, and tree substitution compatibility follows by
-substituting the same binding cuts into each tree. Identity companions
+substituting the same binding cuts into each tree.
+
+\item \textbf{Normalize identity companions.} Identity companions
 may be normalized to empty distributor paths as in
-\cref{sec:global}.
+\cref{sec:global}.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{remark}[The second comparison class]\label{rem:secondcomparison}
@@ -2531,18 +2832,24 @@ isomorphism from $M$. Its actions are
 Transport also gives bijections on balanced distributor multicells and
 preserves all their substitutions.
 \end{lemma}
-\begin{proof}
-The equations for $h$ to preserve the actions force
-\cref{eq:disttransport}. Substitution cancels each adjacent
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Determine the transported actions.} The equations for $h$ to preserve the actions force
+\cref{eq:disttransport}.
+
+\item \textbf{Verify the action laws.} Substitution cancels each adjacent
 $h^{-1}h$ in the associative and commuting-action equations, reducing
 them to those for $M$. The unit equations reduce to
 $h1_Hh^{-1}=1_T$. Thus the actions exist and satisfy all the laws.
-For a multicell, postcompose with the comparison on its output and
+
+\item \textbf{Transport multicells and their equations.} For a multicell, postcompose with the comparison on its output and
 substitute the inverse comparisons on its inputs. Each exterior or
 balance equation becomes the corresponding old equation after these
 cancellations. The same argument covers \cref{eq:distnullary}.
-Inverse transport uses the inverse comparisons, and substitution
-compatibility follows from cancellation at every internal carrier.
+
+\item \textbf{Verify invertibility and substitution compatibility.} Inverse transport uses the inverse comparisons, and substitution
+compatibility follows from cancellation at every internal carrier.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{corollary}[Cotensor recovery for distributor carriers]\label{cor:distcotensor}
@@ -2553,17 +2860,25 @@ equivariant maps are exactly the cotensor bimodule structures and maps
 of \cref{thm:bimodules}. The identifications respect changing bases and
 balanced distributor multicells.
 \end{corollary}
-\begin{proof}
-Use the inverse cone comparison as $h$ in
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Transport actions and maps to the representative.} Use the inverse cone comparison as $h$ in
 \cref{lem:distcarriertransport}. Apply \cref{thm:bimodules} to the
 transported actions, and \cref{lem:changebase} to exterior functors
-and equivariant maps. For multicells, transport every carrier first.
+and equivariant maps.
+
+\item \textbf{Transport multicells.} For multicells, transport every carrier first.
 The bijection of \cref{lem:distcarriertransport} respects their balance
-and exterior equations. For a stably represented source path, unary full
+and exterior equations.
+
+\item \textbf{Identify maps from represented sources.} For a stably represented source path, unary full
 faithfulness further identifies the transported cell with a map from the
 corresponding cotensor; its equations are exactly equivariance and
-balancing of that map. Cone uniqueness gives independence of the chosen
-parentheses in each represented path.
+balancing of that map.
+
+\item \textbf{Prove independence of parentheses.} Cone uniqueness gives independence of the chosen
+parentheses in each represented path.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{definition}[Represented distributor path]\label{def:representeddist}
@@ -2593,13 +2908,19 @@ single cut along the distributor $P$. Conversely an original
 $c:\Gamma\cell P$ is invertible in the completion exactly when it
 has \cref{eq:distuniversal}.
 \end{proposition}
-\begin{proof}
-Apply \cref{thm:detection,thm:globalembedding} to $\Ddist(\V)$.
-In the merge realization, contextual precomposition with an invertible
-cell is a bijection. The forward map in \cref{eq:distconversion} is
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Apply distributor detection.} Apply \cref{thm:detection,thm:globalembedding} to $\Ddist(\V)$.
+
+\item \textbf{Obtain contextual factorization.} In the merge realization, contextual precomposition with an invertible
+cell is a bijection.
+
+\item \textbf{Retain the conversion in the reduct.} The forward map in \cref{eq:distconversion} is
 a single-wire tree cut, and the reduct retains its values, all the cell
 collections, and their equalities. It therefore retains the bijection.
-The converse is the detection theorem for this second comparison class.
+
+\item \textbf{Prove the converse.} The converse is the detection theorem for this second comparison class.\qedhere
+\end{enumerate}
 \end{proof}
 
 We give a construction of representing distributor cells. The following
@@ -2634,8 +2955,9 @@ $P:\mathsf A\harr\mathsf C$ on $T$ making
 $c:(M,N)\cell P$ a distributor multicell. This multicell represents
 $(M,N)$ in $\Ddist(\V)$.
 \end{theorem}
-\begin{proof}
-Let $A,C$ be the carriers of the two exterior formal categories. The
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Construct the exterior actions.} Let $A,C$ be the carriers of the two exterior formal categories. The
 cell $c(p_M\wh1_{H_N})$ coequalizes the two action maps with $A$
 adjoined on the left. To check this, commute the left $A$-action on
 $M$ past its right $B$-action, and then use the equality defining
@@ -2648,43 +2970,52 @@ gives a unique left action $p_P$ with
 where the second action is constructed by the right-hand version of the
 same argument.
 
-Every contextual instance of $c$ is an epimorphism, since it is a
+\item \textbf{Verify action associativity and units.} Every contextual instance of $c$ is an epimorphism, since it is a
 coequalizer. Precompose the proposed left associativity equation with
 $1_A\wh1_A\wh c$. Using \cref{eq:distcoeqactions}, it becomes
 left associativity for $p_M$, postcomposed with $c$. Epimorphy gives
 the desired equality. The left unit equation is tested with $c$ and
 reduces to the unit equation for $p_M$. Right associativity and its
 unit equation are proved by the symmetric calculation with $q_N$.
-The commuting-action equation is tested with
+
+\item \textbf{Verify commuting actions.} The commuting-action equation is tested with
 $1_A\wh c\wh1_C$; it reduces to the equality of the two actions
 on the disjoint factors $H_M,H_N$, by interchange. Hence $P$ is a
-distributor. The two equations in \eqref{eq:distcoeqactions} are its exterior
+distributor.
+
+\item \textbf{Identify the distributor comparison.} The two equations in \eqref{eq:distcoeqactions} are its exterior
 equivariance equations for $c$, and the coequalizer equation is its
 interior balance. They also prove uniqueness of the distributor actions.
 
-For contextual universality, let
+\item \textbf{Factor a balanced multicell.} For contextual universality, let
 $\alpha:(L,M,N,R)\cell Z$ be a globular balanced distributor multicell.
 Its balance at the middle formal category says exactly that the
 underlying cell coequalizes the whiskered pair in
 \cref{eq:distcoequalizer}. The preserved coequalizer therefore gives a
-unique underlying factor $\bar\alpha:(L,P,R)\cell Z$. To verify
+unique underlying factor $\bar\alpha:(L,P,R)\cell Z$.
+
+\item \textbf{Reflect balance and exterior equations.} To verify
 any remaining balance or exterior equation for $\bar\alpha$,
 precompose with the corresponding contextual instance of $c$, also
 including the extra category carrier in that equation. The result is
 the corresponding equation for $\alpha$, using
 \cref{eq:distcoeqactions} at the two interfaces adjacent to $P$.
-That contextual instance is epic, so the equation holds. Conversely,
+That contextual instance is epic, so the equation holds.
+
+\item \textbf{Prove the contextual bijection.} Conversely,
 substitution of $c$ into a distributor multicell is a distributor
 multicell by \cref{prop:distvirtual}. These two operations are inverse
 by the coequalizer property. This proves \cref{eq:distuniversal}.
-Globular detection in the virtual equipment $\Ddist(\V)$ gives all
+
+\item \textbf{Allow changing bases.} Globular detection in the virtual equipment $\Ddist(\V)$ gives all
 changing-base instances. No preservation of arbitrary coequalizers or
 ambient exactness property is used: only the stated contextual preservation
-of the particular fork~\eqref{eq:distcoequalizer}.
+of the particular fork~\eqref{eq:distcoequalizer}.\qedhere
+\end{enumerate}
 \end{proof}
 
 When these representations exist for successive distributor pairs, their
-iterated composites have the usual coherent associators and unitors.
+iterated composites have the expected coherent associators and unitors.
 Indeed substitution of intrinsic comparisons is intrinsic by
 \cref{lem:universalclosure}. Any two representatives of a path therefore
 have a unique invertible distributor map carrying one representing cell
@@ -2713,23 +3044,28 @@ instead occurs within an action boundary on one actual bicomodule.
 For every monoidal $\V$, formal internal categories over $I$ are
 exactly ordinary monoids in $\V$.
 \end{proposition}
-\begin{proof}
-The counit law forces either $I$-coaction to be the inverse unitor.
-The two maps defining balance over $I$ are therefore equal after
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Identify the unit-base coactions.} The counit law forces either $I$-coaction to be the inverse unitor.
+
+\item \textbf{Compute stable representatives.} The two maps defining balance over $I$ are therefore equal after
 the canonical unit identifications. Their equalizer is the identity
 on $M\otimes N$, which is preserved by every tensor functor.
 Thus every finite path over $I$ is stably represented by its ordinary
 tensor product, and the nullary representative is $I$.
-\Cref{thm:aguiar,thm:globalaguiar} identify the resulting structures
-and fixed-base maps with ordinary monoids and their homomorphisms.
+
+\item \textbf{Recover ordinary monoids.} \Cref{thm:aguiar,thm:globalaguiar} identify the resulting structures
+and fixed-base maps with ordinary monoids and their homomorphisms.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{proposition}[Identity category]\label{prop:identitycategory}
 Every comonoid $C$ in every monoidal $\V$ has a formal internal
 category with carrier its regular bicomodule $C$.
 \end{proposition}
-\begin{proof}
-By \cref{lem:bicomodunit}, the comparison
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Transport the identity monoid.} By \cref{lem:bicomodunit}, the comparison
 $d_C:C\cell\emp C$ is invertible in the merge realization, with
 inverse $\tau_0$. Transport the identity monoid on the empty path
 along this isomorphism. Explicitly,
@@ -2737,12 +3073,16 @@ along this isomorphism. Explicitly,
  \eta=\tau_0,\qquad
  \mu=\tau_0(d_C\wh d_C):(C,C)\cell C.
 \]
-Substitution cancels the adjacent pairs $d_C\tau_0$, proving
+
+\item \textbf{Verify the formal monoid laws.} Substitution cancels the adjacent pairs $d_C\tau_0$, proving
 associativity and the two unit laws. They remain true in the reduct
-by \cref{thm:reduct}. Equivalently, the multiplication is the
+by \cref{thm:reduct}.
+
+\item \textbf{Identify the diagonal comparison.} Equivalently, the multiplication is the
 inverse comparison for $\delta_C:C\cell(C,C)$: the unit cone
 calculation in \cref{lem:cotensorcoherence} identifies
-$C\square_C C$ with $C$ in every monoidal category.
+$C\square_C C$ with $C$ in every monoidal category.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{proposition}[Cartesian bases]
@@ -2750,21 +3090,27 @@ For a cartesian monoidal category with finite limits, formal internal
 categories are ordinary internal categories, with their usual internal
 functors.
 \end{proposition}
-\begin{proof}
-Every object has its unique diagonal comonoid. Counitality forces a
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Identify bicomodules with internal graphs.} Every object has its unique diagonal comonoid. Counitality forces a
 left coaction $M\to C\times M$ to have second component $1_M$,
 so it is equivalent to a map $M\to C$; the right coaction likewise
 amounts to a map $M\to D$. Coassociativity and commuting coactions
 then follow from the product identities. Thus a bicomodule is an
-internal graph with its two endpoint maps. The balance equalizer of
+internal graph with its two endpoint maps.
+
+\item \textbf{Identify cotensors with stable pullbacks.} The balance equalizer of
 $M\times N\rightrightarrows M\times D\times N$ is exactly
 the pullback $M\times_D N$. Product with any object preserves
 this equalizer: a map into the product is a pair of maps and factors
 exactly when its second component does. The same holds on both
-sides, so the cone is stable. The maps and equations of
+sides, so the cone is stable.
+
+\item \textbf{Recover internal categories and functors.} The maps and equations of
 \cref{thm:aguiar,thm:globalaguiar} now say precisely that composable
 arrows compose associatively, identity arrows are units, and functors
-preserve both operations.
+preserve both operations.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{proposition}[A nonregular ambient category]\label{prop:Ab}
@@ -2781,8 +3127,9 @@ all bicomodule paths over $C$ nevertheless have stable cotensors, with
 Formal categories over $C$ are categories enriched in $\Ab$ on the
 fixed object set $\{1,\ldots,r\}$.
 \end{proposition}
-\begin{proof}
-The coreflexive pair $r,s:\mathbb Z\rightrightarrows\mathbb Z\oplus
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Exhibit failure of ambient regularity.} The coreflexive pair $r,s:\mathbb Z\rightrightarrows\mathbb Z\oplus
 \mathbb Z$ given by
 \[
  r(n)=(n,2n),\qquad s(n)=(n,0)
@@ -2792,7 +3139,7 @@ retraction. After tensoring with $\mathbb Z/2$, the two maps are
 equal, so their equalizer is $\mathbb Z/2$. Hence tensoring does not
 preserve this equalizer.
 
-For the specified comonoid write
+\item \textbf{Decompose bicomodules into matrix entries.} For the specified comonoid write
 \[
  \lambda_M(x)=\sum_i e_i\otimes p_i(x),\qquad
  \rho_M(x)=\sum_j q_j(x)\otimes e_j.
@@ -2804,30 +3151,32 @@ $p_iq_j=q_jp_i$. Thus
 $M=\bigoplus_{i,j}M_{ij}$, where $M_{ij}=\operatorname{im}(p_iq_j)$.
 The converse constructs the coactions from any such decomposition.
 
-Decompose $M\otimes N$ into the summands
+\item \textbf{Compute the matrix cotensor.} Decompose $M\otimes N$ into the summands
 $M_{ij}\otimes N_{kl}$. The two balance maps insert $e_j$ and
 $e_k$, respectively. If $j=k$ they agree. If $j\ne k$, projection
 to the inserted $e_j$ coordinate takes their difference to the
 identity on this summand. Therefore the equalizer consists exactly
 of the summands with $j=k$, giving \cref{eq:matrixcotensor}.
-This argument remains valid after arbitrary tensoring on either side:
+
+\item \textbf{Prove stability under tensoring.} This argument remains valid after arbitrary tensoring on either side:
 finite direct sums are preserved, and the coordinate calculation still
 gives identity or zero on each summand. It proves preservation of the
 equalizer fork, not just preservation of its inclusion. In particular, this
 stability is a coordinate calculation after tensoring and does not use
 flatness of any of the groups involved.
 
-For $A:C\harr C$, a multiplication consists of maps
+\item \textbf{Recover enriched category composition.} For $A:C\harr C$, a multiplication consists of maps
 $A_{ij}\otimes A_{jk}\to A_{ik}$. A bicomodule map $C\to A$
 consists of maps $\mathbb Z\to A_{ii}$. The cotensor associator is
 the canonical associator for the direct sums of triple tensor products,
 by its cone characterization. Thus the monoid equations are precisely
 bilinear category composition and its identity equations. Apply
-\cref{thm:aguiar} to these stable cones.
+\cref{thm:aguiar} to these stable cones.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{remark}
-The preceding identification includes the usual variation of the finite
+The preceding identification includes the variation of the finite
 object set. A comonoid map
 $\bigoplus_i\mathbb Z e_i\to\bigoplus_j\mathbb Z e_j$ must send
 each $e_i$ to a group-like element. Writing such an element as
@@ -2835,7 +3184,7 @@ $\sum_j a_je_j$, its equations give $a_j^2=a_j$, $a_ja_k=0$ for
 $j\ne k$, and $\sum_j a_j=1$. Over $\mathbb Z$ exactly one
 coefficient is $1$ and the rest are $0$. Thus these comonoid maps are
 exactly functions of the indexing sets, and \cref{thm:globalaguiar}
-gives the usual enriched functors.
+gives the enriched functors.
 \end{remark}
 
 In this nonregular example, every cotensor relevant to the indicated
@@ -2852,36 +3201,39 @@ all vertices of this form. Its objects and vertical arrows are
 finite-object $\Ab$-enriched categories and enriched functors. Every
 distributor is isomorphic to one carried by an actual bicomodule, and
 these distributors are exactly enriched distributors. Every finite
-distributor path is represented by its usual relative tensor product.
+distributor path is represented by its relative tensor product.
 Consequently, after replacing represented boundaries, the completed
 many-sided cells are exactly the equivariant maps between these relative
 tensor products.
 \end{proposition}
-\begin{proof}
-Let $\mathbb B_{\mathrm{fin}}$ be the specified part of
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Restrict to finite group-like bases.} Let $\mathbb B_{\mathrm{fin}}$ be the specified part of
 $\mathbb B(\Ab)$. The companion and conjoint of a comonoid map
 $C_S\to C_T$ are bicomodules with these finite bases, so the
 restriction paths remain in $\mathbb B_{\mathrm{fin}}$. Units remain
 there as well. Thus its path-carrier calculus is a virtual equipment
 by the proof of \cref{lem:carrierequipment}.
 
-\Cref{prop:Ab} and its proof, with rectangular indexing sets, identify
+\item \textbf{Represent carrier paths by matrices.} \Cref{prop:Ab} and its proof, with rectangular indexing sets, identify
 a bicomodule $C_S\harr C_T$ with a matrix of abelian groups
 $(M_{ij})_{i\in S,j\in T}$ and identify cotensor composition with
 matrix multiplication using direct sums and tensor products. All carrier
 paths in $\mathbb B_{\mathrm{fin}}$ therefore have stable atomic
-representatives. \Cref{lem:distcarriertransport} replaces every
+representatives.
+
+\item \textbf{Identify enriched distributor data.} \Cref{lem:distcarriertransport} replaces every
 distributor carrier by such a representative. Its actions are maps
 \[
  A_{ii'}\otimes M_{i'j}\longrightarrow M_{ij},\qquad
  M_{ij}\otimes B_{jj'}\longrightarrow M_{ij'},
 \]
 with the associative, unital, and commuting equations of an enriched
-distributor. The exterior equations on maps give the usual equivariant
+distributor. The exterior equations on maps give the standard equivariant
 maps over enriched functors. Balanced multicells have the same
 identification by \cref{def:distcell} and cotensor representation.
 
-For distributors $M:\mathsf A\harr\mathsf B$ and
+\item \textbf{Construct the balanced tensor quotient.} For distributors $M:\mathsf A\harr\mathsf B$ and
 $N:\mathsf B\harr\mathsf C$, define
 \begin{equation}\label{eq:Abdistributorproduct}
  (M\otimes_{\mathsf B}N)_{ik}
@@ -2907,22 +3259,26 @@ Q \arrow[d,dashed,"\exists!\,\bar\alpha"]\\
 && Z.
 \end{tikzcd}
 \]
-Tensor product of abelian groups preserves coequalizers in either variable, and finite
+
+\item \textbf{Verify contextual preservation of the quotient.} Tensor product of abelian groups preserves coequalizers in either variable, and finite
 direct sums preserve them as well. Hence matrix cotensor composition
 preserves this fork under every compatible matrix context. Replacing
 path carriers by their representatives transfers this contextual
 coequalizer property to $\mathbb B_{\mathrm{fin}}$.
 
-\Cref{thm:distcoequalizer} equips the quotient in
+\item \textbf{Represent distributor pairs and finite paths.} \Cref{thm:distcoequalizer} equips the quotient in
 \eqref{eq:Abdistributorproduct} with its exterior actions and proves
 that it represents the pair as distributors. The regular distributor
 represents the empty path by \cref{lem:distunit}, so induction gives
 all finite paths. Coherence and functoriality follow from the unique
-representing comparisons. In the second completion, replace both
+representing comparisons.
+
+\item \textbf{Identify cells in the second completion.} In the second completion, replace both
 boundaries by these representatives and use
 \cref{eq:distconservative} to identify the resulting unary square
 with its ordinary equivariant distributor map. This proves the final
-assertion, including arbitrary exterior enriched functors.
+assertion, including arbitrary exterior enriched functors.\qedhere
+\end{enumerate}
 \end{proof}
 
 In this example a functor $\mathsf F:\mathsf A\to\mathsf B$ with
@@ -2972,16 +3328,19 @@ $\varphi(a)=0$, $\varphi(b)=t$.
 The displayed formulas make $E$ a comonoid, $H,J$ bicomodules over
 $E$, and $\varphi$ an equivariant bicomodule map.
 \end{lemma}
-\begin{proof}
-The comonoid laws for $E$ hold on $e,g,x$: the two iterated coproducts
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Verify the comonoid laws.} The comonoid laws for $E$ hold on $e,g,x$: the two iterated coproducts
 of $x$ are the sum of the three tensors with one $x$ and two $g$'s,
 and the counit laws follow from $\eps(g)=1$, $\eps(x)=0$.
-For the right coaction on $H$, write
+
+\item \textbf{Verify the bicomodule laws.} For the right coaction on $H$, write
 $\rho_H(h)=h\otimes g+d(h)\otimes x$ with $d(a)=0$, $d(b)=2a$.
 The equation $d^2=0$ proves coassociativity, the first square below.
 Counitality and commuting coactions follow from the formulas; the
 laws for $J$ use that $e,g$ are group-like.
-Right equivariance of $\varphi$ is the second square, since
+
+\item \textbf{Verify equivariance of the map.} Right equivariance of $\varphi$ is the second square, since
 $\varphi d=0$; left equivariance follows from the common support $e$:
 \[
 \begin{tikzcd}[column sep=2.1em]
@@ -2994,9 +3353,9 @@ H\otimes E \arrow[r,"\rho_H\otimes1"'] & H\otimes E\otimes E
 H \arrow[r,"\varphi"] \arrow[d,"\rho_H"'] &
 J \arrow[d,"\rho_J"]\\
 H\otimes E \arrow[r,"\varphi\otimes1"'] & J\otimes E.
-\end{tikzcd}
+\end{tikzcd}\qedhere
 \]
-
+\end{enumerate}
 \end{proof}
 
 \begin{lemma}[Triangular categories]\label{strong:lem:triangular}
@@ -3011,18 +3370,21 @@ Every finite composition path is stably represented; for $n\geq1$,
 A_K^{\square_E n}\cong E\oplus K^{\oplus n}.
 \]
 \end{lemma}
-\begin{proof}
-Expand $(E\oplus K)\otimes(E\oplus K)$ into its four blocks.
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Compute the stable binary blocks.} Expand $(E\oplus K)\otimes(E\oplus K)$ into its four blocks.
 The $E,E$, $E,K$, and $K,E$ blocks have the stable unit cotensors
 $E$, $K$, and $K$. The $K,K$ block has stable equalizer zero:
 projection of the inserted $E$ factor onto its $e$ coordinate takes
 the two balance maps to zero and the identity, respectively. Thus every
 equalizing map is zero, also after tensoring.
 
-For a longer word, remove regular $E$ factors using their stable unit
+\item \textbf{Represent every finite word.} For a longer word, remove regular $E$ factors using their stable unit
 cones. A block with no $K$ contributes $E$, one $K$ contributes $K$,
 and two or more $K$'s contribute zero. This proves the asserted
-representatives and stability. Associativity is the fold square
+representatives and stability.
+
+\item \textbf{Prove associativity of the fold.} Associativity is the fold square
 \[
 \begin{tikzcd}[column sep=4em]
 E\oplus K^{\oplus3} \arrow[r,"\nabla_{12}"]
@@ -3032,9 +3394,12 @@ E\oplus K^{\oplus2} \arrow[r,"m_K"'] & E\oplus K.
 \end{tikzcd}
 \]
 Here $\nabla_{12}$ and $\nabla_{23}$ fold the indicated pair of $K$
-summands; both routes add all three. The unit
+summands; both routes add all three.
+
+\item \textbf{Verify units and transport the laws.} The unit
 equations are the summand inclusions. \Cref{thm:aguiar}
-converts these into formal category laws.
+converts these into formal category laws.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{corollary}[The restriction functor]\label{strong:cor:triangular-functor}
@@ -3045,8 +3410,11 @@ F=1_E\oplus\varphi:A\longrightarrow B
 \]
 defines a formal functor $\mathsf F=(1_E,F):\mathsf A\to\mathsf B$.
 \end{corollary}
-\begin{proof}
-By \cref{strong:lem:triangular-data}, $F$ is equivariant. It preserves
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Verify equivariance.} By \cref{strong:lem:triangular-data}, $F$ is equivariant.
+
+\item \textbf{Verify the functor equations.} It preserves
 the unit and the folds of \cref{strong:lem:triangular} through
 \[
 \begin{tikzcd}[column sep=3.8em]
@@ -3063,7 +3431,9 @@ A \arrow[d,"F"]\\
 \end{tikzcd}
 \]
 \Cref{thm:globalaguiar} gives the formal functor laws.
-The carriers $A,B,E$ have ranks five, four, and three, respectively.
+
+\item \textbf{Record the carrier ranks.} The carriers $A,B,E$ have ranks five, four, and three, respectively.\qedhere
+\end{enumerate}
 \end{proof}
 
 \subsection{An actual bicomodule with a nonzero formal action}
@@ -3088,13 +3458,17 @@ p_{B,0}:M\oplus N\longrightarrow M,\qquad
 ((ru+sv),w)\longmapsto(r+w)u+sv.
 \]
 \end{proposition}
-\begin{proof}
-For $(B,M)$, the regular $E$ block gives $M$;
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Compute the stable action cotensor.} For $(B,M)$, the regular $E$ block gives $M$;
 $J\otimes Nu$ has mismatched supports and gives zero; and both
 coactions on $J\otimes Nv$ insert $g$, giving all of $N$.
 These computations persist under arbitrary tensoring.
-The extra $N$ summand and its image $Nu$ both have left support $e$,
-so this is equivariant. The triple $(B,B,M)$ is stably represented by
+
+\item \textbf{Check action equivariance.} The extra $N$ summand and its image $Nu$ both have left support $e$,
+so this is equivariant.
+
+\item \textbf{Verify associativity.} The triple $(B,B,M)$ is stably represented by
 $M\oplus N\oplus N$, and the action square becomes
 \[
 \begin{tikzcd}[column sep=4em]
@@ -3104,10 +3478,14 @@ M\oplus N \arrow[r,"p_{B,0}"'] & M.
 \end{tikzcd}
 \]
 Here $\sigma(m,w_1,w_2)=(p_{B,0}(m,w_2),w_1)$; both routes send
-$((ru+sv),w_1,w_2)$ to $(r+w_1+w_2)u+sv$. The unit selects $M$.
+$((ru+sv),w_1,w_2)$ to $(r+w_1+w_2)u+sv$.
+
+\item \textbf{Verify the action unit.} The unit selects $M$.
 Hence this gives an associative, unital formal action $p_B$.
-The right action $q:(M,\Z)\cell M$ is the unit comparison and commutes
-with $p_B$ by its coherence.
+
+\item \textbf{Add the commuting right action.} The right action $q:(M,\Z)\cell M$ is the unit comparison and commutes
+with $p_B$ by its coherence.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{proposition}[Restriction on the actual carrier]\label{strong:prop:restricted-action}
@@ -3127,9 +3505,12 @@ Equivalently, $p_A=p_B(F,1_M)$, a tree substitution in $\Q(\Ab)$.
 Its right action is the unit action $q$ of
 \cref{strong:prop:stable-action}.
 \end{proposition}
-\begin{proof}
-Since the base map of $\mathsf F$ is $1_E$, restriction retains the
-actual carrier $M$. Associativity follows by pasting
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Identify the restricted carrier.} Since the base map of $\mathsf F$ is $1_E$, restriction retains the
+actual carrier $M$.
+
+\item \textbf{Verify restricted associativity.} Associativity follows by pasting
 \[
 \begin{tikzcd}[column sep=2.5em,row sep=2.6em]
 (A,A,M) \arrow[r,"{(\mu_A,1)}"] \arrow[d,"{(F,F,1)}"'] &
@@ -3143,7 +3524,8 @@ M \arrow[d,equal]\\
 \]
 The two routes around the outside are the two $A$-action composites,
 after using the definition of $p_A$ on the left route.
-Unitality is the left triangle in
+
+\item \textbf{Verify the restricted unit law.} Unitality is the left triangle in
 \[
 \begin{tikzcd}[column sep=3em]
 M \arrow[r,"{(\eta_A,1)}"] \arrow[dr,equal] &
@@ -3154,10 +3536,12 @@ M \arrow[r,"{(\eta_A,1)}"] \arrow[dr,equal] &
 \]
 whose outer triangle is the functor unit law followed by the $B$-action
 unit law.
-The commuting-action equation follows by substituting $F$ into that for
+
+\item \textbf{Verify commuting actions.} The commuting-action equation follows by substituting $F$ into that for
 $p_B,q$. Thus $(M,p_A,q)$ is a formal distributor
 $\mathsf A\harr\Icat$ on one actual bicomodule. The construction of
-$p_A$ uses the inverse comparison for the stable path $(B,M)$.
+$p_A$ uses the inverse comparison for the stable path $(B,M)$.\qedhere
+\end{enumerate}
 \end{proof}
 
 \subsection{The unstable cone and the contextual obstruction}
@@ -3168,8 +3552,9 @@ equivariant $E$--$\Z$ bicomodule cone. After tensoring with $R=\Z/2$,
 the comparison from this cone to the new equalizer is neither monic
 nor epic. In particular, the action cotensor is not stable.
 \end{lemma}
-\begin{proof}
-The regular block of $T$ is
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Compute the ordinary cotensor.} The regular block of $T$ is
 $M$. The $H\otimes Nu$ block is zero by its supports, while an element
 \[
 a\otimes\alpha v+b\otimes\beta v\in H\otimes Nv
@@ -3180,7 +3565,8 @@ obstruction is $2a\otimes x\otimes\beta v$. Consequently
 T\cong M\oplus Na\oplus N[2]b
 \cong(\Z/4)^3\oplus\Z/2.
 \end{equation}
-Writing $z$ for the last, order-two generator, its cone
+
+\item \textbf{Describe its equivariant cone.} Writing $z$ for the last, order-two generator, its cone
 $i:T\hookrightarrow A\otimes M$ is
 \begin{equation}\label{strong:eq:badcone}
 u\longmapsto e\otimes u,\quad
@@ -3191,14 +3577,17 @@ z\longmapsto2b\otimes v.
 Give $u,a,z$ left support $e$, and $v$ left support $g$; this makes
 $T$ an $E$--$\Z$ bicomodule and $i$ an equivariant cone.
 
-After tensoring with $R=\Z/2$, the nonzero class
-$z\otimes\overline1$ maps to zero. Meanwhile
+\item \textbf{Exhibit a kernel after tensoring.} After tensoring with $R=\Z/2$, the nonzero class
+$z\otimes\overline1$ maps to zero.
+
+\item \textbf{Exhibit a new balanced element.} Meanwhile
 \begin{equation}\label{strong:eq:newbalanced}
 b\otimes v\otimes\overline1
 \end{equation}
 becomes balanced: its obstruction is a multiple of $2$. This element
 cannot lie in the image of $i\otimes1_R$, whose $b$ coordinate is zero.
-Thus the tensored cone fails both injectivity and surjectivity onto
+
+\item \textbf{Compute the canonical comparison.} Thus the tensored cone fails both injectivity and surjectivity onto
 the new equalizer $T_R^{\mathrm{bal}}$. The comparison is
 \[
 \begin{tikzcd}[column sep=4em]
@@ -3211,7 +3600,8 @@ Both objects on the left have underlying group $(\Z/2)^4$.
 In the source basis $(u,v,a,z)$ and the target basis given by
 $e\otimes u,g\otimes v,a\otimes v,b\otimes v$ after reduction,
 $\kappa$ has matrix $\operatorname{diag}(1,1,1,0)$. The failure is in
-this canonical cone, whose image has dimension three.
+this canonical cone, whose image has dimension three.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{theorem}[An unrepresented action boundary]\label{strong:thm:strong}\label{strong:prop:strong}
@@ -3219,14 +3609,15 @@ The action boundary $(A,M)$ has no atomic contextual representative.
 Its formal action operates nontrivially on the new balanced element
 \eqref{strong:eq:newbalanced}.
 \end{theorem}
-\begin{proof}
-In the original globular calculus $P$ of $\Ccal(\Ab)$, the cone $i$
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Represent the empty-context functor.} In the original globular calculus $P$ of $\Ccal(\Ab)$, the cone $i$
 is a cell $(A,M)\cell T$. It represents the empty-context balanced-map
 functor: factor a balanced map through its ordinary equalizer, and
 test equivariance of the factor after $1_E\otimes i$. This map is
 monic because $E$ is free. The right coaction is the unit coaction.
 
-Let $W=\Z/2$ have left $E$-coaction $w\mapsto e\otimes w$ and right
+\item \textbf{Construct the contextual obstruction.} Let $W=\Z/2$ have left $E$-coaction $w\mapsto e\otimes w$ and right
 unit coaction. With $R$ regarded as a $\Z$--$\Z$ bicomodule, the map
 \[
 \beta:W\longrightarrow A\otimes M\otimes R,\qquad
@@ -3246,7 +3637,7 @@ of $\beta(\overline1)$ is nonzero, while that of every element in the
 image of $i\otimes1_R$ vanishes.
 Hence $i$ fails the contextual test of \cref{def:universal}.
 
-Every other contextual representative would first represent the same
+\item \textbf{Exclude every alternative atomic representative.} Every other contextual representative would first represent the same
 empty-context functor, so its cone would be $i$ composed with a
 bicomodule isomorphism:
 \[
@@ -3262,7 +3653,7 @@ represent the path. By \cref{thm:detection}, $(A,M)$ is not
 isomorphic to any atom in the globular localization, or in its reversed
 merge realization.
 
-In the forward realization, $\beta$ is the primitive cell
+\item \textbf{Evaluate the formal action.} In the forward realization, $\beta$ is the primitive cell
 $W\cell(A,M,R)$. Applying $F$ to its first output replaces $b$ by $t$.
 The stable comparison for $(B,M)$ followed by $p_B$ then sends
 $t\otimes v\otimes\overline1$ to $u\otimes\overline1$. Thus, in the
@@ -3277,18 +3668,21 @@ W \arrow[r,"\beta"] \arrow[d,"\gamma"'] &
 (M\oplus N,R) \arrow[l,"p_{B,0}\wh1_R"]
 \end{tikzcd}
 \]
-Here $(M,R)$ is stably represented by $M\otimes R$.
+
+\item \textbf{Detect the nonzero result.} Here $(M,R)$ is stably represented by $M\otimes R$.
 Under this comparison, unary conservativity identifies $\gamma$ with
 the actual map $\overline1\mapsto u\otimes\overline1\neq0$.
-The reduct retains the resulting cells and equality.
+The reduct retains the resulting cells and equality.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{corollary}[The action on the ordinary cotensor]\label{strong:cor:ordinary-action}
 The map $p_T:T\to M$ induced by the formal action is nonzero on the
 order-two summand of $T$: it sends its generator $z$ to $2u$.
 \end{corollary}
-\begin{proof}
-The primitive cone gives a triangle in the merge realization
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Identify the ordinary cotensor action.} The primitive cone gives a triangle in the merge realization
 \[
 \begin{tikzcd}
 T \arrow[r,"\iota"] \arrow[dr,"p_T"'] &
@@ -3302,9 +3696,12 @@ p_T:T\longrightarrow M,\qquad
 (ru+sv,\alpha,\beta)\longmapsto(r+\beta)u+sv,
 \qquad \beta\in N[2],
 \]
-so $p_T(z)=2u\neq0$. Nevertheless, the contextual action above cannot
+so $p_T(z)=2u\neq0$.
+
+\item \textbf{Exclude contextual evaluation through that cotensor.} Nevertheless, the contextual action above cannot
 be evaluated by first factoring through $T\otimes R$: that
-factorization does not exist by \cref{strong:thm:strong}.
+factorization does not exist by \cref{strong:thm:strong}.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{corollary}[Restriction does not preserve action stability]\label{strong:cor:failure}
@@ -3314,15 +3711,21 @@ categories have stable finite composition paths. This failure occurs
 for a distributor on one actual bicomodule, whose restricted action
 boundary has no contextual atomic representative.
 \end{corollary}
-\begin{proof}
-Use the functor $\mathsf F:\mathsf A\to\mathsf B$ of
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Choose the functor and stable category structures.} Use the functor $\mathsf F:\mathsf A\to\mathsf B$ of
 \cref{strong:cor:triangular-functor}. \Cref{strong:lem:triangular} gives
-stable composition paths for both categories. The $\mathsf B$-action
+stable composition paths for both categories.
+
+\item \textbf{Restrict the stable action.} The $\mathsf B$-action
 of \cref{strong:prop:stable-action} has a stable action cotensor;
 its restriction is the $\mathsf A$-action of
-\cref{strong:prop:restricted-action}. \Cref{strong:lem:unstable-cotensor}
+\cref{strong:prop:restricted-action}.
+
+\item \textbf{Identify the failure of representation.} \Cref{strong:lem:unstable-cotensor}
 and \cref{strong:thm:strong} give the asserted instability and
-nonrepresentability.
+nonrepresentability.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{remark}[A prime-indexed family]
@@ -3365,15 +3768,22 @@ horizontal arrows, and
 It therefore preserves and reflects formal categories and their
 homomorphisms on atomic carriers.
 \end{lemma}
-\begin{proof}
-Substitution composes the arrows at cut vertices as well as the root
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Verify substitution and interchange.} Substitution composes the arrows at cut vertices as well as the root
 cells. Associativity is exactly virtual substitution associativity;
 substitution on disjoint blocks commutes, proving interchange.
-Nullary blocks use the degenerate virtual pastings, and the structural
-empty square on $f$ is its horizontal identity. For one output there
+
+\item \textbf{Handle nullary and identity squares.} Nullary blocks use the degenerate virtual pastings, and the structural
+empty square on $f$ is its horizontal identity.
+
+\item \textbf{Recover the single-output fragment.} For one output there
 is one block and its two cut arrows are the specified $f,g$, so the
-displayed equality follows. All monoid and homomorphism operations lie
-in this fragment, which proves the last statement.
+displayed equality follows.
+
+\item \textbf{Retain monoids and homomorphisms.} All monoid and homomorphism operations lie
+in this fragment, which proves the last statement.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{theorem}[Kleisli recovery]\label{thm:kleisli}
@@ -3387,14 +3797,20 @@ When $\mathbb K$ is a virtual equipment, its refined realization
 $\E_{\mathrm{poly}}(\mathbb K)$ gives the same comparison and also
 preserves its represented composites and boundary transport.
 \end{theorem}
-\begin{proof}
-A horizontal Kleisli arrow from $X$ to $Y$ is the original arrow
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Identify the Kleisli monoid data.} A horizontal Kleisli arrow from $X$ to $Y$ is the original arrow
 $X\harr TY$ with the Kleisli typing. By the definition of a $T$-monoid
 \cite[Definition 4.3]{CruttwellShulman2010}, its multiplication and
-unit are the monoid cells in $\mathbb K$. Apply \cref{lem:raw} and
-\cref{thm:reduct}. If $\mathbb K$ is an equipment, apply
+unit are the monoid cells in $\mathbb K$.
+
+\item \textbf{Pass to the path calculus and reduct.} Apply \cref{lem:raw} and
+\cref{thm:reduct}.
+
+\item \textbf{Apply equipment completion when available.} If $\mathbb K$ is an equipment, apply
 \cref{thm:completion} instead; its inverted comparisons are precisely
-the intrinsic ones by \cref{thm:detection}.
+the intrinsic ones by \cref{thm:detection}.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{proposition}[Normalization is tracked]\label{prop:normalization}
@@ -3404,14 +3820,19 @@ original unit square
 $U_X\cell A$ with sides $(1_X,\eta_X)$ is cartesian in $\mathbb X$
 if and only if its image is cartesian in $\E(\mathbb X)$.
 \end{proposition}
-\begin{proof}
-Normalization is the cartesianness of this unit square
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Identify the normalization test.} Normalization is the cartesianness of this unit square
 \cite[Definition 8.2]{CruttwellShulman2010}. Its top is atomic and its
 bottom is atomic in the original equipment $\mathbb X$.
-\Cref{thm:globalembedding} preserves and reflects all the single-output
-factorization tests defining cartesianness. The object correspondence in
+
+\item \textbf{Preserve and reflect cartesianness.} \Cref{thm:globalembedding} preserves and reflects all the single-output
+factorization tests defining cartesianness.
+
+\item \textbf{Retain the original unit square.} The object correspondence in
 \cref{thm:kleisli} retains the original unit square as data and
-therefore retains this property.
+therefore retains this property.\qedhere
+\end{enumerate}
 \end{proof}
 
 Here cartesianness is tested in $\mathbb X$, as in the definition of
@@ -3424,22 +3845,29 @@ Garner's description of symmetric polycategories as monads on discrete
 objects in a two-sided Kleisli bicategory is a further instance of
 formal-category data in a poly-virtual calculus.
 \end{proposition}
-\begin{proof}
-Garner constructs the two-sided Kleisli bicategory using a
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Identify the Kleisli bicategory and its monads.} Garner constructs the two-sided Kleisli bicategory using a
 pseudo-distributive law whose suitable matchings have associated graphs
 that are connected, acyclic, and have no multiple edges
 \cite[Proposition 9 and Definition 14]{Garner2008}, and identifies its
 monads on discrete objects with symmetric polycategories
 \cite[Theorem 42]{Garner2008}.
-For any bicategory, fix a bracketing of each finite path of $1$-arrows
+
+\item \textbf{Construct its coherent path presentation.} For any bicategory, fix a bracketing of each finite path of $1$-arrows
 and take cells between the corresponding bracketed composites. Rectangular
 evaluation is composition followed by the canonical associator and unitor
 comparisons; bicategorical coherence makes the result independent of the
-evaluation order \cite[Section 1.5]{Leinster2004}. A monad on
+evaluation order \cite[Section 1.5]{Leinster2004}.
+
+\item \textbf{Identify monads in the reduct.} A monad on
 one original $1$-arrow is exactly \cref{eq:shape,eq:monadlaws} in
-this path presentation. Apply \cref{thm:reduct}. The symmetric
+this path presentation. Apply \cref{thm:reduct}.
+
+\item \textbf{Retain the given symmetric structure.} The symmetric
 permutations here are part of Garner's Kleisli data; this argument does
-not insert exchanges into our planar wire calculus.
+not insert exchanges into our planar wire calculus.\qedhere
+\end{enumerate}
 \end{proof}
 
 \section{Universal characterization and comparison with other envelopes}\label{sec:comparison}
@@ -3457,13 +3885,20 @@ Applied to the input $\Ddist(\V)$, the same characterization gives
 $\FDist(\V)$ and preserves all primitive distributor multicells,
 including their changing-base instances.
 \end{theorem}
-\begin{proof}
-The presentation and its uniqueness are \cref{thm:localUP}.
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Identify the presentation and reversible comparisons.} The presentation and its uniqueness are \cref{thm:localUP}.
 The exact recognition of reversible atomic comparisons is
-\cref{thm:detection}. The two conservativity assertions are
-\cref{thm:conservative,thm:globalembedding}. For the reduct use
+\cref{thm:detection}.
+
+\item \textbf{Apply both conservativity theorems.} The two conservativity assertions are
+\cref{thm:conservative,thm:globalembedding}.
+
+\item \textbf{Pass to the reduct.} For the reduct use
 \cref{thm:reduct,prop:mates,thm:bimodules}.
-For the distributor instance apply \cref{thm:distcompletion}.
+
+\item \textbf{Apply the distributor instance.} For the distributor instance apply \cref{thm:distcompletion}.\qedhere
+\end{enumerate}
 \end{proof}
 
 The path presentation in \cref{prop:pathpresentation} is the merge
@@ -3480,14 +3915,20 @@ $\bar J:L(P)\to\mathcal M$. It is an equivalence on a hom-category
 precisely when it is fully faithful there and every object of that
 hom-category is isomorphic to an interpreted path.
 \end{proposition}
-\begin{proof}
-The extension statement is \cref{thm:localUP}. A fully faithful
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Obtain the extension.} The extension statement is \cref{thm:localUP}.
+
+\item \textbf{Construct a quasi-inverse.} A fully faithful
 and essentially surjective functor is an equivalence: choose, for
 each target object, an isomorphism from an object in the image; use
 full faithfulness to pull back the conjugated morphisms. The resulting
-functor is a quasi-inverse by those same isomorphisms. Conversely an
+functor is a quasi-inverse by those same isomorphisms.
+
+\item \textbf{Prove necessity and apply the criterion.} Conversely an
 equivalence is fully faithful and essentially surjective. Applied
-to $\bar J$ this gives the stated test.
+to $\bar J$ this gives the stated test.\qedhere
+\end{enumerate}
 \end{proof}
 
 An identification with a module or Yoneda envelope therefore requires
@@ -3621,14 +4062,19 @@ themselves establish local smallness in the original universe.
 The same conclusions apply to the path-carrier, distributor, and second
 completion constructions.
 \end{proposition}
-\begin{proof}
-For small data, finite paths and finite subdivisions form sets.
+\begin{proof}\leavevmode
+\begin{enumerate}
+\item \textbf{Bound the forest collections.} For small data, finite paths and finite subdivisions form sets.
 Forests are finite products of original cell sets, indexed by a set
-of subdivisions, hence form a set. The collection $S(P)$ is a
+of subdivisions, hence form a set.
+
+\item \textbf{Bound the localization.} The collection $S(P)$ is a
 subcollection of the original cells, so is a set as well. Finite
 terms in these generators and their formal inverses form a set;
 the congruence generated by the stated relations is an equivalence
-relation on it, and its quotient is a set. For a fixed vertical arrow $f$,
+relation on it, and its quotient is a set.
+
+\item \textbf{Bound the global cell collections.} For a fixed vertical arrow $f$,
 the binding presentations in $\mathcal B(f)$ form a subcollection of a
 finite product of the original horizontal-arrow and cell sets, and hence a
 set. Therefore the coproduct and quotient in \cref{eq:choicefreecells} are
@@ -3636,7 +4082,7 @@ sets. After a local binding presentation is fixed, each global cell
 collection is identified with the localized hom-set in
 \cref{eq:globalcells}.
 
-For the distributor construction on small data, paths and the cells of
+\item \textbf{Bound the distributor completion.} For the distributor construction on small data, paths and the cells of
 the carrier equipment form sets. Formal categories and distributors are
 specified by finitely many carriers and cells satisfying equations, so
 they form subcollections of sets of such tuples. Distributor multicells
@@ -3644,50 +4090,53 @@ are subsets of the corresponding carrier cell sets. The forest and
 localization argument therefore applies a second time. Restricting on
 the original atomic monoid objects does not change this conclusion.
 
-For large data the same description uses finite terms labelled in
+\item \textbf{Treat large data in the larger universe.} For large data the same description uses finite terms labelled in
 the larger universe. Although every individual cell has a finite
 description, arbitrarily many intermediate atomic arrows can occur
 in descriptions with fixed many-sided endpoints. Finite length
 alone therefore does not give a small collection in the smaller
-universe. The conservativity theorem does give exactly the original
+universe.
+
+\item \textbf{Identify the fragments with preserved size.} The conservativity theorem does give exactly the original
 size for the single-output fragment and, after reversal, for the
 single-input fragment.
 The second completion similarly preserves exactly the size of the
 primitive single-output distributor collections, without deducing local
-smallness of its general many-sided profiles in a smaller universe.
+smallness of its general many-sided profiles in a smaller universe.\qedhere
+\end{enumerate}
 \end{proof}
 
 \begin{thebibliography}{Had19}
 
 \bibitem[Agu97]{Aguiar1997}
 Marcelo Aguiar,
-\emph{Internal categories and quantum groups},
+\textbf{Internal categories and quantum groups},
 Ph.D. thesis, Cornell University, 1997.
 \url{https://pi.math.cornell.edu/~maguiar/thesis2.pdf}.
 
 \bibitem[CS10]{CruttwellShulman2010}
 G.~S.~H. Cruttwell and Michael~A. Shulman,
-\emph{A unified framework for generalized multicategories},
+\textbf{A unified framework for generalized multicategories},
 Theory and Applications of Categories \textbf{24} (2010), no.~21,
 580--655.
 \href{https://arxiv.org/abs/0907.2460}{arXiv:0907.2460}.
 
 \bibitem[FS26]{FairbanksShulman2025}
 Aaron David Fairbanks and Michael Shulman,
-\emph{Doubly weak double categories},
+\textbf{Doubly weak double categories},
 Applied Categorical Structures \textbf{34} (2026), article 26.
 \href{https://doi.org/10.1007/s10485-026-09863-1}
 {doi:10.1007/s10485-026-09863-1}.
 
 \bibitem[Gar08]{Garner2008}
 Richard Garner,
-\emph{Polycategories via pseudo-distributive laws},
+\textbf{Polycategories via pseudo-distributive laws},
 Advances in Mathematics \textbf{218} (2008), 781--827.
 \href{https://arxiv.org/abs/math/0606735}{arXiv:math/0606735}.
 
 \bibitem[Had19]{Hadzihasanovic2019}
 Amar Hadzihasanovic,
-\emph{Weak units, universal cells, and coherence via universality for
+\textbf{Weak units, universal cells, and coherence via universality for
 bicategories},
 Theory and Applications of Categories \textbf{34} (2019), no.~29,
 883--960.
@@ -3695,7 +4144,7 @@ Theory and Applications of Categories \textbf{34} (2019), no.~29,
 
 \bibitem[Lei04]{Leinster2004}
 Tom Leinster,
-\emph{Higher operads, higher categories},
+\textbf{Higher operads, higher categories},
 London Mathematical Society Lecture Note Series, vol.~298,
 Cambridge University Press, Cambridge, 2004.
 \href{https://doi.org/10.1017/CBO9780511525896}
@@ -3703,7 +4152,7 @@ Cambridge University Press, Cambridge, 2004.
 
 \bibitem[Shu08]{Shulman2008}
 Michael Shulman,
-\emph{Framed bicategories and monoidal fibrations},
+\textbf{Framed bicategories and monoidal fibrations},
 Theory and Applications of Categories \textbf{20} (2008), no.~18,
 650--738.
 \href{https://arxiv.org/abs/0706.1286}{arXiv:0706.1286}.
